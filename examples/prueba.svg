@@ -1,0 +1,23 @@
+func main() {
+  for(i = 0; i < 15; i = i + 1) write i;
+  //read j;
+  //if (j == 0) {
+  //  write j;
+  //} elif (j == 1) {
+  //  write j + 1;
+  //} else {
+  //  write j + 2;
+  //}
+//
+  //Create text t 0 0 "Attributes" {fill:(2,3,4),font-style:normal} 15.0;
+  //Destroy t 2; 
+  //Modify t {fill:red,line:green,orientation:vertical} 2 3;
+  //Create line l 0,2 3,4 1,2 7,8 {line-pattern:dots};
+  //Move l 5,7 30 40;
+  //Scale l 10 20 15.4 20;
+  //Rotate l 15 40 7.8 9.8;
+  //Source "pelopicopata.txt";
+
+
+
+}

@@ -1,4 +1,4 @@
-// $ANTLR 3.4 /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g 2015-04-29 18:58:08
+// $ANTLR 3.4 /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g 2015-04-29 21:00:46
 
 package parser;
 
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 @SuppressWarnings({"all", "warnings", "unchecked"})
 public class SvgLexer extends Lexer {
     public static final int EOF=-1;
+    public static final int T__69=69;
     public static final int T__70=70;
     public static final int T__71=71;
     public static final int T__72=72;
@@ -40,7 +41,6 @@ public class SvgLexer extends Lexer {
     public static final int T__96=96;
     public static final int T__97=97;
     public static final int T__98=98;
-    public static final int T__99=99;
     public static final int AND=4;
     public static final int ARGLIST=5;
     public static final int ARRAY=6;
@@ -104,9 +104,8 @@ public class SvgLexer extends Lexer {
     public static final int TEXT=64;
     public static final int THEN=65;
     public static final int TRUE=66;
-    public static final int WHILE=67;
-    public static final int WRITE=68;
-    public static final int WS=69;
+    public static final int WRITE=67;
+    public static final int WS=68;
 
     // delegates
     // delegators
@@ -123,15 +122,36 @@ public class SvgLexer extends Lexer {
     }
     public String getGrammarFileName() { return "/home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g"; }
 
-    // $ANTLR start "T__70"
-    public final void mT__70() throws RecognitionException {
+    // $ANTLR start "T__69"
+    public final void mT__69() throws RecognitionException {
         try {
-            int _type = T__70;
+            int _type = T__69;
             int _channel = DEFAULT_TOKEN_CHANNEL;
             // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:6:7: ( '&' )
             // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:6:9: '&'
             {
             match('&'); 
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        	// do for sure before leaving
+        }
+    }
+    // $ANTLR end "T__69"
+
+    // $ANTLR start "T__70"
+    public final void mT__70() throws RecognitionException {
+        try {
+            int _type = T__70;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:7:7: ( ',' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:7:9: ','
+            {
+            match(','); 
 
             }
 
@@ -149,10 +169,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__71;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:7:7: ( ',' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:7:9: ','
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:8:7: ( ':' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:8:9: ':'
             {
-            match(','); 
+            match(':'); 
 
             }
 
@@ -170,10 +190,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__72;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:8:7: ( ':' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:8:9: ':'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:9:7: ( ';' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:9:9: ';'
             {
-            match(':'); 
+            match(';'); 
 
             }
 
@@ -191,10 +211,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__73;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:9:7: ( ';' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:9:9: ';'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:10:7: ( '[' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:10:9: '['
             {
-            match(';'); 
+            match('['); 
 
             }
 
@@ -212,10 +232,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__74;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:10:7: ( '[' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:10:9: '['
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:11:7: ( ']' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:11:9: ']'
             {
-            match('['); 
+            match(']'); 
 
             }
 
@@ -233,10 +253,12 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__75;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:11:7: ( ']' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:11:9: ']'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:12:7: ( 'alternate' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:12:9: 'alternate'
             {
-            match(']'); 
+            match("alternate"); 
+
+
 
             }
 
@@ -254,10 +276,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__76;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:12:7: ( 'alternate' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:12:9: 'alternate'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:13:7: ( 'blue' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:13:9: 'blue'
             {
-            match("alternate"); 
+            match("blue"); 
 
 
 
@@ -277,10 +299,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__77;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:13:7: ( 'blue' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:13:9: 'blue'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:14:7: ( 'bold' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:14:9: 'bold'
             {
-            match("blue"); 
+            match("bold"); 
 
 
 
@@ -300,10 +322,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__78;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:14:7: ( 'bold' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:14:9: 'bold'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:15:7: ( 'bolder' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:15:9: 'bolder'
             {
-            match("bold"); 
+            match("bolder"); 
 
 
 
@@ -323,10 +345,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__79;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:15:7: ( 'bolder' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:15:9: 'bolder'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:16:7: ( 'dots' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:16:9: 'dots'
             {
-            match("bolder"); 
+            match("dots"); 
 
 
 
@@ -346,10 +368,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__80;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:16:7: ( 'dots' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:16:9: 'dots'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:17:7: ( 'fill' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:17:9: 'fill'
             {
-            match("dots"); 
+            match("fill"); 
 
 
 
@@ -369,10 +391,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__81;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:17:7: ( 'fill' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:17:9: 'fill'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:18:7: ( 'fill-opacity' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:18:9: 'fill-opacity'
             {
-            match("fill"); 
+            match("fill-opacity"); 
 
 
 
@@ -392,10 +414,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__82;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:18:7: ( 'fill-opacity' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:18:9: 'fill-opacity'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:19:7: ( 'font-style' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:19:9: 'font-style'
             {
-            match("fill-opacity"); 
+            match("font-style"); 
 
 
 
@@ -415,10 +437,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__83;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:19:7: ( 'font-style' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:19:9: 'font-style'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:20:7: ( 'font-weight' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:20:9: 'font-weight'
             {
-            match("font-style"); 
+            match("font-weight"); 
 
 
 
@@ -438,10 +460,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__84;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:20:7: ( 'font-weight' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:20:9: 'font-weight'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:21:7: ( 'green' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:21:9: 'green'
             {
-            match("font-weight"); 
+            match("green"); 
 
 
 
@@ -461,10 +483,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__85;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:21:7: ( 'green' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:21:9: 'green'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:22:7: ( 'horizontal' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:22:9: 'horizontal'
             {
-            match("green"); 
+            match("horizontal"); 
 
 
 
@@ -484,10 +506,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__86;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:22:7: ( 'horizontal' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:22:9: 'horizontal'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:23:7: ( 'italic' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:23:9: 'italic'
             {
-            match("horizontal"); 
+            match("italic"); 
 
 
 
@@ -507,10 +529,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__87;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:23:7: ( 'italic' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:23:9: 'italic'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:24:7: ( 'lighter' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:24:9: 'lighter'
             {
-            match("italic"); 
+            match("lighter"); 
 
 
 
@@ -530,10 +552,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__88;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:24:7: ( 'lighter' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:24:9: 'lighter'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:25:7: ( 'line-pattern' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:25:9: 'line-pattern'
             {
-            match("lighter"); 
+            match("line-pattern"); 
 
 
 
@@ -553,10 +575,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__89;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:25:7: ( 'line-pattern' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:25:9: 'line-pattern'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:26:7: ( 'line-width' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:26:9: 'line-width'
             {
-            match("line-pattern"); 
+            match("line-width"); 
 
 
 
@@ -576,10 +598,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__90;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:26:7: ( 'line-width' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:26:9: 'line-width'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:27:7: ( 'lines' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:27:9: 'lines'
             {
-            match("line-width"); 
+            match("lines"); 
 
 
 
@@ -599,10 +621,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__91;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:27:7: ( 'lines' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:27:9: 'lines'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:28:7: ( 'normal' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:28:9: 'normal'
             {
-            match("lines"); 
+            match("normal"); 
 
 
 
@@ -622,10 +644,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__92;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:28:7: ( 'normal' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:28:9: 'normal'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:29:7: ( 'oblique' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:29:9: 'oblique'
             {
-            match("normal"); 
+            match("oblique"); 
 
 
 
@@ -645,10 +667,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__93;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:29:7: ( 'oblique' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:29:9: 'oblique'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:30:7: ( 'orientation' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:30:9: 'orientation'
             {
-            match("oblique"); 
+            match("orientation"); 
 
 
 
@@ -668,10 +690,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__94;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:30:7: ( 'orientation' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:30:9: 'orientation'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:31:7: ( 'red' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:31:9: 'red'
             {
-            match("orientation"); 
+            match("red"); 
 
 
 
@@ -691,10 +713,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__95;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:31:7: ( 'red' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:31:9: 'red'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:32:7: ( 'vertical' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:32:9: 'vertical'
             {
-            match("red"); 
+            match("vertical"); 
 
 
 
@@ -714,10 +736,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__96;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:32:7: ( 'vertical' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:32:9: 'vertical'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:33:7: ( 'yellow' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:33:9: 'yellow'
             {
-            match("vertical"); 
+            match("yellow"); 
 
 
 
@@ -737,12 +759,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__97;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:33:7: ( 'yellow' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:33:9: 'yellow'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:34:7: ( '{' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:34:9: '{'
             {
-            match("yellow"); 
-
-
+            match('{'); 
 
             }
 
@@ -760,27 +780,6 @@ public class SvgLexer extends Lexer {
         try {
             int _type = T__98;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:34:7: ( '{' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:34:9: '{'
-            {
-            match('{'); 
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        	// do for sure before leaving
-        }
-    }
-    // $ANTLR end "T__98"
-
-    // $ANTLR start "T__99"
-    public final void mT__99() throws RecognitionException {
-        try {
-            int _type = T__99;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
             // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:35:7: ( '}' )
             // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:35:9: '}'
             {
@@ -795,7 +794,7 @@ public class SvgLexer extends Lexer {
         	// do for sure before leaving
         }
     }
-    // $ANTLR end "T__99"
+    // $ANTLR end "T__98"
 
     // $ANTLR start "EQUAL"
     public final void mEQUAL() throws RecognitionException {
@@ -1145,15 +1144,15 @@ public class SvgLexer extends Lexer {
     }
     // $ANTLR end "RPAREN"
 
-    // $ANTLR start "WHILE"
-    public final void mWHILE() throws RecognitionException {
+    // $ANTLR start "FOR"
+    public final void mFOR() throws RecognitionException {
         try {
-            int _type = WHILE;
+            int _type = FOR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:283:9: ( 'while' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:283:11: 'while'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:283:9: ( 'for' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:283:11: 'for'
             {
-            match("while"); 
+            match("for"); 
 
 
 
@@ -1166,7 +1165,7 @@ public class SvgLexer extends Lexer {
         	// do for sure before leaving
         }
     }
-    // $ANTLR end "WHILE"
+    // $ANTLR end "FOR"
 
     // $ANTLR start "NOT"
     public final void mNOT() throws RecognitionException {
@@ -1651,36 +1650,13 @@ public class SvgLexer extends Lexer {
     }
     // $ANTLR end "ENDIF"
 
-    // $ANTLR start "FOR"
-    public final void mFOR() throws RecognitionException {
-        try {
-            int _type = FOR;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:305:9: ( 'for' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:305:11: 'for'
-            {
-            match("for"); 
-
-
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        	// do for sure before leaving
-        }
-    }
-    // $ANTLR end "FOR"
-
     // $ANTLR start "FUNC"
     public final void mFUNC() throws RecognitionException {
         try {
             int _type = FUNC;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:306:9: ( 'func' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:306:11: 'func'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:305:9: ( 'func' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:305:11: 'func'
             {
             match("func"); 
 
@@ -1702,8 +1678,8 @@ public class SvgLexer extends Lexer {
         try {
             int _type = ENDFUNC;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:307:9: ( 'endfunc' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:307:11: 'endfunc'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:306:9: ( 'endfunc' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:306:11: 'endfunc'
             {
             match("endfunc"); 
 
@@ -1725,8 +1701,8 @@ public class SvgLexer extends Lexer {
         try {
             int _type = RETURN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:308:9: ( 'return' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:308:11: 'return'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:307:9: ( 'return' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:307:11: 'return'
             {
             match("return"); 
 
@@ -1748,8 +1724,8 @@ public class SvgLexer extends Lexer {
         try {
             int _type = READ;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:309:9: ( 'read' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:309:11: 'read'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:308:9: ( 'read' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:308:11: 'read'
             {
             match("read"); 
 
@@ -1771,8 +1747,8 @@ public class SvgLexer extends Lexer {
         try {
             int _type = WRITE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:310:9: ( 'write' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:310:11: 'write'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:309:9: ( 'write' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:309:11: 'write'
             {
             match("write"); 
 
@@ -1794,8 +1770,8 @@ public class SvgLexer extends Lexer {
         try {
             int _type = ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:311:9: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:311:13: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:310:9: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:310:13: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             {
             if ( (input.LA(1) >= 'A' && input.LA(1) <= 'Z')||input.LA(1)=='_'||(input.LA(1) >= 'a' && input.LA(1) <= 'z') ) {
                 input.consume();
@@ -1807,7 +1783,7 @@ public class SvgLexer extends Lexer {
             }
 
 
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:311:37: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:310:37: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             loop1:
             do {
                 int alt1=2;
@@ -1857,10 +1833,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = INT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:312:9: ( ( '0' .. '9' )+ )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:312:13: ( '0' .. '9' )+
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:311:9: ( ( '0' .. '9' )+ )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:311:13: ( '0' .. '9' )+
             {
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:312:13: ( '0' .. '9' )+
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:311:13: ( '0' .. '9' )+
             int cnt2=0;
             loop2:
             do {
@@ -1915,10 +1891,10 @@ public class SvgLexer extends Lexer {
         try {
             int _type = FLOAT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:313:9: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )+ )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:313:11: ( '0' .. '9' )+ '.' ( '0' .. '9' )+
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:312:9: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )+ )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:312:11: ( '0' .. '9' )+ '.' ( '0' .. '9' )+
             {
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:313:11: ( '0' .. '9' )+
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:312:11: ( '0' .. '9' )+
             int cnt3=0;
             loop3:
             do {
@@ -1959,7 +1935,7 @@ public class SvgLexer extends Lexer {
 
             match('.'); 
 
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:313:25: ( '0' .. '9' )+
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:312:25: ( '0' .. '9' )+
             int cnt4=0;
             loop4:
             do {
@@ -2014,7 +1990,7 @@ public class SvgLexer extends Lexer {
         try {
             int _type = COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:316:9: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '/*' ( options {greedy=false; } : . )* '*/' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:315:9: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '/*' ( options {greedy=false; } : . )* '*/' )
             int alt8=2;
             int LA8_0 = input.LA(1);
 
@@ -2044,13 +2020,13 @@ public class SvgLexer extends Lexer {
             }
             switch (alt8) {
                 case 1 :
-                    // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:316:11: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
+                    // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:315:11: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
                     {
                     match("//"); 
 
 
 
-                    // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:316:16: (~ ( '\\n' | '\\r' ) )*
+                    // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:315:16: (~ ( '\\n' | '\\r' ) )*
                     loop5:
                     do {
                         int alt5=2;
@@ -2084,7 +2060,7 @@ public class SvgLexer extends Lexer {
                     } while (true);
 
 
-                    // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:316:30: ( '\\r' )?
+                    // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:315:30: ( '\\r' )?
                     int alt6=2;
                     int LA6_0 = input.LA(1);
 
@@ -2093,7 +2069,7 @@ public class SvgLexer extends Lexer {
                     }
                     switch (alt6) {
                         case 1 :
-                            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:316:30: '\\r'
+                            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:315:30: '\\r'
                             {
                             match('\r'); 
 
@@ -2110,13 +2086,13 @@ public class SvgLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:317:11: '/*' ( options {greedy=false; } : . )* '*/'
+                    // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:316:11: '/*' ( options {greedy=false; } : . )* '*/'
                     {
                     match("/*"); 
 
 
 
-                    // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:317:16: ( options {greedy=false; } : . )*
+                    // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:316:16: ( options {greedy=false; } : . )*
                     loop7:
                     do {
                         int alt7=2;
@@ -2141,7 +2117,7 @@ public class SvgLexer extends Lexer {
 
                         switch (alt7) {
                     	case 1 :
-                    	    // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:317:44: .
+                    	    // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:316:44: .
                     	    {
                     	    matchAny(); 
 
@@ -2178,12 +2154,12 @@ public class SvgLexer extends Lexer {
         try {
             int _type = STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:321:9: ( '\"' ( ESC_SEQ |~ ( '\\\\' | '\"' ) )* '\"' )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:321:12: '\"' ( ESC_SEQ |~ ( '\\\\' | '\"' ) )* '\"'
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:320:9: ( '\"' ( ESC_SEQ |~ ( '\\\\' | '\"' ) )* '\"' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:320:12: '\"' ( ESC_SEQ |~ ( '\\\\' | '\"' ) )* '\"'
             {
             match('\"'); 
 
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:321:16: ( ESC_SEQ |~ ( '\\\\' | '\"' ) )*
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:320:16: ( ESC_SEQ |~ ( '\\\\' | '\"' ) )*
             loop9:
             do {
                 int alt9=3;
@@ -2199,7 +2175,7 @@ public class SvgLexer extends Lexer {
 
                 switch (alt9) {
             	case 1 :
-            	    // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:321:18: ESC_SEQ
+            	    // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:320:18: ESC_SEQ
             	    {
             	    mESC_SEQ(); 
 
@@ -2207,7 +2183,7 @@ public class SvgLexer extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:321:28: ~ ( '\\\\' | '\"' )
+            	    // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:320:28: ~ ( '\\\\' | '\"' )
             	    {
             	    if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '!')||(input.LA(1) >= '#' && input.LA(1) <= '[')||(input.LA(1) >= ']' && input.LA(1) <= '\uFFFF') ) {
             	        input.consume();
@@ -2244,8 +2220,8 @@ public class SvgLexer extends Lexer {
     // $ANTLR start "ESC_SEQ"
     public final void mESC_SEQ() throws RecognitionException {
         try {
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:327:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' ) )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:327:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:326:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' ) )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:326:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' )
             {
             match('\\'); 
 
@@ -2274,8 +2250,8 @@ public class SvgLexer extends Lexer {
         try {
             int _type = WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:330:9: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
-            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:330:11: ( ' ' | '\\t' | '\\r' | '\\n' )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:329:9: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
+            // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:329:11: ( ' ' | '\\t' | '\\r' | '\\n' )
             {
             if ( (input.LA(1) >= '\t' && input.LA(1) <= '\n')||input.LA(1)=='\r'||input.LA(1)==' ' ) {
                 input.consume();
@@ -2301,246 +2277,246 @@ public class SvgLexer extends Lexer {
     // $ANTLR end "WS"
 
     public void mTokens() throws RecognitionException {
-        // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:8: ( T__70 | T__71 | T__72 | T__73 | T__74 | T__75 | T__76 | T__77 | T__78 | T__79 | T__80 | T__81 | T__82 | T__83 | T__84 | T__85 | T__86 | T__87 | T__88 | T__89 | T__90 | T__91 | T__92 | T__93 | T__94 | T__95 | T__96 | T__97 | T__98 | T__99 | EQUAL | COMP_EQUAL | NOT_EQUAL | LT | LE | GT | GE | PLUS | MINUS | TRUE | FALSE | MUL | DIV | MOD | LPAREN | RPAREN | WHILE | NOT | AND | OR | IF | THEN | ELSE | CREATE | DESTROY | MODIFY | MOVE | SCALE | ROTATE | SOURCE | TEXT | CIRCLE | RECTANGLE | ELLIPSE | LINE | POLYGON | ELIF | ENDIF | FOR | FUNC | ENDFUNC | RETURN | READ | WRITE | ID | INT | FLOAT | COMMENT | STRING | WS )
-        int alt10=80;
+        // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:8: ( T__69 | T__70 | T__71 | T__72 | T__73 | T__74 | T__75 | T__76 | T__77 | T__78 | T__79 | T__80 | T__81 | T__82 | T__83 | T__84 | T__85 | T__86 | T__87 | T__88 | T__89 | T__90 | T__91 | T__92 | T__93 | T__94 | T__95 | T__96 | T__97 | T__98 | EQUAL | COMP_EQUAL | NOT_EQUAL | LT | LE | GT | GE | PLUS | MINUS | TRUE | FALSE | MUL | DIV | MOD | LPAREN | RPAREN | FOR | NOT | AND | OR | IF | THEN | ELSE | CREATE | DESTROY | MODIFY | MOVE | SCALE | ROTATE | SOURCE | TEXT | CIRCLE | RECTANGLE | ELLIPSE | LINE | POLYGON | ELIF | ENDIF | FUNC | ENDFUNC | RETURN | READ | WRITE | ID | INT | FLOAT | COMMENT | STRING | WS )
+        int alt10=79;
         alt10 = dfa10.predict(input);
         switch (alt10) {
             case 1 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:10: T__70
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:10: T__69
+                {
+                mT__69(); 
+
+
+                }
+                break;
+            case 2 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:16: T__70
                 {
                 mT__70(); 
 
 
                 }
                 break;
-            case 2 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:16: T__71
+            case 3 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:22: T__71
                 {
                 mT__71(); 
 
 
                 }
                 break;
-            case 3 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:22: T__72
+            case 4 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:28: T__72
                 {
                 mT__72(); 
 
 
                 }
                 break;
-            case 4 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:28: T__73
+            case 5 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:34: T__73
                 {
                 mT__73(); 
 
 
                 }
                 break;
-            case 5 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:34: T__74
+            case 6 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:40: T__74
                 {
                 mT__74(); 
 
 
                 }
                 break;
-            case 6 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:40: T__75
+            case 7 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:46: T__75
                 {
                 mT__75(); 
 
 
                 }
                 break;
-            case 7 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:46: T__76
+            case 8 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:52: T__76
                 {
                 mT__76(); 
 
 
                 }
                 break;
-            case 8 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:52: T__77
+            case 9 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:58: T__77
                 {
                 mT__77(); 
 
 
                 }
                 break;
-            case 9 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:58: T__78
+            case 10 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:64: T__78
                 {
                 mT__78(); 
 
 
                 }
                 break;
-            case 10 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:64: T__79
+            case 11 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:70: T__79
                 {
                 mT__79(); 
 
 
                 }
                 break;
-            case 11 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:70: T__80
+            case 12 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:76: T__80
                 {
                 mT__80(); 
 
 
                 }
                 break;
-            case 12 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:76: T__81
+            case 13 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:82: T__81
                 {
                 mT__81(); 
 
 
                 }
                 break;
-            case 13 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:82: T__82
+            case 14 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:88: T__82
                 {
                 mT__82(); 
 
 
                 }
                 break;
-            case 14 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:88: T__83
+            case 15 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:94: T__83
                 {
                 mT__83(); 
 
 
                 }
                 break;
-            case 15 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:94: T__84
+            case 16 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:100: T__84
                 {
                 mT__84(); 
 
 
                 }
                 break;
-            case 16 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:100: T__85
+            case 17 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:106: T__85
                 {
                 mT__85(); 
 
 
                 }
                 break;
-            case 17 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:106: T__86
+            case 18 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:112: T__86
                 {
                 mT__86(); 
 
 
                 }
                 break;
-            case 18 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:112: T__87
+            case 19 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:118: T__87
                 {
                 mT__87(); 
 
 
                 }
                 break;
-            case 19 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:118: T__88
+            case 20 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:124: T__88
                 {
                 mT__88(); 
 
 
                 }
                 break;
-            case 20 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:124: T__89
+            case 21 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:130: T__89
                 {
                 mT__89(); 
 
 
                 }
                 break;
-            case 21 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:130: T__90
+            case 22 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:136: T__90
                 {
                 mT__90(); 
 
 
                 }
                 break;
-            case 22 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:136: T__91
+            case 23 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:142: T__91
                 {
                 mT__91(); 
 
 
                 }
                 break;
-            case 23 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:142: T__92
+            case 24 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:148: T__92
                 {
                 mT__92(); 
 
 
                 }
                 break;
-            case 24 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:148: T__93
+            case 25 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:154: T__93
                 {
                 mT__93(); 
 
 
                 }
                 break;
-            case 25 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:154: T__94
+            case 26 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:160: T__94
                 {
                 mT__94(); 
 
 
                 }
                 break;
-            case 26 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:160: T__95
+            case 27 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:166: T__95
                 {
                 mT__95(); 
 
 
                 }
                 break;
-            case 27 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:166: T__96
+            case 28 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:172: T__96
                 {
                 mT__96(); 
 
 
                 }
                 break;
-            case 28 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:172: T__97
+            case 29 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:178: T__97
                 {
                 mT__97(); 
 
 
                 }
                 break;
-            case 29 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:178: T__98
+            case 30 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:184: T__98
                 {
                 mT__98(); 
-
-
-                }
-                break;
-            case 30 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:184: T__99
-                {
-                mT__99(); 
 
 
                 }
@@ -2674,15 +2650,15 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 47 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:277: WHILE
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:277: FOR
                 {
-                mWHILE(); 
+                mFOR(); 
 
 
                 }
                 break;
             case 48 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:283: NOT
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:281: NOT
                 {
                 mNOT(); 
 
@@ -2690,7 +2666,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 49 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:287: AND
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:285: AND
                 {
                 mAND(); 
 
@@ -2698,7 +2674,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 50 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:291: OR
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:289: OR
                 {
                 mOR(); 
 
@@ -2706,7 +2682,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 51 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:294: IF
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:292: IF
                 {
                 mIF(); 
 
@@ -2714,7 +2690,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 52 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:297: THEN
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:295: THEN
                 {
                 mTHEN(); 
 
@@ -2722,7 +2698,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 53 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:302: ELSE
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:300: ELSE
                 {
                 mELSE(); 
 
@@ -2730,7 +2706,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 54 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:307: CREATE
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:305: CREATE
                 {
                 mCREATE(); 
 
@@ -2738,7 +2714,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 55 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:314: DESTROY
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:312: DESTROY
                 {
                 mDESTROY(); 
 
@@ -2746,7 +2722,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 56 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:322: MODIFY
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:320: MODIFY
                 {
                 mMODIFY(); 
 
@@ -2754,7 +2730,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 57 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:329: MOVE
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:327: MOVE
                 {
                 mMOVE(); 
 
@@ -2762,7 +2738,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 58 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:334: SCALE
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:332: SCALE
                 {
                 mSCALE(); 
 
@@ -2770,7 +2746,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 59 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:340: ROTATE
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:338: ROTATE
                 {
                 mROTATE(); 
 
@@ -2778,7 +2754,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 60 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:347: SOURCE
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:345: SOURCE
                 {
                 mSOURCE(); 
 
@@ -2786,7 +2762,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 61 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:354: TEXT
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:352: TEXT
                 {
                 mTEXT(); 
 
@@ -2794,7 +2770,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 62 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:359: CIRCLE
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:357: CIRCLE
                 {
                 mCIRCLE(); 
 
@@ -2802,7 +2778,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 63 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:366: RECTANGLE
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:364: RECTANGLE
                 {
                 mRECTANGLE(); 
 
@@ -2810,7 +2786,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 64 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:376: ELLIPSE
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:374: ELLIPSE
                 {
                 mELLIPSE(); 
 
@@ -2818,7 +2794,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 65 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:384: LINE
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:382: LINE
                 {
                 mLINE(); 
 
@@ -2826,7 +2802,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 66 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:389: POLYGON
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:387: POLYGON
                 {
                 mPOLYGON(); 
 
@@ -2834,7 +2810,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 67 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:397: ELIF
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:395: ELIF
                 {
                 mELIF(); 
 
@@ -2842,7 +2818,7 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 68 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:402: ENDIF
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:400: ENDIF
                 {
                 mENDIF(); 
 
@@ -2850,95 +2826,87 @@ public class SvgLexer extends Lexer {
                 }
                 break;
             case 69 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:408: FOR
-                {
-                mFOR(); 
-
-
-                }
-                break;
-            case 70 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:412: FUNC
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:406: FUNC
                 {
                 mFUNC(); 
 
 
                 }
                 break;
-            case 71 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:417: ENDFUNC
+            case 70 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:411: ENDFUNC
                 {
                 mENDFUNC(); 
 
 
                 }
                 break;
-            case 72 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:425: RETURN
+            case 71 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:419: RETURN
                 {
                 mRETURN(); 
 
 
                 }
                 break;
-            case 73 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:432: READ
+            case 72 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:426: READ
                 {
                 mREAD(); 
 
 
                 }
                 break;
-            case 74 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:437: WRITE
+            case 73 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:431: WRITE
                 {
                 mWRITE(); 
 
 
                 }
                 break;
-            case 75 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:443: ID
+            case 74 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:437: ID
                 {
                 mID(); 
 
 
                 }
                 break;
-            case 76 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:446: INT
+            case 75 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:440: INT
                 {
                 mINT(); 
 
 
                 }
                 break;
-            case 77 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:450: FLOAT
+            case 76 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:444: FLOAT
                 {
                 mFLOAT(); 
 
 
                 }
                 break;
-            case 78 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:456: COMMENT
+            case 77 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:450: COMMENT
                 {
                 mCOMMENT(); 
 
 
                 }
                 break;
-            case 79 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:464: STRING
+            case 78 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:458: STRING
                 {
                 mSTRING(); 
 
 
                 }
                 break;
-            case 80 :
-                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:471: WS
+            case 79 :
+                // /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g:1:465: WS
                 {
                 mWS(); 
 
@@ -2954,95 +2922,95 @@ public class SvgLexer extends Lexer {
     protected DFA10 dfa10 = new DFA10(this);
     static final String DFA10_eotS =
         "\7\uffff\15\53\2\uffff\1\104\1\uffff\1\106\1\110\2\uffff\1\53\1"+
-        "\uffff\1\115\3\uffff\11\53\1\uffff\1\132\2\uffff\14\53\1\151\3\53"+
-        "\1\160\3\53\6\uffff\3\53\2\uffff\14\53\2\uffff\1\53\1\u008a\5\53"+
-        "\1\u0090\5\53\1\uffff\3\53\1\u0099\2\53\1\uffff\1\u009c\30\53\1"+
-        "\uffff\1\u00b6\1\u00b8\1\u00b9\1\u00bb\1\53\1\uffff\1\53\1\u00be"+
-        "\4\53\1\u00c5\1\53\1\uffff\2\53\1\uffff\2\53\1\u00cb\2\53\1\u00ce"+
-        "\1\u00cf\1\u00d0\2\53\1\u00d3\1\53\1\u00d5\5\53\1\u00db\6\53\1\uffff"+
-        "\1\53\5\uffff\1\u00e5\1\uffff\1\u00e6\3\53\1\uffff\1\u00ec\1\uffff"+
-        "\5\53\1\uffff\2\53\3\uffff\1\u00f4\1\u00f5\1\uffff\1\53\1\uffff"+
-        "\1\u00f7\4\53\1\uffff\1\u00fc\5\53\1\u0102\4\uffff\1\53\1\u0104"+
-        "\1\53\3\uffff\1\u0106\3\53\1\u010a\1\53\1\u010c\2\uffff\1\53\1\uffff"+
-        "\1\53\1\u010f\1\53\1\u0111\1\uffff\1\u0112\1\u0113\1\u0114\2\53"+
-        "\1\uffff\1\53\1\uffff\1\u0118\1\uffff\1\u0119\2\53\1\uffff\1\53"+
-        "\1\uffff\1\u011d\1\u011e\1\uffff\1\u011f\4\uffff\1\u0120\2\53\2"+
-        "\uffff\2\53\1\u0125\4\uffff\1\u0126\2\53\1\u0129\2\uffff\1\u012a"+
-        "\1\53\2\uffff\1\u012c\1\uffff";
+        "\uffff\1\115\3\uffff\11\53\1\uffff\1\131\2\uffff\14\53\1\150\3\53"+
+        "\1\157\3\53\6\uffff\3\53\2\uffff\13\53\2\uffff\1\53\1\u0088\5\53"+
+        "\1\u008e\5\53\1\uffff\3\53\1\u0097\2\53\1\uffff\1\u009a\27\53\1"+
+        "\uffff\1\u00b3\1\u00b5\1\u00b6\1\u00b8\1\53\1\uffff\1\53\1\u00bb"+
+        "\4\53\1\u00c2\1\53\1\uffff\2\53\1\uffff\2\53\1\u00c8\2\53\1\u00cb"+
+        "\1\u00cc\1\u00cd\1\u00ce\1\53\1\u00d0\5\53\1\u00d6\7\53\1\uffff"+
+        "\1\53\5\uffff\1\u00e1\1\uffff\1\u00e2\3\53\1\uffff\1\u00e8\1\uffff"+
+        "\5\53\1\uffff\2\53\4\uffff\1\53\1\uffff\1\u00f1\4\53\1\uffff\1\u00f6"+
+        "\4\53\1\u00fb\1\53\1\u00fd\4\uffff\1\53\1\u00ff\1\53\3\uffff\1\u0101"+
+        "\3\53\1\u0105\1\53\1\u0107\1\53\1\uffff\1\53\1\u010a\1\53\1\u010c"+
+        "\1\uffff\1\u010d\1\u010e\1\u010f\1\53\1\uffff\1\53\1\uffff\1\53"+
+        "\1\uffff\1\u0113\1\uffff\1\u0114\2\53\1\uffff\1\53\1\uffff\1\u0118"+
+        "\1\u0119\1\uffff\1\u011a\4\uffff\1\u011b\2\53\2\uffff\2\53\1\u0120"+
+        "\4\uffff\1\u0121\2\53\1\u0124\2\uffff\1\u0125\1\53\2\uffff\1\u0127"+
+        "\1\uffff";
     static final String DFA10_eofS =
-        "\u012d\uffff";
+        "\u0128\uffff";
     static final String DFA10_minS =
         "\1\11\6\uffff\2\154\1\157\1\141\1\162\1\157\1\146\1\151\1\157\1"+
         "\142\3\145\2\uffff\1\75\1\uffff\2\75\2\uffff\1\145\1\uffff\1\52"+
-        "\3\uffff\1\150\1\154\1\162\1\145\1\157\1\143\1\157\1\151\1\157\1"+
+        "\3\uffff\1\154\1\162\1\145\1\157\1\143\1\157\1\151\1\157\1\162\1"+
         "\uffff\1\56\2\uffff\1\164\1\144\1\165\1\154\1\164\1\154\1\156\1"+
         "\154\1\156\1\145\1\162\1\141\1\60\1\147\1\162\1\154\1\60\1\141\1"+
-        "\162\1\154\6\uffff\1\165\1\145\1\170\2\uffff\3\151\1\144\1\145\1"+
-        "\163\1\144\1\141\1\165\1\164\1\162\1\154\2\uffff\1\145\1\60\1\145"+
-        "\1\144\1\163\1\154\1\164\1\60\1\163\1\143\1\145\1\151\1\154\1\uffff"+
-        "\1\150\1\145\1\155\1\60\1\151\1\145\1\uffff\1\60\1\164\1\165\1\144"+
-        "\1\164\1\154\1\145\1\156\1\164\1\154\1\164\1\145\1\151\2\146\1\141"+
-        "\1\164\1\151\1\145\1\154\1\162\1\141\1\143\1\171\1\162\1\uffff\3"+
-        "\60\2\55\1\uffff\1\145\1\60\1\156\1\172\1\151\1\164\1\55\1\141\1"+
-        "\uffff\1\161\1\156\1\uffff\1\141\1\162\1\60\1\151\1\157\3\60\2\145"+
-        "\1\60\1\160\1\60\1\146\1\165\1\164\1\162\1\146\1\60\1\145\1\143"+
-        "\1\164\1\154\1\147\1\156\1\uffff\1\162\4\uffff\1\163\1\60\1\uffff"+
+        "\162\1\154\6\uffff\1\165\1\145\1\170\2\uffff\1\151\1\144\1\145\1"+
+        "\163\1\144\1\141\1\165\1\164\1\162\1\154\1\151\2\uffff\1\145\1\60"+
+        "\1\145\1\144\1\163\1\154\1\164\1\60\1\163\1\143\1\145\1\151\1\154"+
+        "\1\uffff\1\150\1\145\1\155\1\60\1\151\1\145\1\uffff\1\60\1\164\1"+
+        "\165\1\144\1\164\1\154\1\145\1\156\1\164\1\145\1\151\2\146\1\141"+
+        "\1\164\1\151\1\145\1\154\1\162\1\141\1\143\1\171\1\164\1\162\1\uffff"+
+        "\3\60\2\55\1\uffff\1\145\1\60\1\156\1\172\1\151\1\164\1\55\1\141"+
+        "\1\uffff\1\161\1\156\1\uffff\1\141\1\162\1\60\1\151\1\157\4\60\1"+
+        "\160\1\60\1\146\1\165\1\164\1\162\1\146\1\60\1\145\1\143\1\164\1"+
+        "\154\1\147\1\145\1\156\1\uffff\1\162\4\uffff\1\163\1\60\1\uffff"+
         "\1\60\1\157\1\143\1\145\1\160\1\60\1\uffff\1\154\1\165\1\164\2\156"+
-        "\1\uffff\1\143\1\167\3\uffff\2\60\1\uffff\1\163\1\uffff\1\60\1\156"+
-        "\1\145\1\157\1\171\1\uffff\1\60\3\145\1\157\1\141\1\60\4\uffff\1"+
-        "\156\1\60\1\162\3\uffff\1\60\1\145\1\141\1\147\1\60\1\141\1\60\2"+
-        "\uffff\1\145\1\uffff\1\143\1\60\1\171\1\60\1\uffff\3\60\1\156\1"+
-        "\164\1\uffff\1\164\1\uffff\1\60\1\uffff\1\60\1\164\1\154\1\uffff"+
-        "\1\154\1\uffff\2\60\1\uffff\1\60\4\uffff\1\60\1\145\1\141\2\uffff"+
-        "\1\151\1\145\1\60\4\uffff\1\60\1\154\1\157\1\60\2\uffff\1\60\1\156"+
-        "\2\uffff\1\60\1\uffff";
+        "\1\uffff\1\143\1\167\4\uffff\1\163\1\uffff\1\60\1\156\1\145\1\157"+
+        "\1\171\1\uffff\1\60\3\145\1\157\1\60\1\141\1\60\4\uffff\1\156\1"+
+        "\60\1\162\3\uffff\1\60\1\145\1\141\1\147\1\60\1\141\1\60\1\145\1"+
+        "\uffff\1\143\1\60\1\171\1\60\1\uffff\3\60\1\156\1\uffff\1\164\1"+
+        "\uffff\1\164\1\uffff\1\60\1\uffff\1\60\1\164\1\154\1\uffff\1\154"+
+        "\1\uffff\2\60\1\uffff\1\60\4\uffff\1\60\1\145\1\141\2\uffff\1\151"+
+        "\1\145\1\60\4\uffff\1\60\1\154\1\157\1\60\2\uffff\1\60\1\156\2\uffff"+
+        "\1\60\1\uffff";
     static final String DFA10_maxS =
         "\1\175\6\uffff\1\156\2\157\1\165\1\162\1\157\1\164\1\151\1\157\1"+
         "\162\3\145\2\uffff\1\75\1\uffff\2\75\2\uffff\1\162\1\uffff\1\57"+
-        "\3\uffff\1\162\1\156\1\162\1\145\3\157\1\151\1\157\1\uffff\1\71"+
+        "\3\uffff\1\156\1\162\1\145\3\157\1\151\1\157\1\162\1\uffff\1\71"+
         "\2\uffff\1\164\1\144\1\165\1\154\1\164\1\154\1\162\1\154\1\156\1"+
         "\145\1\162\1\141\1\172\1\156\1\164\1\154\1\172\1\164\1\162\1\154"+
-        "\6\uffff\1\165\1\145\1\170\2\uffff\2\151\1\163\1\144\1\145\1\163"+
-        "\1\166\1\141\1\165\1\164\1\162\1\154\2\uffff\1\145\1\172\1\145\1"+
+        "\6\uffff\1\165\1\145\1\170\2\uffff\1\163\1\144\1\145\1\163\1\166"+
+        "\1\141\1\165\1\164\1\162\1\154\1\151\2\uffff\1\145\1\172\1\145\1"+
         "\144\1\163\1\154\1\164\1\172\1\163\1\143\1\145\1\151\1\154\1\uffff"+
         "\1\150\1\145\1\155\1\172\1\151\1\145\1\uffff\1\172\1\164\1\165\1"+
-        "\144\1\164\1\154\1\145\1\156\1\164\1\154\1\164\1\145\1\151\1\146"+
-        "\1\151\1\141\1\164\1\151\1\145\1\154\1\162\1\141\1\143\1\171\1\162"+
-        "\1\uffff\4\172\1\55\1\uffff\1\145\1\172\1\156\1\172\1\151\1\164"+
-        "\1\172\1\141\1\uffff\1\161\1\156\1\uffff\1\141\1\162\1\172\1\151"+
-        "\1\157\3\172\2\145\1\172\1\160\1\172\1\146\1\165\1\164\1\162\1\146"+
-        "\1\172\1\145\1\143\1\164\1\154\1\147\1\156\1\uffff\1\162\4\uffff"+
-        "\1\167\1\172\1\uffff\1\172\1\157\1\143\1\145\1\167\1\172\1\uffff"+
-        "\1\154\1\165\1\164\2\156\1\uffff\1\143\1\167\3\uffff\2\172\1\uffff"+
-        "\1\163\1\uffff\1\172\1\156\1\145\1\157\1\171\1\uffff\1\172\3\145"+
-        "\1\157\1\141\1\172\4\uffff\1\156\1\172\1\162\3\uffff\1\172\1\145"+
-        "\1\141\1\147\1\172\1\141\1\172\2\uffff\1\145\1\uffff\1\143\1\172"+
-        "\1\171\1\172\1\uffff\3\172\1\156\1\164\1\uffff\1\164\1\uffff\1\172"+
-        "\1\uffff\1\172\1\164\1\154\1\uffff\1\154\1\uffff\2\172\1\uffff\1"+
-        "\172\4\uffff\1\172\1\145\1\141\2\uffff\1\151\1\145\1\172\4\uffff"+
-        "\1\172\1\154\1\157\1\172\2\uffff\1\172\1\156\2\uffff\1\172\1\uffff";
+        "\144\1\164\1\154\1\145\1\156\1\164\1\145\1\151\1\146\1\151\1\141"+
+        "\1\164\1\151\1\145\1\154\1\162\1\141\1\143\1\171\1\164\1\162\1\uffff"+
+        "\4\172\1\55\1\uffff\1\145\1\172\1\156\1\172\1\151\1\164\1\172\1"+
+        "\141\1\uffff\1\161\1\156\1\uffff\1\141\1\162\1\172\1\151\1\157\4"+
+        "\172\1\160\1\172\1\146\1\165\1\164\1\162\1\146\1\172\1\145\1\143"+
+        "\1\164\1\154\1\147\1\145\1\156\1\uffff\1\162\4\uffff\1\167\1\172"+
+        "\1\uffff\1\172\1\157\1\143\1\145\1\167\1\172\1\uffff\1\154\1\165"+
+        "\1\164\2\156\1\uffff\1\143\1\167\4\uffff\1\163\1\uffff\1\172\1\156"+
+        "\1\145\1\157\1\171\1\uffff\1\172\3\145\1\157\1\172\1\141\1\172\4"+
+        "\uffff\1\156\1\172\1\162\3\uffff\1\172\1\145\1\141\1\147\1\172\1"+
+        "\141\1\172\1\145\1\uffff\1\143\1\172\1\171\1\172\1\uffff\3\172\1"+
+        "\156\1\uffff\1\164\1\uffff\1\164\1\uffff\1\172\1\uffff\1\172\1\164"+
+        "\1\154\1\uffff\1\154\1\uffff\2\172\1\uffff\1\172\4\uffff\1\172\1"+
+        "\145\1\141\2\uffff\1\151\1\145\1\172\4\uffff\1\172\1\154\1\157\1"+
+        "\172\2\uffff\1\172\1\156\2\uffff\1\172\1\uffff";
     static final String DFA10_acceptS =
         "\1\uffff\1\1\1\2\1\3\1\4\1\5\1\6\15\uffff\1\35\1\36\1\uffff\1\41"+
         "\2\uffff\1\46\1\47\1\uffff\1\52\1\uffff\1\54\1\55\1\56\11\uffff"+
-        "\1\113\1\uffff\1\117\1\120\24\uffff\1\40\1\37\1\43\1\42\1\45\1\44"+
-        "\3\uffff\1\116\1\53\14\uffff\1\114\1\115\15\uffff\1\63\6\uffff\1"+
-        "\62\31\uffff\1\61\5\uffff\1\105\10\uffff\1\60\2\uffff\1\32\31\uffff"+
-        "\1\10\1\uffff\1\11\1\13\1\15\1\14\2\uffff\1\106\6\uffff\1\101\5"+
-        "\uffff\1\111\2\uffff\1\50\1\64\1\75\2\uffff\1\65\1\uffff\1\103\5"+
-        "\uffff\1\71\7\uffff\1\16\1\17\1\51\1\20\3\uffff\1\24\1\25\1\26\7"+
-        "\uffff\1\57\1\112\1\uffff\1\104\4\uffff\1\72\5\uffff\1\12\1\uffff"+
-        "\1\22\1\uffff\1\27\3\uffff\1\110\1\uffff\1\34\2\uffff\1\66\1\uffff"+
-        "\1\70\1\74\1\73\1\76\3\uffff\1\23\1\30\3\uffff\1\100\1\107\1\67"+
-        "\1\102\4\uffff\1\33\1\7\2\uffff\1\77\1\21\1\uffff\1\31";
+        "\1\112\1\uffff\1\116\1\117\24\uffff\1\40\1\37\1\43\1\42\1\45\1\44"+
+        "\3\uffff\1\115\1\53\13\uffff\1\113\1\114\15\uffff\1\63\6\uffff\1"+
+        "\62\30\uffff\1\61\5\uffff\1\57\10\uffff\1\60\2\uffff\1\32\30\uffff"+
+        "\1\10\1\uffff\1\11\1\13\1\15\1\14\2\uffff\1\105\6\uffff\1\101\5"+
+        "\uffff\1\110\2\uffff\1\50\1\64\1\75\1\65\1\uffff\1\103\5\uffff\1"+
+        "\71\10\uffff\1\16\1\17\1\51\1\20\3\uffff\1\24\1\25\1\26\10\uffff"+
+        "\1\104\4\uffff\1\72\4\uffff\1\111\1\uffff\1\12\1\uffff\1\22\1\uffff"+
+        "\1\27\3\uffff\1\107\1\uffff\1\34\2\uffff\1\66\1\uffff\1\70\1\74"+
+        "\1\73\1\76\3\uffff\1\23\1\30\3\uffff\1\100\1\106\1\67\1\102\4\uffff"+
+        "\1\33\1\7\2\uffff\1\77\1\21\1\uffff\1\31";
     static final String DFA10_specialS =
-        "\u012d\uffff}>";
+        "\u0128\uffff}>";
     static final String[] DFA10_transitionS = {
             "\2\56\2\uffff\1\56\22\uffff\1\56\1\27\1\55\2\uffff\1\37\1\1"+
             "\1\uffff\1\40\1\41\1\35\1\32\1\2\1\33\1\uffff\1\36\12\54\1\3"+
-            "\1\4\1\30\1\26\1\31\2\uffff\2\53\1\44\1\45\10\53\1\46\4\53\1"+
-            "\50\1\47\7\53\1\5\1\uffff\1\6\1\uffff\1\53\1\uffff\1\7\1\10"+
-            "\1\51\1\11\1\43\1\12\1\13\1\14\1\15\2\53\1\16\1\53\1\17\1\20"+
-            "\1\52\1\53\1\21\1\53\1\34\1\53\1\22\1\42\1\53\1\23\1\53\1\24"+
+            "\1\4\1\30\1\26\1\31\2\uffff\2\53\1\43\1\44\10\53\1\45\4\53\1"+
+            "\47\1\46\7\53\1\5\1\uffff\1\6\1\uffff\1\53\1\uffff\1\7\1\10"+
+            "\1\50\1\11\1\42\1\12\1\13\1\14\1\15\2\53\1\16\1\53\1\17\1\20"+
+            "\1\51\1\53\1\21\1\53\1\34\1\53\1\22\1\52\1\53\1\23\1\53\1\24"+
             "\1\uffff\1\25",
             "",
             "",
@@ -3077,86 +3045,87 @@ public class SvgLexer extends Lexer {
             "",
             "",
             "",
-            "\1\116\11\uffff\1\117",
-            "\1\120\1\uffff\1\121",
+            "\1\116\1\uffff\1\117",
+            "\1\120",
+            "\1\121",
             "\1\122",
-            "\1\123",
-            "\1\124",
-            "\1\125\13\uffff\1\126",
+            "\1\123\13\uffff\1\124",
+            "\1\125",
+            "\1\126",
             "\1\127",
             "\1\130",
-            "\1\131",
             "",
-            "\1\133\1\uffff\12\54",
+            "\1\132\1\uffff\12\54",
             "",
             "",
+            "\1\133",
             "\1\134",
             "\1\135",
             "\1\136",
             "\1\137",
             "\1\140",
-            "\1\141",
-            "\1\142\3\uffff\1\143",
+            "\1\141\3\uffff\1\142",
+            "\1\143",
             "\1\144",
             "\1\145",
             "\1\146",
             "\1\147",
-            "\1\150",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\152\6\uffff\1\153",
-            "\1\154\1\uffff\1\155",
-            "\1\156",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\10\53\1\157\21\53",
-            "\1\164\1\uffff\1\162\1\161\17\uffff\1\163",
+            "\1\151\6\uffff\1\152",
+            "\1\153\1\uffff\1\154",
+            "\1\155",
+            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\10\53\1\156\21\53",
+            "\1\163\1\uffff\1\161\1\160\17\uffff\1\162",
+            "\1\164",
             "\1\165",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
             "\1\166",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
             "\1\167",
             "\1\170",
-            "\1\171",
             "",
             "",
-            "\1\172",
-            "\1\173",
-            "\1\176\2\uffff\1\175\6\uffff\1\174",
-            "\1\177",
-            "\1\u0080",
+            "\1\173\2\uffff\1\172\6\uffff\1\171",
+            "\1\174",
+            "\1\175",
+            "\1\176",
+            "\1\177\21\uffff\1\u0080",
             "\1\u0081",
-            "\1\u0082\21\uffff\1\u0083",
+            "\1\u0082",
+            "\1\u0083",
             "\1\u0084",
             "\1\u0085",
             "\1\u0086",
+            "",
+            "",
             "\1\u0087",
-            "\1\u0088",
-            "",
-            "",
-            "\1\u0089",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "\1\u0089",
+            "\1\u008a",
             "\1\u008b",
             "\1\u008c",
             "\1\u008d",
-            "\1\u008e",
-            "\1\u008f",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "\1\u008f",
+            "\1\u0090",
             "\1\u0091",
             "\1\u0092",
             "\1\u0093",
+            "",
             "\1\u0094",
             "\1\u0095",
-            "",
             "\1\u0096",
-            "\1\u0097",
-            "\1\u0098",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\u009a",
-            "\1\u009b",
+            "\1\u0098",
+            "\1\u0099",
             "",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "\1\u009b",
+            "\1\u009c",
             "\1\u009d",
             "\1\u009e",
             "\1\u009f",
@@ -3166,11 +3135,11 @@ public class SvgLexer extends Lexer {
             "\1\u00a3",
             "\1\u00a4",
             "\1\u00a5",
-            "\1\u00a6",
-            "\1\u00a7",
+            "\1\u00a7\2\uffff\1\u00a6",
             "\1\u00a8",
             "\1\u00a9",
-            "\1\u00ab\2\uffff\1\u00aa",
+            "\1\u00aa",
+            "\1\u00ab",
             "\1\u00ac",
             "\1\u00ad",
             "\1\u00ae",
@@ -3178,128 +3147,130 @@ public class SvgLexer extends Lexer {
             "\1\u00b0",
             "\1\u00b1",
             "\1\u00b2",
-            "\1\u00b3",
-            "\1\u00b4",
-            "\1\u00b5",
             "",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\4\53\1\u00b7\25\53",
+            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\4\53\1\u00b4\25\53",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\u00ba\2\uffff\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32"+
+            "\1\u00b7\2\uffff\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32"+
             "\53",
-            "\1\u00bc",
+            "\1\u00b9",
             "",
-            "\1\u00bd",
+            "\1\u00ba",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "\1\u00bc",
+            "\1\u00bd",
+            "\1\u00be",
             "\1\u00bf",
-            "\1\u00c0",
-            "\1\u00c1",
-            "\1\u00c2",
-            "\1\u00c3\2\uffff\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\22"+
-            "\53\1\u00c4\7\53",
+            "\1\u00c0\2\uffff\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\22"+
+            "\53\1\u00c1\7\53",
+            "\1\u00c3",
+            "",
+            "\1\u00c4",
+            "\1\u00c5",
+            "",
             "\1\u00c6",
-            "",
             "\1\u00c7",
-            "\1\u00c8",
-            "",
+            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
             "\1\u00c9",
             "\1\u00ca",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\u00cc",
-            "\1\u00cd",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "\1\u00cf",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
             "\1\u00d1",
             "\1\u00d2",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "\1\u00d3",
             "\1\u00d4",
+            "\1\u00d5",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\u00d6",
             "\1\u00d7",
             "\1\u00d8",
             "\1\u00d9",
             "\1\u00da",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "\1\u00db",
             "\1\u00dc",
             "\1\u00dd",
+            "",
             "\1\u00de",
-            "\1\u00df",
-            "\1\u00e0",
-            "\1\u00e1",
-            "",
-            "\1\u00e2",
             "",
             "",
             "",
             "",
-            "\1\u00e3\3\uffff\1\u00e4",
+            "\1\u00df\3\uffff\1\u00e0",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
             "",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\u00e7",
-            "\1\u00e8",
+            "\1\u00e3",
+            "\1\u00e4",
+            "\1\u00e5",
+            "\1\u00e6\6\uffff\1\u00e7",
+            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "",
             "\1\u00e9",
-            "\1\u00ea\6\uffff\1\u00eb",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "",
+            "\1\u00ea",
+            "\1\u00eb",
+            "\1\u00ec",
             "\1\u00ed",
+            "",
             "\1\u00ee",
             "\1\u00ef",
-            "\1\u00f0",
-            "\1\u00f1",
             "",
+            "",
+            "",
+            "",
+            "\1\u00f0",
+            "",
+            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
             "\1\u00f2",
             "\1\u00f3",
-            "",
-            "",
-            "",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "",
-            "\1\u00f6",
+            "\1\u00f4",
+            "\1\u00f5",
             "",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "\1\u00f7",
             "\1\u00f8",
             "\1\u00f9",
             "\1\u00fa",
-            "\1\u00fb",
-            "",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\u00fd",
+            "\1\u00fc",
+            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "",
+            "",
+            "",
+            "",
             "\1\u00fe",
-            "\1\u00ff",
+            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
             "\1\u0100",
-            "\1\u0101",
+            "",
+            "",
+            "",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "",
-            "",
-            "",
-            "",
+            "\1\u0102",
             "\1\u0103",
+            "\1\u0104",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\u0105",
-            "",
-            "",
-            "",
+            "\1\u0106",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\u0107",
             "\1\u0108",
+            "",
             "\1\u0109",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
             "\1\u010b",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
             "",
-            "",
-            "\1\u010d",
-            "",
-            "\1\u010e",
+            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
             "\1\u0110",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "",
+            "\1\u0111",
+            "",
+            "\1\u0112",
             "",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
             "\1\u0115",
             "\1\u0116",
@@ -3307,41 +3278,33 @@ public class SvgLexer extends Lexer {
             "\1\u0117",
             "",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
             "",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\u011a",
-            "\1\u011b",
             "",
+            "",
+            "",
+            "",
+            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
             "\1\u011c",
+            "\1\u011d",
+            "",
+            "",
+            "\1\u011e",
+            "\1\u011f",
+            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "",
+            "",
+            "",
             "",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "",
-            "",
-            "",
-            "",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\u0121",
             "\1\u0122",
-            "",
-            "",
             "\1\u0123",
-            "\1\u0124",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "",
-            "",
-            "",
-            "",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\u0127",
-            "\1\u0128",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
             "",
             "",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\u012b",
+            "\1\u0126",
             "",
             "",
             "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
@@ -3378,7 +3341,7 @@ public class SvgLexer extends Lexer {
             this.transition = DFA10_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( T__70 | T__71 | T__72 | T__73 | T__74 | T__75 | T__76 | T__77 | T__78 | T__79 | T__80 | T__81 | T__82 | T__83 | T__84 | T__85 | T__86 | T__87 | T__88 | T__89 | T__90 | T__91 | T__92 | T__93 | T__94 | T__95 | T__96 | T__97 | T__98 | T__99 | EQUAL | COMP_EQUAL | NOT_EQUAL | LT | LE | GT | GE | PLUS | MINUS | TRUE | FALSE | MUL | DIV | MOD | LPAREN | RPAREN | WHILE | NOT | AND | OR | IF | THEN | ELSE | CREATE | DESTROY | MODIFY | MOVE | SCALE | ROTATE | SOURCE | TEXT | CIRCLE | RECTANGLE | ELLIPSE | LINE | POLYGON | ELIF | ENDIF | FOR | FUNC | ENDFUNC | RETURN | READ | WRITE | ID | INT | FLOAT | COMMENT | STRING | WS );";
+            return "1:1: Tokens : ( T__69 | T__70 | T__71 | T__72 | T__73 | T__74 | T__75 | T__76 | T__77 | T__78 | T__79 | T__80 | T__81 | T__82 | T__83 | T__84 | T__85 | T__86 | T__87 | T__88 | T__89 | T__90 | T__91 | T__92 | T__93 | T__94 | T__95 | T__96 | T__97 | T__98 | EQUAL | COMP_EQUAL | NOT_EQUAL | LT | LE | GT | GE | PLUS | MINUS | TRUE | FALSE | MUL | DIV | MOD | LPAREN | RPAREN | FOR | NOT | AND | OR | IF | THEN | ELSE | CREATE | DESTROY | MODIFY | MOVE | SCALE | ROTATE | SOURCE | TEXT | CIRCLE | RECTANGLE | ELLIPSE | LINE | POLYGON | ELIF | ENDIF | FUNC | ENDFUNC | RETURN | READ | WRITE | ID | INT | FLOAT | COMMENT | STRING | WS );";
         }
     }
  

@@ -93,7 +93,7 @@ block_instructions
 instruction
         :   assign ';'!     // Assignment
         |   ite_stmt        // if-then-else
-        |   for_stmt        // while statement
+        |   for_stmt        // for statement
         |   create ';'!     // Create object
         |   destroy ';'!    // Destroy object
         |   modify ';'!     // Modify object
@@ -280,7 +280,7 @@ DIV     : '/';
 MOD     : '%' ;
 LPAREN  : '(' ;
 RPAREN  : ')' ;
-WHILE   : 'while' ; // BORRAR, No compilava sense aquest token en un inici.
+FOR     : 'for' ;
 NOT     : 'not' ;
 AND     : 'and' ;
 OR      : 'or' ;    
@@ -302,7 +302,6 @@ LINE    : 'line';
 POLYGON : 'polygon';
 ELIF    : 'elif' ;
 ENDIF   : 'endif' ;
-FOR     : 'for' ;
 FUNC    : 'func' ;
 ENDFUNC : 'endfunc' ;
 RETURN  : 'return' ;

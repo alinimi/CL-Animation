@@ -251,13 +251,18 @@ public class Interp {
                 return null;
 
             // While
-            case SvgLexer.WHILE:
+            case SvgLexer.FOR:
+                executeInstruction(t.getChild(0));
+                SvgTree inst = t.getChild(3);
                 while (true) {
-                    value = evaluateExpression(t.getChild(0));
+                    value = evaluateExpression(t.getChild(1));
                     checkBoolean(value);
                     if (!value.getBooleanValue()) return null;
-                    Data r = executeListInstructions(t.getChild(1));
+                    Data r;
+                    if (inst.getType() == SvgLexer.LIST_INSTR) r = executeListInstructions(inst);
+                    else r = executeInstruction(inst);
                     if (r != null) return r;
+                    executeInstruction(t.getChild(2));
                 }
 
             // Return
