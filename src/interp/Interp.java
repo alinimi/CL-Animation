@@ -217,6 +217,38 @@ public class Interp {
         }
         return null;
     }
+
+    private Data executeInstructions (SvgTree t) {
+        assert t != null;
+        Data result = null;
+        if (t.getType() == SvgLexer.LIST_INSTR) {
+            result =  executeListInstructions(t);
+        } else {
+            result = executeInstruction(t);
+        }
+        return result;
+    }
+
+    private Data evaluateITE (SvgTree t) {
+        assert t != null;
+        if (t.getType() == SvgLexer.ELSE) return new Data(true);
+        else {
+            Data value = evaluateExpression(t.getChild(0));
+            checkBoolean(value);
+            return value;
+        }
+    }
+
+    private Data executeITE (SvgTree t) {
+        assert t != null;
+        Data result = null;
+        if (t.getType() == SvgLexer.ELSE) {
+            result = executeInstructions(t.getChild(0));
+        } else {
+            result = executeInstructions(t.getChild(1));
+        }
+        return result;
+    }
     
     /**
      * Executes an instruction. 
@@ -242,15 +274,16 @@ public class Interp {
                 return null;
 
             // If-then-else
-            case SvgLexer.IF:
-                value = evaluateExpression(t.getChild(0));
-                checkBoolean(value);
-                if (value.getBooleanValue()) return executeListInstructions(t.getChild(1));
-                // Is there else statement ?
-                if (t.getChildCount() == 3) return executeListInstructions(t.getChild(2));
+            case SvgLexer.ITE:
+                int ninstr = t.getChildCount();
+                for (int i = 0; i < ninstr; ++i) {
+                    SvgTree currentTree = t.getChild(i);
+                    value = evaluateITE(currentTree);
+                    if(value.getBooleanValue()) return executeITE(currentTree);
+                }
                 return null;
 
-            // While
+            // for
             case SvgLexer.FOR:
                 executeInstruction(t.getChild(0));
                 SvgTree inst = t.getChild(3);
@@ -258,9 +291,7 @@ public class Interp {
                     value = evaluateExpression(t.getChild(1));
                     checkBoolean(value);
                     if (!value.getBooleanValue()) return null;
-                    Data r;
-                    if (inst.getType() == SvgLexer.LIST_INSTR) r = executeListInstructions(inst);
-                    else r = executeInstruction(inst);
+                    Data r = executeInstructions(inst);
                     if (r != null) return r;
                     executeInstruction(t.getChild(2));
                 }
@@ -382,7 +413,7 @@ public class Interp {
         Data value2;
         switch (type) {
             // Relational operators
-            case SvgLexer.EQUAL:
+            case SvgLexer.COMP_EQUAL:
             case SvgLexer.NOT_EQUAL:
             case SvgLexer.LT:
             case SvgLexer.LE:

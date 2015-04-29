@@ -1,4 +1,4 @@
-// $ANTLR 3.4 /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g 2015-04-29 21:00:44
+// $ANTLR 3.4 /home/jordivilaseca/FIB/CL/CL-Animation/src/parser/Svg.g 2015-04-29 22:01:50
 
 package parser;
 import interp.SvgTree;
@@ -1332,7 +1332,7 @@ public TreeAdaptor getTreeAdaptor() {
             stream_expr.add(expr44.getTree());
 
             // AST REWRITE
-            // elements: expr, variable
+            // elements: variable, expr
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -4036,7 +4036,7 @@ public TreeAdaptor getTreeAdaptor() {
 
 
             // AST REWRITE
-            // elements: else_stmt, if_stmt, else_if_stmt
+            // elements: else_if_stmt, else_stmt, if_stmt
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -5984,7 +5984,7 @@ public TreeAdaptor getTreeAdaptor() {
 
 
             // AST REWRITE
-            // elements: ID, expr_list
+            // elements: expr_list, ID
             // token labels: 
             // rule labels: retval
             // token list labels: 

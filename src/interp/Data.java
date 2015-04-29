@@ -142,7 +142,7 @@ public class Data {
     public Data evaluateRelational (int op, Data d) {
         assert type != Type.VOID && type == d.type;
         switch (op) {
-            case SvgLexer.EQUAL: return new Data(value == d.value);
+            case SvgLexer.COMP_EQUAL: return new Data(value == d.value);
             case SvgLexer.NOT_EQUAL: return new Data(value != d.value);
             case SvgLexer.LT: return new Data(value < d.value);
             case SvgLexer.LE: return new Data(value <= d.value);
