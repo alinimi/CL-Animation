@@ -46,7 +46,7 @@ public class Interp {
      * Each entry of the map stores the root of the AST
      * correponding to the function.
      */
-    private HashMap<String,AslTree> FuncName2Tree;
+    private HashMap<String,SvgTree> FuncName2Tree;
 
     /** Standard input of the interpreter (System.in). */
     private Scanner stdin;
@@ -67,7 +67,7 @@ public class Interp {
      * Constructor of the interpreter. It prepares the main
      * data structures for the execution of the main program.
      */
-    public Interp(AslTree T, String tracefile) {
+    public Interp(SvgTree T, String tracefile) {
         assert T != null;
         MapFunctions(T);  // Creates the table to map function names into AST nodes
         PreProcessAST(T); // Some internal pre-processing ot the AST
@@ -104,13 +104,13 @@ public class Interp {
      * Gathers information from the AST and creates the map from
      * function names to the corresponding AST nodes.
      */
-    private void MapFunctions(AslTree T) {
-        assert T != null && T.getType() == AslLexer.LIST_FUNCTIONS;
-        FuncName2Tree = new HashMap<String,AslTree> ();
+    private void MapFunctions(SvgTree T) {
+        assert T != null && T.getType() == SvgLexer.LIST_FUNCTIONS;
+        FuncName2Tree = new HashMap<String,SvgTree> ();
         int n = T.getChildCount();
         for (int i = 0; i < n; ++i) {
-            AslTree f = T.getChild(i);
-            assert f.getType() == AslLexer.FUNC;
+            SvgTree f = T.getChild(i);
+            assert f.getType() == SvgLexer.FUNC;
             String fname = f.getChild(0).getText();
             if (FuncName2Tree.containsKey(fname)) {
                 throw new RuntimeException("Multiple definitions of function " + fname);
@@ -122,14 +122,14 @@ public class Interp {
     /**
      * Performs some pre-processing on the AST. Basically, it
      * calculates the value of the literals and stores a simpler
-     * representation. See AslTree.java for details.
+     * representation. See SvgTree.java for details.
      */
-    private void PreProcessAST(AslTree T) {
+    private void PreProcessAST(SvgTree T) {
         if (T == null) return;
         switch(T.getType()) {
-            case AslLexer.INT: T.setIntValue(); break;
-            case AslLexer.STRING: T.setStringValue(); break;
-            case AslLexer.BOOLEAN: T.setBooleanValue(); break;
+            case SvgLexer.INT: T.setIntValue(); break;
+            case SvgLexer.STRING: T.setStringValue(); break;
+            case SvgLexer.BOOLEAN: T.setBooleanValue(); break;
             default: break;
         }
         int n = T.getChildCount();
@@ -144,7 +144,7 @@ public class Interp {
     public int lineNumber() { return linenumber; }
 
     /** Defines the current line number associated to an AST node. */
-    private void setLineNumber(AslTree t) { linenumber = t.getLine();}
+    private void setLineNumber(SvgTree t) { linenumber = t.getLine();}
 
     /** Defines the current line number with a specific value */
     private void setLineNumber(int l) { linenumber = l;}
@@ -155,9 +155,9 @@ public class Interp {
      * @param args The AST node representing the list of arguments of the caller.
      * @return The data returned by the function.
      */
-    private Data executeFunction (String funcname, AslTree args) {
+    private Data executeFunction (String funcname, SvgTree args) {
         // Get the AST of the function
-        AslTree f = FuncName2Tree.get(funcname);
+        SvgTree f = FuncName2Tree.get(funcname);
         if (f == null) throw new RuntimeException(" function " + funcname + " not declared");
 
         // Gather the list of arguments of the caller. This function
@@ -169,7 +169,7 @@ public class Interp {
         if (trace != null) traceFunctionCall(f, Arg_values);
         
         // List of parameters of the callee
-        AslTree p = f.getChild(1);
+        SvgTree p = f.getChild(1);
         int nparam = p.getChildCount(); // Number of parameters
 
         // Create the activation record in memory
@@ -207,7 +207,7 @@ public class Interp {
      * @return The data returned by the instructions (null if no return
      * statement has been executed).
      */
-    private Data executeListInstructions (AslTree t) {
+    private Data executeListInstructions (SvgTree t) {
         assert t != null;
         Data result = null;
         int ninstr = t.getChildCount();
@@ -226,7 +226,7 @@ public class Interp {
      * non-null only if a return statement is executed or a block
      * of instructions executing a return.
      */
-    private Data executeInstruction (AslTree t) {
+    private Data executeInstruction (SvgTree t) {
         assert t != null;
         
         setLineNumber(t);
@@ -236,13 +236,13 @@ public class Interp {
         switch (t.getType()) {
 
             // Assignment
-            case AslLexer.ASSIGN:
+            case SvgLexer.ASSIGN:
                 value = evaluateExpression(t.getChild(1));
                 Stack.defineVariable (t.getChild(0).getText(), value);
                 return null;
 
             // If-then-else
-            case AslLexer.IF:
+            case SvgLexer.IF:
                 value = evaluateExpression(t.getChild(0));
                 checkBoolean(value);
                 if (value.getBooleanValue()) return executeListInstructions(t.getChild(1));
@@ -251,7 +251,7 @@ public class Interp {
                 return null;
 
             // While
-            case AslLexer.WHILE:
+            case SvgLexer.WHILE:
                 while (true) {
                     value = evaluateExpression(t.getChild(0));
                     checkBoolean(value);
@@ -261,7 +261,7 @@ public class Interp {
                 }
 
             // Return
-            case AslLexer.RETURN:
+            case SvgLexer.RETURN:
                 if (t.getChildCount() != 0) {
                     return evaluateExpression(t.getChild(0));
                 }
@@ -269,7 +269,7 @@ public class Interp {
 
             // Read statement: reads a variable and raises an exception
             // in case of a format error.
-            case AslLexer.READ:
+            case SvgLexer.READ:
                 String token = null;
                 Data val = new Data(0);;
                 try {
@@ -282,10 +282,10 @@ public class Interp {
                 return null;
 
             // Write statement: it can write an expression or a string.
-            case AslLexer.WRITE:
-                AslTree v = t.getChild(0);
+            case SvgLexer.WRITE:
+                SvgTree v = t.getChild(0);
                 // Special case for strings
-                if (v.getType() == AslLexer.STRING) {
+                if (v.getType() == SvgLexer.STRING) {
                     System.out.format(v.getStringValue());
                     return null;
                 }
@@ -295,7 +295,7 @@ public class Interp {
                 return null;
 
             // Function call
-            case AslLexer.FUNCALL:
+            case SvgLexer.FUNCALL:
                 executeFunction(t.getChild(0).getText(), t.getChild(1));
                 return null;
 
@@ -313,7 +313,7 @@ public class Interp {
      * @return The value of the expression.
      */
      
-    private Data evaluateExpression(AslTree t) {
+    private Data evaluateExpression(SvgTree t) {
         assert t != null;
 
         int previous_line = lineNumber();
@@ -324,19 +324,19 @@ public class Interp {
         // Atoms
         switch (type) {
             // A variable
-            case AslLexer.ID:
+            case SvgLexer.ID:
                 value = new Data(Stack.getVariable(t.getText()));
                 break;
             // An integer literal
-            case AslLexer.INT:
+            case SvgLexer.INT:
                 value = new Data(t.getIntValue());
                 break;
             // A Boolean literal
-            case AslLexer.BOOLEAN:
+            case SvgLexer.BOOLEAN:
                 value = new Data(t.getBooleanValue());
                 break;
             // A function call. Checks that the function returns a result.
-            case AslLexer.FUNCALL:
+            case SvgLexer.FUNCALL:
                 value = executeFunction(t.getChild(0).getText(), t.getChild(1));
                 assert value != null;
                 if (value.isVoid()) {
@@ -356,14 +356,14 @@ public class Interp {
         value = evaluateExpression(t.getChild(0));
         if (t.getChildCount() == 1) {
             switch (type) {
-                case AslLexer.PLUS:
+                case SvgLexer.PLUS:
                     checkInteger(value);
                     break;
-                case AslLexer.MINUS:
+                case SvgLexer.MINUS:
                     checkInteger(value);
                     value.setValue(-value.getIntegerValue());
                     break;
-                case AslLexer.NOT:
+                case SvgLexer.NOT:
                     checkBoolean(value);
                     value.setValue(!value.getBooleanValue());
                     break;
@@ -377,12 +377,12 @@ public class Interp {
         Data value2;
         switch (type) {
             // Relational operators
-            case AslLexer.EQUAL:
-            case AslLexer.NOT_EQUAL:
-            case AslLexer.LT:
-            case AslLexer.LE:
-            case AslLexer.GT:
-            case AslLexer.GE:
+            case SvgLexer.EQUAL:
+            case SvgLexer.NOT_EQUAL:
+            case SvgLexer.LT:
+            case SvgLexer.LE:
+            case SvgLexer.GT:
+            case SvgLexer.GE:
                 value2 = evaluateExpression(t.getChild(1));
                 if (value.getType() != value2.getType()) {
                   throw new RuntimeException ("Incompatible types in relational expression");
@@ -391,19 +391,19 @@ public class Interp {
                 break;
 
             // Arithmetic operators
-            case AslLexer.PLUS:
-            case AslLexer.MINUS:
-            case AslLexer.MUL:
-            case AslLexer.DIV:
-            case AslLexer.MOD:
+            case SvgLexer.PLUS:
+            case SvgLexer.MINUS:
+            case SvgLexer.MUL:
+            case SvgLexer.DIV:
+            case SvgLexer.MOD:
                 value2 = evaluateExpression(t.getChild(1));
                 checkInteger(value); checkInteger(value2);
                 value.evaluateArithmetic(type, value2);
                 break;
 
             // Boolean operators
-            case AslLexer.AND:
-            case AslLexer.OR:
+            case SvgLexer.AND:
+            case SvgLexer.OR:
                 // The first operand is evaluated, but the second
                 // is deferred (lazy, short-circuit evaluation).
                 checkBoolean(value);
@@ -427,16 +427,16 @@ public class Interp {
      * @param t AST node of the second operand.
      * @return An Boolean data with the value of the expression.
      */
-    private Data evaluateBoolean (int type, Data v, AslTree t) {
+    private Data evaluateBoolean (int type, Data v, SvgTree t) {
         // Boolean evaluation with short-circuit
 
         switch (type) {
-            case AslLexer.AND:
+            case SvgLexer.AND:
                 // Short circuit if v is false
                 if (!v.getBooleanValue()) return v;
                 break;
         
-            case AslLexer.OR:
+            case SvgLexer.OR:
                 // Short circuit if v is true
                 if (v.getBooleanValue()) return v;
                 break;
@@ -474,9 +474,9 @@ public class Interp {
      * @return The list of evaluated arguments.
      */
      
-    private ArrayList<Data> listArguments (AslTree AstF, AslTree args) {
+    private ArrayList<Data> listArguments (SvgTree AstF, SvgTree args) {
         if (args != null) setLineNumber(args);
-        AslTree pars = AstF.getChild(1);   // Parameters of the function
+        SvgTree pars = AstF.getChild(1);   // Parameters of the function
         
         // Create the list of parameters
         ArrayList<Data> Params = new ArrayList<Data> ();
@@ -493,15 +493,15 @@ public class Interp {
         // reference and calculates the values and references of
         // the parameters.
         for (int i = 0; i < n; ++i) {
-            AslTree p = pars.getChild(i); // Parameters of the callee
-            AslTree a = args.getChild(i); // Arguments passed by the caller
+            SvgTree p = pars.getChild(i); // Parameters of the callee
+            SvgTree a = args.getChild(i); // Arguments passed by the caller
             setLineNumber(a);
-            if (p.getType() == AslLexer.PVALUE) {
+            if (p.getType() == SvgLexer.PVALUE) {
                 // Pass by value: evaluate the expression
                 Params.add(i,evaluateExpression(a));
             } else {
                 // Pass by reference: check that it is a variable
-                if (a.getType() != AslLexer.ID) {
+                if (a.getType() != SvgLexer.ID) {
                     throw new RuntimeException("Wrong argument for pass by reference");
                 }
                 // Find the variable and pass the reference
@@ -519,9 +519,9 @@ public class Interp {
      * @param f AST of the function
      * @param arg_values Values of the parameters passed to the function
      */
-    private void traceFunctionCall(AslTree f, ArrayList<Data> arg_values) {
+    private void traceFunctionCall(SvgTree f, ArrayList<Data> arg_values) {
         function_nesting++;
-        AslTree params = f.getChild(1);
+        SvgTree params = f.getChild(1);
         int nargs = params.getChildCount();
         
         for (int i=0; i < function_nesting; ++i) trace.print("|   ");
@@ -530,8 +530,8 @@ public class Interp {
         trace.print(f.getChild(0) + "(");
         for (int i = 0; i < nargs; ++i) {
             if (i > 0) trace.print(", ");
-            AslTree p = params.getChild(i);
-            if (p.getType() == AslLexer.PREF) trace.print("&");
+            SvgTree p = params.getChild(i);
+            if (p.getType() == SvgLexer.PREF) trace.print("&");
             trace.print(p.getText() + "=" + arg_values.get(i));
         }
         trace.print(") ");
@@ -549,18 +549,18 @@ public class Interp {
      * @param result The value of the result
      * @param arg_values The value of the parameters passed to the function
      */
-    private void traceReturn(AslTree f, Data result, ArrayList<Data> arg_values) {
+    private void traceReturn(SvgTree f, Data result, ArrayList<Data> arg_values) {
         for (int i=0; i < function_nesting; ++i) trace.print("|   ");
         function_nesting--;
         trace.print("return");
         if (!result.isVoid()) trace.print(" " + result);
         
         // Print the value of arguments passed by reference
-        AslTree params = f.getChild(1);
+        SvgTree params = f.getChild(1);
         int nargs = params.getChildCount();
         for (int i = 0; i < nargs; ++i) {
-            AslTree p = params.getChild(i);
-            if (p.getType() == AslLexer.PVALUE) continue;
+            SvgTree p = params.getChild(i);
+            if (p.getType() == SvgLexer.PVALUE) continue;
             trace.print(", &" + p.getText() + "=" + arg_values.get(i));
         }
         

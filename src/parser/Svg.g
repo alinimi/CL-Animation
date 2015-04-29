@@ -25,11 +25,11 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-grammar Asl;
+grammar Svg;
 
 options {
     output = AST;
-    ASTLabelType = AslTree;
+    ASTLabelType = SvgTree;
 }
 
 // Imaginary tokens to create some AST nodes
@@ -54,7 +54,7 @@ tokens {
 
 @header {
 package parser;
-import interp.AslTree;
+import interp.SvgTree;
 }
 
 @lexer::header {
@@ -280,6 +280,7 @@ DIV     : '/';
 MOD     : '%' ;
 LPAREN  : '(' ;
 RPAREN  : ')' ;
+WHILE   : 'while' ; // BORRAR, No compilava sense aquest token en un inici.
 NOT     : 'not' ;
 AND     : 'and' ;
 OR      : 'or' ;    
