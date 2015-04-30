@@ -15,3 +15,6 @@ doc/
 javadoc/
 bin/
 /nbproject/private/
+src/parser/SvgLexer.java
+src/parser/SvgParser.java
+src/parser/Svg.tokens

@@ -93,7 +93,7 @@ block_instructions
 instruction
         :   assign ';'!     // Assignment
         |   ite_stmt        // if-then-else
-        |   for_stmt        // while statement
+        |   for_stmt        // for statement
         |   create ';'!     // Create object
         |   destroy ';'!    // Destroy object
         |   modify ';'!     // Modify object
@@ -128,10 +128,10 @@ create  : CREATE^ objecte_create                    attributes          (FLOAT|I
         ;
 
 //              type        Name     ObjectAttributes
-objecte_create: TEXT      ID       INT INT STRING
-              | CIRCLE    ID       INT INT INT
-              | RECTANGLE ID       INT INT INT INT (INT INT)?
-              | ELLIPSE   ID       INT INT INT INT
+objecte_create: TEXT      ID       coord STRING
+              | CIRCLE    ID       coord INT
+              | RECTANGLE ID       coord INT INT (INT INT)?
+              | ELLIPSE   ID       coord INT INT
               | LINE      ID       list_min_2_coord
               | POLYGON   ID       list_min_2_coord
               ;
@@ -155,17 +155,17 @@ modify  : MODIFY^   ID          attributes          (FLOAT|INT) (FLOAT|INT)
 attributes  : '{' attribute (',' attribute)* '}' -> ^(LIST_ATTR attribute+)
             ;
 
-attribute   : 'fill'^           ':'! color
-            | 'fill-opacity'^   ':'! FLOAT
-            | 'line'^           ':'! color
-            | 'line-pattern'^   ':'! ('dots'|'lines'|'alternate')
-            | 'line-width'^     ':'! INT
+attribute   : FILL^          ':'! color
+            | FILLOPACITY^   ':'! FLOAT
+            | LINECOLOR      ':'! color
+            | LINEPATTERN^   ':'! ('dots'|'lines'|'alternate')
+            | LINEWIDTH^     ':'! INT
             | text_attributes
             ;
 
-text_attributes : 'font-style'^ ':'! ('normal' | 'italic' | 'oblique')
-                | 'font-weight'^':'! ('normal' | 'bold' | 'bolder' | 'lighter' | INT)
-                | 'orientation'^':'! ('horizontal'|'vertical')
+text_attributes : FONTSTYLE^ ':'! ('normal' | 'italic' | 'oblique')
+                | FONTWEIGHT^ ':'! ('normal' | 'bold' | 'bolder' | 'lighter' | INT)
+                | ORINENTATION^ ':'! ('horizontal'|'vertical')
                 ;
 
 color : ('red'|'blue'|'green'|'yellow'|rgb)
@@ -280,7 +280,7 @@ DIV     : '/';
 MOD     : '%' ;
 LPAREN  : '(' ;
 RPAREN  : ')' ;
-WHILE   : 'while' ; // BORRAR, No compilava sense aquest token en un inici.
+FOR     : 'for' ;
 NOT     : 'not' ;
 AND     : 'and' ;
 OR      : 'or' ;    
@@ -288,7 +288,7 @@ IF      : 'if' ;
 THEN    : 'then' ;
 ELSE    : 'else' ;
 CREATE  : 'Create' ;
-DESTROY :  'Destroy';
+DESTROY : 'Destroy';
 MODIFY  : 'Modify';
 MOVE    : 'Move';
 SCALE   : 'Scale';
@@ -300,9 +300,16 @@ RECTANGLE : 'rectangle';
 ELLIPSE : 'ellipse';
 LINE    : 'line';
 POLYGON : 'polygon';
+FILL    : 'fill';
+FILLOPACITY : 'fill-opacity';
+LINECOLOR    : 'line-color';
+LINEPATTERN : 'line-pattern';
+LINEWIDTH : 'line-width' ;
+FONTSTYLE : 'font-style';
+FONTWEIGHT : 'font-weight';
+ORINENTATION : 'font-orientation';
 ELIF    : 'elif' ;
 ENDIF   : 'endif' ;
-FOR     : 'for' ;
 FUNC    : 'func' ;
 ENDFUNC : 'endfunc' ;
 RETURN  : 'return' ;
