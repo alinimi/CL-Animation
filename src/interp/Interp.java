@@ -27,6 +27,7 @@
 
 package interp;
 
+import interp.data.Data;
 import parser.*;
 
 import java.util.ArrayList;
