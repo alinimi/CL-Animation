@@ -30,6 +30,7 @@ package interp;
 import parser.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.io.*;
@@ -37,6 +38,9 @@ import java.io.*;
 /** Class that implements the interpreter of the language. */
 
 public class Interp {
+
+    private static final String[] textAtrributeTypes = {"font-style","font-weight","orientation"};
+    private static final String[] generalAttributeTypes = {"fill","fill-opacity","line","line-pattern","line-width"};
 
     /** Memory of the virtual machine. */
     private Stack Stack;
@@ -249,6 +253,18 @@ public class Interp {
         }
         return result;
     }
+
+    private HashMap<String,Object> generateAttributes(int type, SvgTree t) {
+        assert t != null;
+        HashMap<String,Object> attrs = new HashMap<String,Object>();
+        for (int i = 0; i < t.getChildCount(); i++) {
+            SvgTree attr = t.getChild(i);
+            existAttribute(type, attr.getText());
+            Object o = processAttribute(attr);
+            attrs.put(attr.getText(), o);
+        }
+        return attrs;
+    }
     
     /**
      * Executes an instruction. 
@@ -333,6 +349,9 @@ public class Interp {
             // Function call
             case SvgLexer.FUNCALL:
                 executeFunction(t.getChild(0).getText(), t.getChild(1));
+                return null;
+
+            case SvgLexer.CREATE:
                 return null;
 
             default: assert false; // Should never happen
@@ -497,6 +516,102 @@ public class Interp {
     private void checkInteger (Data b) {
         if (!b.isInteger()) {
             throw new RuntimeException ("Expecting numerical expression");
+        }
+    }
+
+    private void checkColor(SvgTree t) {
+        // El cas de que sigui un color predefinit (Vermell, groc, verd o blau) ja ha estat comprovat durant el parsing
+        assert t != null;
+        if (t.getType() == SvgLexer.RGB) {
+            for(int i = 0; i < 3; i++) {
+                int value = Integer.parseInt(t.getChild(i).getText());
+                if (value < 0 || value > 255) {
+                    throw new RuntimeException("Color value " + value + " not valid, correct range [0,255]");
+                }
+            }
+        }
+    }
+
+    private String getColor(SvgTree t) {
+        assert t != null;
+        String color;
+        if (t.getType() == SvgLexer.RGB) {
+            String[] a = new String[3];
+            for(int i = 0; i < 3; i++) {
+                SvgTree child = t.getChild(i);
+                a[i] = child.getText();
+            }
+            color = "rgb(" + a[0] + "," + a[1] + "," + a[2] + ")";
+        } else {
+            color = t.getText();
+        }
+        return color;
+    }
+
+    private void checkOpacity(SvgTree t) {
+        assert t != null;
+        float value = Float.parseFloat(t.getText());
+        if (value < 0. || value > 1.) {
+            throw new RuntimeException("Opacity value " + value + " not valid, correct range [0,1]");
+        } 
+    }
+
+    private void checkFontWeight(SvgTree t) {
+        if (t.getType() == SvgLexer.INT) {
+            int value = Integer.parseInt(t.getText());
+            for (int i = 100; i <= 900; i += 100) {
+                if (i == value) return;
+            }
+            throw new RuntimeException("font-weight value " + value + " not valid, correct options are" +
+                "(100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900)");
+        }
+    }
+
+        private Object processAttribute (SvgTree t) {
+        assert t != null;
+        SvgTree value = t.getChild(0);
+        assert value != null;
+        Object ret;
+        int type = t.getType();
+        switch (type) {
+            case SvgLexer.FILL:
+                checkColor(value);
+                ret = getColor(value);
+                break;
+
+            case SvgLexer.FILLOPACITY:
+                checkOpacity(value);
+                ret = value.getText();
+                break;
+
+            case SvgLexer.LINECOLOR:
+                checkColor(value);
+                ret = getColor(value);
+                break;
+
+            case SvgLexer.FONTWEIGHT:
+                checkFontWeight(value);
+                ret = value.getText();
+                break;
+
+            default:
+                ret = value.getText();
+                break;
+        }
+        return ret;
+    }
+
+    private void existAttribute (int type, String attr) {
+        // We check general case.
+        if (!Arrays.asList(generalAttributeTypes).contains(attr)) {
+            throw new RuntimeException ("Attribute '" + attr + "' does not exist");
+        }
+
+        // if it is a TEXT, we check into TEXT attributes.
+        if(type == SvgLexer.TEXT) {
+            if (!Arrays.asList(textAtrributeTypes).contains(attr)) {
+                throw new RuntimeException ("Attribute '" + attr + "' does not exist");
+            }
         }
     }
 
