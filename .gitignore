@@ -16,4 +16,4 @@ javadoc/
 bin/
 src/parser/SvgLexer.java
 src/parser/SvgParser.java
-src/parser/Svg.token
+src/parser/Svg.tokens

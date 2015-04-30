@@ -5,8 +5,10 @@ func main() {
     write j;
   } elif (j == 1) {
     write j;
-  } else {
+  } elif (j == 2) {
     write j;
+  } else {
+    write "Pepe";
   }
 //
   //Create text t 0 0 "Attributes" {fill:(2,3,4),font-style:normal} 15.0;
