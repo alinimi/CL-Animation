@@ -14,9 +14,18 @@ hs_err_pid*
 doc/
 javadoc/
 bin/
-nbproject
+nbproject/
 build.xml
 src/parser/SvgLexer.java
 src/parser/SvgParser.java
 src/parser/Svg.tokens
 /build/
+
+# debugging files
+*.pdf
+*.dot
+*.ast
+
+# examples
+
+examples/
