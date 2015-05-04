@@ -11,13 +11,24 @@ package interp.data;
  * @author Alicia
  */
 public class SvgObject extends Data{
-    private String id;
+    private final String id;
+    private boolean isNull;
     //id como int o como string?
-    SvgObject(String ident){
+    public SvgObject(String ident){
         super(Type.STRING);
+        isNull = false;
         id = ident;
     }
+    
+    public SvgObject(){
+        id = "";
+        isNull = true;
+    }
+
     String getID(){
-        return id;
+        if(!isNull){
+            return id;
+        }
+        return null;
     }
 }

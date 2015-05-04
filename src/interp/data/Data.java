@@ -41,7 +41,7 @@ import parser.*;
 
 public  class Data {
     /** Types of data */
-    public enum Type {VOID, BOOLEAN, INTEGER, FLOAT, STRING, OBJECT;}
+    public enum Type {VOID, BOOLEAN, INTEGER, FLOAT, STRING, OBJECT, ARRAY;}
 
     /** Type of data*/
     private Type type;
@@ -75,7 +75,8 @@ public  class Data {
     /** Indicates whether the data is object */
     public boolean isObject(){return type == Type.OBJECT;}
     
-    
+    /** Indicates whether the data is array */
+    public boolean isArray(){return type == Type.ARRAY;}
     /** Indicates whether the data is object */
     public boolean isNumber(){
         return type == Type.INTEGER || type == Type.FLOAT;

@@ -22,12 +22,6 @@ public class SvgInt extends SvgNumber{
         value = v; 
     }
     
-    
-    @Override
-    public Type getType() {
-        return Type.INTEGER;
-    }
-
     public int getValue(){
         return value;
     }
@@ -42,7 +36,7 @@ public class SvgInt extends SvgNumber{
                 return new SvgInt(getValue()* d.getValue());
             case SvgLexer.DIV:
                 checkDivZero(d);
-                return new SvgInt(getValue()* d.getValue());
+                return new SvgInt(getValue()/ d.getValue());
             case SvgLexer.MOD: checkDivZero(d);
                 return new SvgInt(getValue() % d.getValue());
             default: assert false;

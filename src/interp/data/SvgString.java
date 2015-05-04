@@ -21,7 +21,7 @@ public class SvgString extends Data{
         return value;
     }
     
-    public Data concat(SvgString d){
+    public SvgString concat(SvgString d){
         return new SvgString(getValue()+d.getValue());
     }
     

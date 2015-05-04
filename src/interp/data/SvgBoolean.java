@@ -13,7 +13,7 @@ import parser.SvgLexer;
  * @author Alicia
  */
 public class SvgBoolean extends Data{
-    boolean value;
+    private boolean value;
     public SvgBoolean(boolean b){
         super(Type.BOOLEAN);
         value = b;
