@@ -18,3 +18,12 @@ bin/
 src/parser/SvgLexer.java
 src/parser/SvgParser.java
 src/parser/Svg.tokens
+
+# debugging files
+*.pdf
+*.dot
+*.ast
+
+# examples
+
+examples/

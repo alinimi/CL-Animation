@@ -27,7 +27,7 @@
 
 package interp;
 
-import interp.data.Data;
+import interp.Data;
 import parser.*;
 
 import java.util.ArrayList;
@@ -261,10 +261,27 @@ public class Interp {
         for (int i = 0; i < t.getChildCount(); i++) {
             SvgTree attr = t.getChild(i);
             existAttribute(type, attr.getText());
-            Object o = processAttribute(attr);
+            Object o = generateAttribute(attr);
             attrs.put(attr.getText(), o);
         }
         return attrs;
+    }
+
+    private int[] getCoordinate(SvgTree t) {
+        int x = Integer.parseInt(t.getChild(0).getText());
+        int y = Integer.parseInt(t.getChild(1).getText());
+        int[] coord = new int[]{x,y};
+        return coord;
+
+    }
+
+    private int[][] generateCoordinates(SvgTree t) {
+        assert t != null;
+        int[][] coords = new int[t.getChildCount()][2];
+        for (int i = 0; i < t.getChildCount(); i++) {
+            coords[i] = getCoordinate(t);
+        }
+        return coords;
     }
     
     /**
@@ -353,6 +370,23 @@ public class Interp {
                 return null;
 
             case SvgLexer.CREATE:
+                int intType = t.getChild(0).getType();
+                String type = t.getChild(0).getText();
+                String varName = t.getChild(1).getText();
+                Stack.defineVariable (varName, new Data(intType));
+                int[] initialCoord = getCoordinate(t.getChild(2));
+                String text = t.getChild(3).getText();
+                HashMap<String,Object> attrs = generateAttributes(intType, t.getChild(4));
+                float startTime = 0;
+                if (t.getChildCount() == 6) startTime = Float.parseFloat(t.getChild(5).getText());
+                // svg.create(type,varName,initialCoord,text,attrs,startTime)
+
+                System.out.println(type);
+                System.out.println(varName);
+                System.out.println(initialCoord[0] + " " + initialCoord[1]);
+                System.out.println(text);
+                System.out.println(attrs);
+                System.out.println(startTime);
                 return null;
 
             default: assert false; // Should never happen
@@ -568,7 +602,7 @@ public class Interp {
         }
     }
 
-        private Object processAttribute (SvgTree t) {
+        private Object generateAttribute (SvgTree t) {
         assert t != null;
         SvgTree value = t.getChild(0);
         assert value != null;
@@ -603,14 +637,16 @@ public class Interp {
     }
 
     private void existAttribute (int type, String attr) {
-        // We check general case.
-        if (!Arrays.asList(generalAttributeTypes).contains(attr)) {
-            throw new RuntimeException ("Attribute '" + attr + "' does not exist");
-        }
+        boolean generalAttribute = Arrays.asList(generalAttributeTypes).contains(attr);
 
         // if it is a TEXT, we check into TEXT attributes.
         if(type == SvgLexer.TEXT) {
-            if (!Arrays.asList(textAtrributeTypes).contains(attr)) {
+            boolean textAttribute = Arrays.asList(textAtrributeTypes).contains(attr);
+            if (!generalAttribute && !textAttribute) {
+                throw new RuntimeException ("Attribute '" + attr + "' does not exist");
+            }
+        } else {
+            if (!generalAttribute) {
                 throw new RuntimeException ("Attribute '" + attr + "' does not exist");
             }
         }
