@@ -6,6 +6,7 @@
 
 package interp;
 
+import interp.data.SvgObject.Shape;
 import java.util.HashMap;
 
 /**
@@ -26,11 +27,12 @@ public class Animation{
     /**
      * Crea un objeto con identificador id si no existe.
      * @param id
-     * @param type
+     * @param type uno de los tipos de objetos definidos en el enum Shape de
+     * SvgObject
      * @param attrs
      * @param creationTime
      */
-    public void create(String id, String type, HashMap<String,String> attrs,
+    public void create(String id, Shape type, HashMap<String,String> attrs,
         int creationTime){
         if(!objects.containsKey(id)){
             AnimatedObject obj = new AnimatedObject(type, creationTime);
@@ -100,7 +102,9 @@ public class Animation{
      */
     public void move(String id, int xIni, int yIni, 
             int xEnd, int yEnd, int timeStart, int timeEnd){
-        //TODO
+        if(objects.containsKey(id)){
+            AnimatedObject obj = objects.get(id);
+        }
     }
     
     public void scale(String id, int sizeStart, int sizeEnd, int timeStart, int timeEnd){

@@ -5,6 +5,8 @@
  */
 package interp;
 
+import interp.data.SvgObject;
+import interp.data.SvgObject.Shape;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -14,17 +16,21 @@ import java.util.HashMap;
  */
 public class AnimatedObject {
     private int creationTime;
-    private String objectType;
+    private SvgObject.Shape objectType;
     private int destructionTime;
     private HashMap <String,String> attributeMap;
-    private ArrayList <Animation> animationList;
+    private ArrayList <ObjectAnimation> animationList;
     
-    public AnimatedObject(String type, int creationTime){
+    public AnimatedObject(Shape type, int creationTime){
         objectType = type;
         creationTime = -1;
         destructionTime = -1;
-        animationList = new ArrayList <Animation>();
+        animationList = new ArrayList <ObjectAnimation>();
         attributeMap = new HashMap<String,String>();
+    }
+    
+    public Shape getType(){
+        return objectType;
     }
     
     public void setAttribute(String name, String value){
@@ -41,7 +47,7 @@ public class AnimatedObject {
     
     public void addAnimation(int st, int et, String attr, 
                 String sv, String ev){
-        Animation an = new Animation(st,et,attr,sv,ev);
+        ObjectAnimation an = new ObjectAnimation(st,et,attr,sv,ev);
         animationList.add(an);
     }
 
@@ -63,13 +69,13 @@ public class AnimatedObject {
     
     
     
-    private class Animation {
+    private class ObjectAnimation {
         private int startTime;
         private int endTime;
         private String attribute;
         private String startValue;
         private String endValue;
-        public Animation(int st, int et, String attr, 
+        public ObjectAnimation(int st, int et, String attr, 
                 String sv, String ev){
             startTime = st;
             endTime = et;
