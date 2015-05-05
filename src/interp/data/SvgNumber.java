@@ -40,7 +40,7 @@ public abstract class SvgNumber extends Data{
                 return new SvgFloat(getFloatValue()* d.getFloatValue());
             case SvgLexer.DIV:
                 checkDivZero(d);
-                return new SvgFloat(getFloatValue()* d.getFloatValue());
+                return new SvgFloat(getFloatValue()/ d.getFloatValue());
             case SvgLexer.MOD: checkDivZero(d);
                 return new SvgFloat(getFloatValue() % d.getFloatValue());
             default: assert false;

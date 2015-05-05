@@ -15,16 +15,25 @@ import parser.SvgLexer;
 public class SvgString extends Data{
     String value;
     public SvgString(String s){
+        super(Type.STRING);
         value = s;
     }
     public String getValue(){
         return value;
     }
     
+    public int getLength(){
+        return value.length();
+    }
+    
     public SvgString concat(SvgString d){
         return new SvgString(getValue()+d.getValue());
     }
     
+    @Override
+    public String toString(){
+        return value;
+    }
     
     public Data evaluateRelational (int op, SvgString d) {
         switch (op) {
@@ -35,4 +44,5 @@ public class SvgString extends Data{
         }
         return null;
     }
+    
 }

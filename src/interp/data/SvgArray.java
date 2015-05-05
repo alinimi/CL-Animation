@@ -23,8 +23,15 @@ public class SvgArray extends Data{
   
     public SvgArray(){
         super(Type.ARRAY);
+        value = new ArrayList<Data>();
     }
     
+    /**
+     * Crea un array de tamaño index+1 donde el elemento index es d y el resto
+     * son elementos neutros de su mismo tipo.
+     * @param d
+     * @param index
+     */
     public SvgArray(Data d, int index) { 
         super(Type.ARRAY);
         value = new ArrayList<Data>(index+1);
@@ -68,9 +75,10 @@ public class SvgArray extends Data{
 
 
     /** Returns a string representing the data in textual form. */
+    @Override
     public String toString() {
         String s = "[";
-        for(int i = 0; i<value.size();++i){
+        for(int i = 0; i< value.size();++i){
             s+=value.get(i).toString();
         }
         s += "]";

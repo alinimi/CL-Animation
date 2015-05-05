@@ -18,7 +18,9 @@ public class SvgFloat extends SvgNumber{
         value = v;
     }
     
-   
+   public float getValue(){
+       return value;
+   }
     
     @Override
     public float getFloatValue(){

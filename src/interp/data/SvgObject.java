@@ -13,11 +13,15 @@ package interp.data;
 public class SvgObject extends Data{
     private final String id;
     private boolean isNull;
+    private Shape shape;
+    
+    public enum Shape {TEXT,CIRCLE,RECTANGLE,ELLIPSE,LINE,POLYGON;}
     //id como int o como string?
-    public SvgObject(String ident){
+    public SvgObject(String ident, Shape s){
         super(Type.STRING);
         isNull = false;
         id = ident;
+        shape = s;
     }
     
     public SvgObject(){
@@ -30,5 +34,8 @@ public class SvgObject extends Data{
             return id;
         }
         return null;
+    }
+    public Shape getShape(){
+        return shape;
     }
 }
