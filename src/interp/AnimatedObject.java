@@ -15,17 +15,20 @@ import java.util.HashMap;
  * @author alicia
  */
 public class AnimatedObject {
+    public enum Transform{ROTATE,SCALE,TRANSLATE;}
     private int creationTime;
     private SvgObject.Shape objectType;
     private int destructionTime;
     private HashMap <String,String> attributeMap;
     private ArrayList <ObjectAnimation> animationList;
+    private ArrayList <ObjectTransform> transformList;
     
     public AnimatedObject(Shape type, int creationTime){
         objectType = type;
         creationTime = -1;
         destructionTime = -1;
         animationList = new ArrayList <ObjectAnimation>();
+        transformList = new ArrayList <ObjectTransform>();
         attributeMap = new HashMap<String,String>();
     }
     
@@ -50,6 +53,11 @@ public class AnimatedObject {
         ObjectAnimation an = new ObjectAnimation(st,et,attr,sv,ev);
         animationList.add(an);
     }
+    
+    public void addTransform(Transform type, int st, int et, String sv, String ev){
+        ObjectTransform t = new ObjectTransform(st,et,type,sv,ev);
+        transformList.add(t);
+    }
 
     public int getCreationTime() {
         return creationTime;
@@ -63,6 +71,10 @@ public class AnimatedObject {
         return destructionTime;
     }
 
+    
+    public boolean hasAttribute(String name){
+        return attributeMap.containsKey(name);
+    }
     public void setDestructionTime(int destructionTime) {
         this.destructionTime = destructionTime;
     }
@@ -84,6 +96,20 @@ public class AnimatedObject {
             endValue = ev;
         }
 
+    }
+    private class ObjectTransform{
+        private Transform type;
+        private String startValue;
+        private String endValue;
+        private int startTime;
+        private int endTime;
+        public ObjectTransform(int st, int et, Transform t, String sv, String ev){
+            type = t;
+            startTime = st;
+            endTime = et;
+            startValue = sv;
+            endValue = ev;
+        }
     }
     
 }

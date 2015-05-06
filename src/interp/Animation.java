@@ -6,6 +6,7 @@
 
 package interp;
 
+import interp.AnimatedObject.Transform;
 import interp.data.SvgObject.Shape;
 import java.util.HashMap;
 
@@ -104,11 +105,51 @@ public class Animation{
             int xEnd, int yEnd, int timeStart, int timeEnd){
         if(objects.containsKey(id)){
             AnimatedObject obj = objects.get(id);
+            obj.addTransform(
+                    Transform.TRANSLATE, timeStart, timeEnd, 
+                    xIni+" "+yIni, xEnd+" "+yEnd);
+            
         }
     }
     
+    public void move(String id, int xEnd, int yEnd){
+        if(objects.containsKey(id)){
+            AnimatedObject obj = objects.get(id);
+            if(obj.hasAttribute("transform")){
+                String attr = obj.getAttribute("transform");
+                attr = attr+", "+"translate("+xEnd+","+yEnd+")";
+            }
+            else{
+                obj.setAttribute("transform", "translate("+xEnd+","+yEnd+")");
+            }
+            
+        }
+    }
+    
+    
+    public void scale(String id, int sizeEnd){
+        if(objects.containsKey(id)){
+            AnimatedObject obj = objects.get(id);
+            if(obj.hasAttribute("transform")){
+                String attr = obj.getAttribute("transform");
+                attr = attr+", "+"scale("+sizeEnd+","+sizeEnd+")";
+            }
+            else{
+                obj.setAttribute("transform", "scale("+sizeEnd+","+sizeEnd+")");
+            }
+            
+        }
+    }
+    
+    
     public void scale(String id, int sizeStart, int sizeEnd, int timeStart, int timeEnd){
-        //TODO
+        if(objects.containsKey(id)){
+            AnimatedObject obj = objects.get(id);
+            obj.addTransform(
+                    Transform.SCALE, timeStart, timeEnd, 
+                    sizeStart+" "+sizeStart, sizeEnd+" "+sizeEnd);
+            
+        }
     }
     
     
