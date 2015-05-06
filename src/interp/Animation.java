@@ -188,8 +188,19 @@ public class Animation{
         }
     }
     
-    public String getSvg(){
-        //TODO
-        return null;
+    
+    @Override
+    public String toString(){
+        String svg = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+        svg = svg + "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/SVG/DTD/svg10.dtd\" >\n";
+
+        svg = svg+ "<svg width=\""+ width +"\" height=\""+height;
+        svg = svg+ "\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
+        for(String s:objects.keySet()){
+            AnimatedObject obj = objects.get(s);
+            svg = svg+"\n"+obj.toString()+"\n";
+        }
+        svg = svg+"</svg>\n";
+        return svg;
     }
 }
