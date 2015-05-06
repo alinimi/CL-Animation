@@ -33,11 +33,11 @@ public class Animation{
      * @param attrs
      * @param creationTime
      */
-    public void create(String id, Shape type, HashMap<String,String> attrs,
+    public void create(Shape type, String id, int[] coords, HashMap<String,Object> attrs, String text,
         int creationTime){
         if(!objects.containsKey(id)){
-            AnimatedObject obj = new AnimatedObject(type, creationTime);
-            obj.addAttributes(attrs);
+            AnimatedObject obj = new AnimatedObject(type, coords, attrs, text, creationTime);
+            
             objects.put(id, obj);
         }
         //error handling
@@ -115,12 +115,14 @@ public class Animation{
     public void move(String id, int xEnd, int yEnd){
         if(objects.containsKey(id)){
             AnimatedObject obj = objects.get(id);
+            String newAttr = "translate("+xEnd+","+yEnd+")";
             if(obj.hasAttribute("transform")){
-                String attr = obj.getAttribute("transform");
-                attr = attr+", "+"translate("+xEnd+","+yEnd+")";
+                String attr = (String)obj.getAttribute("transform");
+                attr = attr+", "+newAttr;
+                obj.setAttribute("transform", attr);
             }
             else{
-                obj.setAttribute("transform", "translate("+xEnd+","+yEnd+")");
+                obj.setAttribute("transform", newAttr);
             }
             
         }
@@ -130,12 +132,14 @@ public class Animation{
     public void scale(String id, int sizeEnd){
         if(objects.containsKey(id)){
             AnimatedObject obj = objects.get(id);
+            String newAttr = "scale("+sizeEnd+","+sizeEnd+")";
             if(obj.hasAttribute("transform")){
-                String attr = obj.getAttribute("transform");
-                attr = attr+", "+"scale("+sizeEnd+","+sizeEnd+")";
+                String attr = (String)obj.getAttribute("transform");
+                attr = attr+", "+newAttr;
+                obj.setAttribute("transform", attr);
             }
             else{
-                obj.setAttribute("transform", "scale("+sizeEnd+","+sizeEnd+")");
+                obj.setAttribute("transform", newAttr);
             }
             
         }
@@ -153,8 +157,35 @@ public class Animation{
     }
     
     
+    public void rotate(String id, int angleEnd){
+        if(objects.containsKey(id)){
+            AnimatedObject obj = objects.get(id);
+            String newAttr = "rotate("+angleEnd+" "+
+                        obj.getRotationCenterX()+","+obj.getRotationCenterY()+")";
+            
+            if(obj.hasAttribute("transform")){
+                String attr = (String)obj.getAttribute("transform");
+                attr = attr+", "+newAttr;
+                obj.setAttribute("transform", attr);
+            }
+            else{
+                obj.setAttribute("transform", newAttr);
+            }
+            
+        }
+    }
+    
     public void rotate(String id, int angleStart, int angleEnd, int timeStart, int timeEnd){
-        //TODO
+        if(objects.containsKey(id)){
+            AnimatedObject obj = objects.get(id);
+            obj.addTransform(
+                    Transform.ROTATE, timeStart, timeEnd, 
+                    angleStart+" "+obj.getRotationCenterX()+" "+
+                            obj.getRotationCenterY(), angleEnd+" "+
+                                    obj.getRotationCenterX()+" "+
+                                    obj.getRotationCenterY());
+            
+        }
     }
     
     public String getSvg(){

@@ -19,17 +19,37 @@ public class AnimatedObject {
     private int creationTime;
     private SvgObject.Shape objectType;
     private int destructionTime;
-    private HashMap <String,String> attributeMap;
+    private int[] coords;
+    String text;
+    private HashMap <String,Object> attributeMap;
     private ArrayList <ObjectAnimation> animationList;
     private ArrayList <ObjectTransform> transformList;
+    private int rotationCenterX;
+    private int rotationCenterY;
     
-    public AnimatedObject(Shape type, int creationTime){
+    
+    //crear objeto
+    public AnimatedObject(Shape type, int[] coordinates,
+            HashMap<String,Object> attrs, String txt, int startTime){
+        //type
         objectType = type;
-        creationTime = -1;
-        destructionTime = -1;
+        
+        //coords
+        coords = coordinates;
+        
+        //attrs
+        attributeMap = attrs;
+        
+        //text
+        text = txt;
+        
+        if(startTime == 0) creationTime = -1;
+        else creationTime = 0;
+        
         animationList = new ArrayList <ObjectAnimation>();
         transformList = new ArrayList <ObjectTransform>();
-        attributeMap = new HashMap<String,String>();
+        
+        setRotationCenter();
     }
     
     public Shape getType(){
@@ -40,11 +60,12 @@ public class AnimatedObject {
         attributeMap.put(name, value);
     }
     
-    public void addAttributes(HashMap<String,String> attrs){
+    public void addAttributes(HashMap<String,Object> attrs){
         attributeMap.putAll(attrs);
+        setRotationCenter();
     }
     
-    public String getAttribute(String name){
+    public Object getAttribute(String name){
         return attributeMap.get(name);
     }
     
@@ -80,6 +101,28 @@ public class AnimatedObject {
     }
     
     
+    public void setRotationCenter(){
+        if(objectType == Shape.POLYGON || objectType == Shape.LINE){
+            int sumX = 0;
+            int sumY = 0;
+            for(int i = 0; i < coords.length; i+=2){
+                sumX += coords[i];
+                sumY += coords[i+1];
+            }
+            rotationCenterX = sumX/coords.length*2;
+            rotationCenterY = sumY/coords.length*2;
+        }                
+        else{
+            rotationCenterX = coords[0];
+            rotationCenterY = coords[1];
+        }
+    }
+    public int getRotationCenterX(){
+        return rotationCenterX;
+    }
+    public int getRotationCenterY(){
+        return rotationCenterY;
+    }
     
     private class ObjectAnimation {
         private int startTime;
