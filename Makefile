@@ -55,14 +55,8 @@ INTERP_SRC =	$(INTERP)/Interp.java \
 				$(INTERP)/Stack.java \
 				$(INTERP)/$(TARGET)Tree.java \
 				$(INTERP)/SvgTreeAdaptor.java \
-				$(INTERP)/data/Data.java \
-				$(INTERP)/data/SvgBoolean.java \
-				$(INTERP)/data/SvgInt.java \
-				$(INTERP)/data/SvgObject.java \
-				$(INTERP)/data/SvgArray.java \
-				$(INTERP)/data/SvgFloat.java \
-				$(INTERP)/data/SvgNumber.java \
-				$(INTERP)/data/SvgString.java
+				$(INTERP)/Data.java
+
 
 ALL_SRC =		$(MAIN_SRC) $(PARSER_SRC) $(INTERP_SRC) $(DATA_SRC)
 
