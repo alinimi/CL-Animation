@@ -153,18 +153,21 @@ public class AnimatedObject {
     public String toString(){
         String tab = "\t";
         String tag = getTag();
-        String svg = tab+"<"+tag+" ";
+        String svg = tab+"<"+tag;
         for(String s: attributeMap.keySet()){
-            svg += getAttributeString(s);
+            svg += " "+getAttributeString(s);
         }
-        svg += ">";
+        svg += ">\n";
+        if(text!=null){
+            svg += "\t\t"+text+"\n";
+        }
         for(ObjectAnimation anim: animationList){
-            anim.toString();
+            svg += anim.toString();
         }
         for(ObjectTransform tr: transformList){
-            tr.toString();
+            svg += tr.toString();
         }
-        svg += "</"+tag+">\n";
+        svg += "\t</"+tag+">\n";
         return svg;
     }
     
@@ -185,12 +188,13 @@ public class AnimatedObject {
         
         @Override
         public String toString(){
-            String svg = "<animate";
+            String svg = "\t\t<animate";
             svg += " attributeName=\""+attribute+"\"";
             svg += " from=\""+startValue+"\"";
             svg += " to=\""+endValue+"\"";
-            svg += " begin=\""+startTime+"\"";
-            svg += " end=\""+endTime+"\"";
+            int dur = endTime-startTime;
+            svg += " dur=\""+dur+"\"";
+            svg += " fill=\"freeze\"";
             svg += "/>\n";
             return svg;
         }
@@ -226,7 +230,7 @@ public class AnimatedObject {
         @Override
         public String toString(){
             String tag = getTag();
-            String svg = "<animateTransform";
+            String svg = "\t\t<animateTransform";
             svg += " type=\""+tag+"\"";
             svg += " from=\""+startValue+"\"";
             svg += " to=\""+endValue+"\"";

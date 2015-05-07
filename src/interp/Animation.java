@@ -26,11 +26,12 @@ public class Animation{
     }
     
     /**
-     * Crea un objeto con identificador id si no existe.
+     *
+     * @param type
      * @param id
-     * @param type uno de los tipos de objetos definidos en el enum Shape de
-     * SvgObject
+     * @param coords
      * @param attrs
+     * @param text
      * @param creationTime
      */
     public void create(Shape type, String id, int[] coords, HashMap<String,Object> attrs, String text,
@@ -198,7 +199,7 @@ public class Animation{
         svg = svg+ "\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
         for(String s:objects.keySet()){
             AnimatedObject obj = objects.get(s);
-            svg = svg+"\n"+obj.toString()+"\n";
+            svg = svg+"\n"+obj.toString();
         }
         svg = svg+"</svg>\n";
         return svg;

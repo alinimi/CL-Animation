@@ -21,8 +21,10 @@ public class AnimationTest {
         Animation anim = new Animation(300,300);
         int[] coords = {0,0};
         HashMap<String,Object> attribs = new HashMap<String,Object>();
-        attribs.put("asdf", "ddd");
+        attribs.put("stroke", "green");
+        attribs.put("stroke-width", "2px");
         anim.create(SvgObject.Shape.TEXT, "text", coords, attribs, "hello", 0);
+        anim.modify("text","y","0","200",0,2);
         System.out.println(anim);
     }
     
