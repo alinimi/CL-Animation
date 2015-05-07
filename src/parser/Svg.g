@@ -157,7 +157,7 @@ attributes  : '{' attribute (',' attribute)* '}' -> ^(LIST_ATTR attribute+)
 
 attribute   : FILL^          ':'! color
             | FILLOPACITY^   ':'! FLOAT
-            | LINECOLOR      ':'! color
+            | LINECOLOR^     ':'! color
             | LINEPATTERN^   ':'! ('dots'|'lines'|'alternate')
             | LINEWIDTH^     ':'! INT
             | text_attributes
