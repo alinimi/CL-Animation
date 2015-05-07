@@ -43,8 +43,7 @@ public class AnimatedObject {
         //text
         text = txt;
         
-        if(startTime == 0) creationTime = -1;
-        else creationTime = 0;
+        creationTime = startTime;
         
         animationList = new ArrayList <ObjectAnimation>();
         transformList = new ArrayList <ObjectTransform>();
@@ -157,9 +156,20 @@ public class AnimatedObject {
         for(String s: attributeMap.keySet()){
             svg += " "+getAttributeString(s);
         }
+        if(creationTime!=-1){
+            svg += " display=\"none\"";
+        }
         svg += ">\n";
         if(text!=null){
             svg += "\t\t"+text+"\n";
+        }
+        if(creationTime!=0){
+            svg += "\t\t<set attributeName=\"display\" to=\"inline\""
+                    + " begin=\""+creationTime+"s\" dur=\"indefinite\"/>\n";
+        }
+        if(destructionTime!=-1){
+            svg += "\t\t<set attributeName=\"display\" to=\"none\""
+                    + " begin=\""+destructionTime+"s\" dur=\"indefinite\"/>\n";
         }
         for(ObjectAnimation anim: animationList){
             svg += anim.toString();
@@ -193,6 +203,7 @@ public class AnimatedObject {
             svg += " from=\""+startValue+"\"";
             svg += " to=\""+endValue+"\"";
             int dur = endTime-startTime;
+            svg += " begin=\""+startTime+"\"";
             svg += " dur=\""+dur+"\"";
             svg += " fill=\"freeze\"";
             svg += "/>\n";
