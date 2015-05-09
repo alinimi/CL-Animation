@@ -55,6 +55,8 @@ INTERP_SRC =	$(INTERP)/Interp.java \
 				$(INTERP)/Stack.java \
 				$(INTERP)/$(TARGET)Tree.java \
 				$(INTERP)/SvgTreeAdaptor.java \
+				$(INTERP)/AnimatedObject.java \
+				$(INTERP)/Animation.java \
 				$(INTERP)/Data.java
 
 
