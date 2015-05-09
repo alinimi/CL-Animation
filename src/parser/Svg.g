@@ -8,7 +8,7 @@
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
  *      notice, this list of conditions and the following disclaimer in the
- *      documentation and/or other materials provided with the distribution.
+? *      documentation and/or other materials provided with the distribution.
  *    * Neither the name of the <organization> nor the
  *      names of its contributors may be used to endorse or promote products
  *      derived from this software without specific prior written permission.
@@ -124,14 +124,14 @@ array   : id=ID '[' INT ']'    -> ^(ARRAY[$id,$id.text] INT)
 // Create instruccion:
 //               |         objecte_create         |
 //        Create |ObjectType Name ObjectAttributes| GeneralAttributes   Time     
-create  : CREATE^ objecte_create                    attributes          (FLOAT|INT)?
+create  : CREATE^ objecte_create                    attributes          (FLOAT|INT)
         ;
 
 //              type        Name     ObjectAttributes
-objecte_create: TEXT      ID       coord STRING
+objecte_create: TEXT      ID       coord INT STRING
               | CIRCLE    ID       coord INT
-              | RECTANGLE ID       coord INT INT (INT INT)?
-              | ELLIPSE   ID       coord INT INT
+              | RECTANGLE ID       coord INT INT INT (INT INT)?
+              | ELLIPSE   ID       coord INT INT INT
               | LINE      ID       list_min_2_coord
               | POLYGON   ID       list_min_2_coord
               ;
@@ -149,7 +149,7 @@ destroy : DESTROY^  ID       (FLOAT|INT)
 
 // Modify instrucction:
 //        Modify    ObjectId    GeneralAttributes   tStart      tEnd
-modify  : MODIFY^   ID          attributes          (FLOAT|INT) (FLOAT|INT)
+modify  : MODIFY^   ID          attributes          (FLOAT|INT) (FLOAT|INT)?
         ;
 
 attributes  : '{' attribute (',' attribute)* '}' -> ^(LIST_ATTR attribute+)
@@ -175,8 +175,8 @@ rgb   : '(' INT ',' INT ',' INT ')' -> ^(RGB INT INT INT)
       ;
 
 // Move instrucction: 
-//      Move  objectId x y      TStart      TEnd
-move  : MOVE^ ID       coord    (FLOAT|INT) (FLOAT|INT)
+//      Move  objectId xS,yS    xE,yE   TStart      TEnd
+move  : MOVE^ ID       coord    coord   (FLOAT|INT) (FLOAT|INT)
       ;
 
 // Scale instrucction:
