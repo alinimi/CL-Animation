@@ -29,8 +29,10 @@ package interp;
 
 import interp.Data;
 import parser.*;
+import interp.data.SvgObject;
 
 import java.util.ArrayList;
+import interp.Animation;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -52,6 +54,8 @@ public class Interp {
      * correponding to the function.
      */
     private HashMap<String,SvgTree> FuncName2Tree;
+
+    private Animation animation;
 
     /** Standard input of the interpreter (System.in). */
     private Scanner stdin;
@@ -76,6 +80,7 @@ public class Interp {
         assert T != null;
         MapFunctions(T);  // Creates the table to map function names into AST nodes
         PreProcessAST(T); // Some internal pre-processing ot the AST
+        animation = new Animation(500,500);
         Stack = new Stack(); // Creates the memory of the virtual machine
         // Initializes the standard input of the program
         stdin = new Scanner (new BufferedReader(new InputStreamReader(System.in)));
@@ -161,6 +166,10 @@ public class Interp {
      * @return The data returned by the function.
      */
     private Data executeFunction (String funcname, SvgTree args) {
+
+        if (funcname == "size" && args.getChildCount() == 2) {
+            // set canvas size
+        }
         // Get the AST of the function
         SvgTree f = FuncName2Tree.get(funcname);
         if (f == null) throw new RuntimeException(" function " + funcname + " not declared");
@@ -267,21 +276,74 @@ public class Interp {
         return attrs;
     }
 
-    private int[] getCoordinate(SvgTree t) {
-        int x = Integer.parseInt(t.getChild(0).getText());
-        int y = Integer.parseInt(t.getChild(1).getText());
-        int[] coord = new int[]{x,y};
-        return coord;
-
+    private HashMap<String,Object> getAttributes(SvgTree t) {
+        int type = t.getType();
+        int size = t.getChildCount();
+        HashMap<String,Object> attrs = generateAttributes(type, t.getChild(size - 2));
+        float startTime = Float.parseFloat(t.getChild(size - 1).getText());
+        switch (type) {
+            case SvgLexer.TEXT:
+            break;
+                
+        }
+        return attrs;
     }
 
-    private int[][] generateCoordinates(SvgTree t) {
+    private int getXCoordinate(SvgTree t) {
+        return Integer.parseInt(t.getChild(0).getText());
+    }
+
+    private int getYCoordinate(SvgTree t) {
+        return Integer.parseInt(t.getChild(1).getText());
+    }
+
+    private int[] generateCoordinates(SvgTree t) {
         assert t != null;
-        int[][] coords = new int[t.getChildCount()][2];
-        for (int i = 0; i < t.getChildCount(); i++) {
-            coords[i] = getCoordinate(t);
+        int[] coords;
+        if (t.getType() == SvgLexer.LIST_COORD) {
+            coords = new int[t.getChildCount()*2];
+            for (int i = 0; i < t.getChildCount(); i++) {
+                coords[2*i] = getXCoordinate(t.getChild(i));
+                coords[2*i+1] = getYCoordinate(t.getChild(i));
+            }
+        } else {
+            coords = new int[]{getXCoordinate(t),getYCoordinate(t)};
         }
+        
         return coords;
+    }
+
+    private SvgObject.Shape lexer2shape(int lexerId) {
+        SvgObject.Shape shape;
+        switch(lexerId) {
+            case SvgLexer.TEXT:
+                shape = SvgObject.Shape.TEXT;
+                break;
+
+            case SvgLexer.CIRCLE:
+                shape = SvgObject.Shape.CIRCLE;
+                break;
+
+            case SvgLexer.RECTANGLE:
+                shape = SvgObject.Shape.RECTANGLE;
+                break;
+
+            case SvgLexer.ELLIPSE:
+                shape = SvgObject.Shape.ELLIPSE;
+                break;
+
+            case SvgLexer.LINE:
+                shape = SvgObject.Shape.LINE;
+                break;
+
+            case SvgLexer.POLYGON:
+                shape = SvgObject.Shape.POLYGON;
+                break;
+
+            default:
+                throw new RuntimeException ("Not correct Shape " + lexerId);
+        }
+        return shape;
     }
     
     /**
@@ -297,6 +359,11 @@ public class Interp {
         
         setLineNumber(t);
         Data value; // The returned value
+        String id;
+        int intType;
+        float startTime;
+        float endTime;
+        HashMap<String,Object> attrs;
 
         // A big switch for all type of instructions
         switch (t.getType()) {
@@ -370,23 +437,69 @@ public class Interp {
                 return null;
 
             case SvgLexer.CREATE:
-                int intType = t.getChild(0).getType();
-                String type = t.getChild(0).getText();
-                String varName = t.getChild(1).getText();
-                Stack.defineVariable (varName, new Data(intType));
-                int[] initialCoord = getCoordinate(t.getChild(2));
+                intType = t.getChild(0).getType();
+                id = t.getChild(1).getText();
+                Stack.defineVariable (id, new Data(intType));
+                int[] initialCoords = generateCoordinates(t.getChild(2));
+                attrs = getAttributes(t);
+                startTime = Float.parseFloat(t.getChild(t.getChildCount() - 1).getText());
                 String text = t.getChild(3).getText();
-                HashMap<String,Object> attrs = generateAttributes(intType, t.getChild(4));
-                float startTime = 0;
+                //attrs = generateAttributes(intType, t.getChild(4));
+                startTime = 0;
                 if (t.getChildCount() == 6) startTime = Float.parseFloat(t.getChild(5).getText());
-                // svg.create(type,varName,initialCoord,text,attrs,startTime)
+                //animation.create(lexer2shape(intType),id, initialCoords,attrs);
+                // svg.create(type,id,initialCoord,text,attrs,startTime)
+                return null;
 
-                System.out.println(type);
-                System.out.println(varName);
-                System.out.println(initialCoord[0] + " " + initialCoord[1]);
-                System.out.println(text);
-                System.out.println(attrs);
-                System.out.println(startTime);
+            case SvgLexer.DESTROY:
+                id = t.getChild(0).getText();
+                // Comprobació de que existeix l'objecte.
+                Stack.getVariable(id);
+                float time = Float.parseFloat(t.getChild(1).getText());
+                //animation.destroy(id,time);
+                return null;
+
+            case SvgLexer.MODIFY:
+                // modify(String id, String name, String value)
+                id = t.getChild(0).getText();
+                intType = Stack.getVariable(id).getIntegerValue();
+                attrs = generateAttributes(intType, t.getChild(1));
+                startTime = Float.parseFloat(t.getChild(2).getText());
+                endTime = -1;
+                if (t.getChildCount() == 4) endTime = Float.parseFloat(t.getChild(3).getText());
+                //animation.modify(id, )
+                // endTime pot ser -1 en cas de que no s'hagi especificat final.
+                // svg.modify(id, intType, startTime, endTime); 
+                return null;
+
+            case SvgLexer.MOVE:
+                id = t.getChild(0).getText();
+                intType = Stack.getVariable(id).getIntegerValue();
+                int xIni = getXCoordinate(t.getChild(1));
+                int yIni = getYCoordinate(t.getChild(1));
+                int xEnd = getXCoordinate(t.getChild(2));
+                int yEnd = getYCoordinate(t.getChild(2));
+                startTime = Float.parseFloat(t.getChild(3).getText());
+                endTime = Float.parseFloat(t.getChild(4).getText());
+                //animation.move(id,xIni,yIni,xEnd,yEnd,startTime,endTime);
+                return null;
+
+            case SvgLexer.SCALE:
+                id = t.getChild(0).getText();
+                float scaleX = Float.parseFloat(t.getChild(1).getText());
+                float scaleY = Float.parseFloat(t.getChild(2).getText());
+                startTime = Float.parseFloat(t.getChild(3).getText());
+                endTime = Float.parseFloat(t.getChild(4).getText());
+                //animate.scale(id,scaleX,scaleY,startTime,endTime);
+                return null;
+
+            case SvgLexer.ROTATE:
+                id = t.getChild(0).getText();
+                int startAngle = Integer.parseInt(t.getChild(1).getText());
+                int endAngle = Integer.parseInt(t.getChild(2).getText());
+                startTime = Float.parseFloat(t.getChild(3).getText());
+                endTime = Float.parseFloat(t.getChild(4).getText());
+                //animate.rotate(id,startAngle,endAngle,startTime,endTime);
                 return null;
 
             default: assert false; // Should never happen
