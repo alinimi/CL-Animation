@@ -19,6 +19,11 @@ public class Animation{
     private int width;
     private int height;
     
+    /**
+     * Constructor. Crea una ventana de animación sin objetos
+     * @param w anchura de la ventana de la animación en píxeles
+     * @param h altura de la ventana de la animación en píxeles
+     */
     public Animation(int w, int h){
         width = w;
         height = h;
@@ -26,31 +31,44 @@ public class Animation{
     }
     
     /**
-     * Crea un objeto con identificador id si no existe.
-     * @param id
-     * @param type uno de los tipos de objetos definidos en el enum Shape de
-     * SvgObject
-     * @param attrs
-     * @param creationTime
+     * Crea un objeto y lo añade a la animación
+     * @param type tipo de objeto (RECTANGLE, CIRCLE, ELLIPSE, TEXT, LINE, POLYGON)
+     * @param id String que sirve como identificador único del objeto.
+     * @param coords Coordenadas en píxeles de un punto descriptivo del objeto (el centro en 
+     * círculos y elipses, la esquina superior izquierda en rectángulos y la esquina
+     * inferior izquierda en textos) o de todos sus puntos en caso de polilíneas
+     * y polígonos
+     * @param attrs HashMap de atributos del objeto y sus valores en el momento
+     * 0s de la animación
+     * @param text El texto de un objeto TEXT. null si el objeto es de cualquier
+     * otro tipo
+     * @param creationTime Momento en segundos en el que aparecerá el objeto en la
+     * animación
      */
-    public void create(Shape type, String id, int[] coords, HashMap<String,Object> attrs, String text,
+    public void create(Shape type, String id, int[] coords, HashMap<String,Object> attrs,
         int creationTime){
         if(!objects.containsKey(id)){
-            AnimatedObject obj = new AnimatedObject(type, coords, attrs, text, creationTime);
+            AnimatedObject obj = new AnimatedObject(type, coords, attrs, creationTime);
             
             objects.put(id, obj);
         }
         //error handling
     }
     
+    /**
+     * Comprueba si existe un objeto con identificador id en la animación
+     * @param id Posible identificador de un objeto
+     * @return true si existe el objeto; false en caso contrario
+     */
     public boolean objectExists(String id){
         return objects.containsKey(id);
     }
     
     /**
-     * Cambia el tiempo en el que se destruye el objeto (en todos los casos)
-     * @param id
-     * @param time
+     * Cambia el momento en segundos en el que el objeto id desaparece de la 
+     * animación
+     * @param id Identificador del objeto
+     * @param time Timestamp de la acción
      */
     public void destroy(String id, int time){
         if(objects.containsKey(id)){
@@ -61,9 +79,9 @@ public class Animation{
     
     /**
      * Set del valor del atributo que tiene el objeto desde su creación
-     * @param id
-     * @param name
-     * @param value
+     * @param id Identificador del objeto
+     * @param name Nombre del atributo
+     * @param value Valor que tiene el atributo al comienzo de la vida del objeto
      */
     public void modify(String id, String name, String value){
         if(objects.containsKey(id)){
@@ -75,15 +93,15 @@ public class Animation{
     /**
      * modifica el atributo name de valueIni a valueEnd en los tiempos
      * especificados
-     * @param id
-     * @param name
-     * @param valueIni
-     * @param valueEnd
-     * @param timeStart
-     * @param timeEnd
+     * @param id Identificador del objeto
+     * @param name Nombre del atributo
+     * @param valueIni Valor del atributo al inicio de la animación
+     * @param valueEnd Valor final del atributo
+     * @param timeStart Momento en el que empieza la animación (en segundos)
+     * @param timeEnd Momento final de la animación (en segundos)
      */
-    public void modify(String id, String name, String valueIni, 
-            String valueEnd, int timeStart, int timeEnd){
+    public void modify(String id, String name, Object valueIni, 
+            Object valueEnd, int timeStart, int timeEnd){
         if(objects.containsKey(id)){
             AnimatedObject obj = objects.get(id);
             obj.addAnimation(timeStart, timeEnd, name, valueIni, valueEnd);
@@ -112,6 +130,12 @@ public class Animation{
         }
     }
     
+    /**
+     *
+     * @param id
+     * @param xEnd
+     * @param yEnd
+     */
     public void move(String id, int xEnd, int yEnd){
         if(objects.containsKey(id)){
             AnimatedObject obj = objects.get(id);
@@ -128,7 +152,11 @@ public class Animation{
         }
     }
     
-    
+    /**
+     *
+     * @param id
+     * @param sizeEnd
+     */
     public void scale(String id, int sizeEnd){
         if(objects.containsKey(id)){
             AnimatedObject obj = objects.get(id);
@@ -145,7 +173,14 @@ public class Animation{
         }
     }
     
-    
+    /**
+     *
+     * @param id
+     * @param sizeStart
+     * @param sizeEnd
+     * @param timeStart
+     * @param timeEnd
+     */
     public void scale(String id, int sizeStart, int sizeEnd, int timeStart, int timeEnd){
         if(objects.containsKey(id)){
             AnimatedObject obj = objects.get(id);
@@ -156,7 +191,11 @@ public class Animation{
         }
     }
     
-    
+    /**
+     *
+     * @param id
+     * @param angleEnd
+     */
     public void rotate(String id, int angleEnd){
         if(objects.containsKey(id)){
             AnimatedObject obj = objects.get(id);
@@ -175,6 +214,14 @@ public class Animation{
         }
     }
     
+    /**
+     *
+     * @param id
+     * @param angleStart
+     * @param angleEnd
+     * @param timeStart
+     * @param timeEnd
+     */
     public void rotate(String id, int angleStart, int angleEnd, int timeStart, int timeEnd){
         if(objects.containsKey(id)){
             AnimatedObject obj = objects.get(id);
@@ -188,8 +235,22 @@ public class Animation{
         }
     }
     
-    public String getSvg(){
-        //TODO
-        return null;
+    /**
+     *
+     * @return Animación especificada en svg
+     */
+    @Override
+    public String toString(){
+        String svg = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+        svg = svg + "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/SVG/DTD/svg10.dtd\" >\n";
+
+        svg = svg+ "<svg width=\""+ width +"\" height=\""+height;
+        svg = svg+ "\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
+        for(String s:objects.keySet()){
+            AnimatedObject obj = objects.get(s);
+            svg = svg+"\n"+obj.toString();
+        }
+        svg = svg+"</svg>\n";
+        return svg;
     }
 }

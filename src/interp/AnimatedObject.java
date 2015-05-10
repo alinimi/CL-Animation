@@ -30,7 +30,7 @@ public class AnimatedObject {
     
     //crear objeto
     public AnimatedObject(Shape type, int[] coordinates,
-            HashMap<String,Object> attrs, String txt, int startTime){
+            HashMap<String,Object> attrs, int startTime){
         //type
         objectType = type;
         
@@ -40,11 +40,9 @@ public class AnimatedObject {
         //attrs
         attributeMap = attrs;
         
-        //text
-        text = txt;
+
         
-        if(startTime == 0) creationTime = -1;
-        else creationTime = 0;
+        creationTime = startTime;
         
         animationList = new ArrayList <ObjectAnimation>();
         transformList = new ArrayList <ObjectTransform>();
@@ -70,7 +68,7 @@ public class AnimatedObject {
     }
     
     public void addAnimation(int st, int et, String attr, 
-                String sv, String ev){
+                Object sv, Object ev){
         ObjectAnimation an = new ObjectAnimation(st,et,attr,sv,ev);
         animationList.add(an);
     }
@@ -124,20 +122,93 @@ public class AnimatedObject {
         return rotationCenterY;
     }
     
+    public String getTag(){
+        switch(objectType){
+            case RECTANGLE:
+                return "rect";
+            case TEXT:
+                return "text";
+            case CIRCLE:
+                return "circle";
+            case ELLIPSE:
+                return "ellipse";
+            case LINE:
+                return "polyline";
+            case POLYGON:
+                return "polygon";
+            default:
+                return null;
+            
+        }
+    }
+    
+    public String getAttributeString(String s){
+        String value = attributeMap.get(s).toString();
+        return s + "=\""+value+"\"";
+    }
+    
+    @Override
+    public String toString(){
+        String tab = "\t";
+        String tag = getTag();
+        String svg = tab+"<"+tag;
+        for(String s: attributeMap.keySet()){
+            svg += " "+getAttributeString(s);
+        }
+        if(creationTime!=-1){
+            svg += " display=\"none\"";
+        }
+        svg += ">\n";
+        if(hasAttribute("text")){
+            svg += "\t\t"+(String)getAttribute("text")+"\n";
+        }
+        if(creationTime!=0){
+            svg += "\t\t<set attributeName=\"display\" to=\"inline\""
+                    + " begin=\""+creationTime+"s\" dur=\"indefinite\"/>\n";
+        }
+        if(destructionTime!=-1){
+            svg += "\t\t<set attributeName=\"display\" to=\"none\""
+                    + " begin=\""+destructionTime+"s\" dur=\"indefinite\"/>\n";
+        }
+        for(ObjectAnimation anim: animationList){
+            svg += anim.toString();
+        }
+        for(ObjectTransform tr: transformList){
+            svg += tr.toString();
+        }
+        svg += "\t</"+tag+">\n";
+        return svg;
+    }
+    
     private class ObjectAnimation {
         private int startTime;
         private int endTime;
         private String attribute;
-        private String startValue;
-        private String endValue;
+        private Object startValue;
+        private Object endValue;
         public ObjectAnimation(int st, int et, String attr, 
-                String sv, String ev){
+                Object sv, Object ev){
             startTime = st;
             endTime = et;
             attribute = attr;
             startValue = sv;
             endValue = ev;
         }
+        
+        @Override
+        public String toString(){
+            String svg = "\t\t<animate";
+            svg += " attributeName=\""+attribute+"\"";
+            svg += " from=\""+startValue.toString()+"\"";
+            svg += " to=\""+endValue.toString()+"\"";
+            int dur = endTime-startTime;
+            svg += " begin=\""+startTime+"\"";
+            svg += " dur=\""+dur+"\"";
+            svg += " fill=\"freeze\"";
+            svg += "/>\n";
+            return svg;
+        }
+
 
     }
     private class ObjectTransform{
@@ -152,6 +223,32 @@ public class AnimatedObject {
             endTime = et;
             startValue = sv;
             endValue = ev;
+        }
+        
+        public String getTag(){
+            switch(type){
+                case TRANSLATE:
+                    return "translate";
+                case ROTATE:
+                    return "rotate";
+                case SCALE:
+                    return "scale";
+                default:
+                    return null;
+            }
+        }
+        
+        @Override
+        public String toString(){
+            String tag = getTag();
+            String svg = "\t\t<animateTransform";
+            svg += " type=\""+tag+"\"";
+            svg += " from=\""+startValue+"\"";
+            svg += " to=\""+endValue+"\"";
+            svg += " begin=\""+startTime+"\"";
+            svg += " end=\""+endTime+"\"";
+            svg += "/>\n";
+            return svg;
         }
     }
     
