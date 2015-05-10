@@ -45,10 +45,10 @@ public class Animation{
      * @param creationTime Momento en segundos en el que aparecerá el objeto en la
      * animación
      */
-    public void create(Shape type, String id, int[] coords, HashMap<String,Object> attrs, String text,
+    public void create(Shape type, String id, int[] coords, HashMap<String,Object> attrs,
         int creationTime){
         if(!objects.containsKey(id)){
-            AnimatedObject obj = new AnimatedObject(type, coords, attrs, text, creationTime);
+            AnimatedObject obj = new AnimatedObject(type, coords, attrs, creationTime);
             
             objects.put(id, obj);
         }
@@ -100,8 +100,8 @@ public class Animation{
      * @param timeStart Momento en el que empieza la animación (en segundos)
      * @param timeEnd Momento final de la animación (en segundos)
      */
-    public void modify(String id, String name, String valueIni, 
-            String valueEnd, int timeStart, int timeEnd){
+    public void modify(String id, String name, Object valueIni, 
+            Object valueEnd, int timeStart, int timeEnd){
         if(objects.containsKey(id)){
             AnimatedObject obj = objects.get(id);
             obj.addAnimation(timeStart, timeEnd, name, valueIni, valueEnd);

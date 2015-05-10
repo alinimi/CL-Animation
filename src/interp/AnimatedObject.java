@@ -30,7 +30,7 @@ public class AnimatedObject {
     
     //crear objeto
     public AnimatedObject(Shape type, int[] coordinates,
-            HashMap<String,Object> attrs, String txt, int startTime){
+            HashMap<String,Object> attrs, int startTime){
         //type
         objectType = type;
         
@@ -40,8 +40,7 @@ public class AnimatedObject {
         //attrs
         attributeMap = attrs;
         
-        //text
-        text = txt;
+
         
         creationTime = startTime;
         
@@ -69,7 +68,7 @@ public class AnimatedObject {
     }
     
     public void addAnimation(int st, int et, String attr, 
-                String sv, String ev){
+                Object sv, Object ev){
         ObjectAnimation an = new ObjectAnimation(st,et,attr,sv,ev);
         animationList.add(an);
     }
@@ -144,7 +143,7 @@ public class AnimatedObject {
     }
     
     public String getAttributeString(String s){
-        String value = (String)attributeMap.get(s);
+        String value = attributeMap.get(s).toString();
         return s + "=\""+value+"\"";
     }
     
@@ -160,8 +159,8 @@ public class AnimatedObject {
             svg += " display=\"none\"";
         }
         svg += ">\n";
-        if(text!=null){
-            svg += "\t\t"+text+"\n";
+        if(hasAttribute("text")){
+            svg += "\t\t"+(String)getAttribute("text")+"\n";
         }
         if(creationTime!=0){
             svg += "\t\t<set attributeName=\"display\" to=\"inline\""
@@ -185,10 +184,10 @@ public class AnimatedObject {
         private int startTime;
         private int endTime;
         private String attribute;
-        private String startValue;
-        private String endValue;
+        private Object startValue;
+        private Object endValue;
         public ObjectAnimation(int st, int et, String attr, 
-                String sv, String ev){
+                Object sv, Object ev){
             startTime = st;
             endTime = et;
             attribute = attr;
@@ -200,8 +199,8 @@ public class AnimatedObject {
         public String toString(){
             String svg = "\t\t<animate";
             svg += " attributeName=\""+attribute+"\"";
-            svg += " from=\""+startValue+"\"";
-            svg += " to=\""+endValue+"\"";
+            svg += " from=\""+startValue.toString()+"\"";
+            svg += " to=\""+endValue.toString()+"\"";
             int dur = endTime-startTime;
             svg += " begin=\""+startTime+"\"";
             svg += " dur=\""+dur+"\"";
@@ -209,6 +208,7 @@ public class AnimatedObject {
             svg += "/>\n";
             return svg;
         }
+
 
     }
     private class ObjectTransform{

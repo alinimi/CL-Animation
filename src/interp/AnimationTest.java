@@ -22,10 +22,11 @@ public class AnimationTest {
         int[] coords = {0,0};
         HashMap<String,Object> attribs = new HashMap<String,Object>();
         attribs.put("stroke", "green");
-        attribs.put("stroke-width", "2px");
-        anim.create(SvgObject.Shape.TEXT, "text", coords, attribs, "hello", 2);
+        attribs.put("stroke-width", 2);
+        attribs.put("text", "hello");
+        anim.create(SvgObject.Shape.TEXT, "text", coords, attribs, 2);
         anim.destroy("text",5);
-        anim.modify("text","y","0","200",0,2);
+        anim.modify("text","y",0,200,0,2);
         System.out.println(anim);
     }
     
