@@ -26,7 +26,7 @@ public class AnimationTest {
         attribs.put("text", "hello");
         anim.create(SvgObject.Shape.TEXT, "text", coords, attribs, 2);
         anim.destroy("text",5);
-        anim.modify("text","y",0,200,0,2);
+        anim.modify("text","y",200,0,2);
         System.out.println(anim);
     }
     

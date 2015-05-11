@@ -16,9 +16,9 @@ import java.util.HashMap;
  */
 public class AnimatedObject {
     public enum Transform{ROTATE,SCALE,TRANSLATE;}
-    private int creationTime;
+private float creationTime;
     private SvgObject.Shape objectType;
-    private int destructionTime;
+    private float destructionTime;
     private int[] coords;
     String text;
     private HashMap <String,Object> attributeMap;
@@ -30,7 +30,7 @@ public class AnimatedObject {
     
     //crear objeto
     public AnimatedObject(Shape type, int[] coordinates,
-            HashMap<String,Object> attrs, int startTime){
+            HashMap<String,Object> attrs, float startTime){
         //type
         objectType = type;
         
@@ -67,18 +67,18 @@ public class AnimatedObject {
         return attributeMap.get(name);
     }
     
-    public void addAnimation(int st, int et, String attr, 
-                Object sv, Object ev){
-        ObjectAnimation an = new ObjectAnimation(st,et,attr,sv,ev);
+    public void addAnimation(float st, float et, String attr, 
+                Object ev){
+        ObjectAnimation an = new ObjectAnimation(st,et,attr,ev);
         animationList.add(an);
     }
     
-    public void addTransform(Transform type, int st, int et, String sv, String ev){
+    public void addTransform(Transform type, float st, float et, String sv, String ev){
         ObjectTransform t = new ObjectTransform(st,et,type,sv,ev);
         transformList.add(t);
     }
 
-    public int getCreationTime() {
+    public float getCreationTime() {
         return creationTime;
     }
 
@@ -86,7 +86,7 @@ public class AnimatedObject {
         this.creationTime = creationTime;
     }
 
-    public int getDestructionTime() {
+    public float getDestructionTime() {
         return destructionTime;
     }
 
@@ -94,7 +94,7 @@ public class AnimatedObject {
     public boolean hasAttribute(String name){
         return attributeMap.containsKey(name);
     }
-    public void setDestructionTime(int destructionTime) {
+    public void setDestructionTime(float destructionTime) {
         this.destructionTime = destructionTime;
     }
     
@@ -181,17 +181,15 @@ public class AnimatedObject {
     }
     
     private class ObjectAnimation {
-        private int startTime;
-        private int endTime;
-        private String attribute;
-        private Object startValue;
-        private Object endValue;
-        public ObjectAnimation(int st, int et, String attr, 
-                Object sv, Object ev){
+        private final float startTime;
+        private final float endTime;
+        private final String attribute;
+        private final Object endValue;
+        public ObjectAnimation(float st, float et, String attr, 
+                Object ev){
             startTime = st;
             endTime = et;
             attribute = attr;
-            startValue = sv;
             endValue = ev;
         }
         
@@ -199,9 +197,8 @@ public class AnimatedObject {
         public String toString(){
             String svg = "\t\t<animate";
             svg += " attributeName=\""+attribute+"\"";
-            svg += " from=\""+startValue.toString()+"\"";
             svg += " to=\""+endValue.toString()+"\"";
-            int dur = endTime-startTime;
+            float dur = endTime-startTime;
             svg += " begin=\""+startTime+"\"";
             svg += " dur=\""+dur+"\"";
             svg += " fill=\"freeze\"";
@@ -212,12 +209,12 @@ public class AnimatedObject {
 
     }
     private class ObjectTransform{
-        private Transform type;
-        private String startValue;
-        private String endValue;
-        private int startTime;
-        private int endTime;
-        public ObjectTransform(int st, int et, Transform t, String sv, String ev){
+        private final Transform type;
+        private final String startValue;
+        private final String endValue;
+        private final float startTime;
+        private final float endTime;
+        public ObjectTransform(float st, float et, Transform t, String sv, String ev){
             type = t;
             startTime = st;
             endTime = et;
@@ -247,6 +244,7 @@ public class AnimatedObject {
             svg += " to=\""+endValue+"\"";
             svg += " begin=\""+startTime+"\"";
             svg += " end=\""+endTime+"\"";
+            svg += " additive=\"sum\"";
             svg += "/>\n";
             return svg;
         }
