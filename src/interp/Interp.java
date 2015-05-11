@@ -42,8 +42,8 @@ import java.io.*;
 
 public class Interp {
 
-    private static final String[] textAtrributeTypes = {"font-style","font-weight","orientation"};
-    private static final String[] generalAttributeTypes = {"fill","fill-opacity","line","line-pattern","line-width"};
+    private static final String[] textAtrributeTypes = {"font-style","font-weight","font-orientation"};
+    private static final String[] generalAttributeTypes = {"fill","fill-opacity","line-color","line-pattern","line-width"};
 
     /** Memory of the virtual machine. */
     private Stack Stack;
@@ -277,7 +277,7 @@ public class Interp {
     }
 
     private HashMap<String,Object> getAttributes(SvgTree t) {
-        int type = t.getType();
+        int type = t.getChild(0).getType();
         int size = t.getChildCount();
         HashMap<String,Object> attrs = getGeneralAttributes(type, t.getChild(size - 2));
         switch (type) {
@@ -474,10 +474,8 @@ public class Interp {
                 attrs = getAttributes(t);
                 startTime = Float.parseFloat(t.getChild(t.getChildCount() - 1).getText());
                 String text = t.getChild(3).getText();
-                //attrs = generateAttributes(intType, t.getChild(4));
-                //animation.create(lexer2shape(intType),id, initialCoords,attrs);
-                // svg.create(type,id,initialCoord,text,attrs,startTime)
-                //makeInitialTransformations(t);
+                animation.create(lexer2shape(intType),id, initialCoords,attrs, (int) startTime);
+                makeInitialTransformations(t);
                 return null;
 
             case SvgLexer.DESTROY:
@@ -485,7 +483,7 @@ public class Interp {
                 // Comprobació de que existeix l'objecte.
                 Stack.getVariable(id);
                 float time = Float.parseFloat(t.getChild(1).getText());
-                //animation.destroy(id,time);
+                animation.destroy(id,(int) time);
                 return null;
 
             case SvgLexer.MODIFY:
@@ -496,6 +494,10 @@ public class Interp {
                 startTime = Float.parseFloat(t.getChild(2).getText());
                 endTime = -1;
                 if (t.getChildCount() == 4) endTime = Float.parseFloat(t.getChild(3).getText());
+                //SvgTree attrsTree = t.getChild(1);
+                //for (int i = 0; i < attrsTree.getChildCount(); i++) {
+
+                //}
                 //animation.modify(id, )
                 // endTime pot ser -1 en cas de que no s'hagi especificat final.
                 // svg.modify(id, intType, startTime, endTime); 
@@ -510,7 +512,7 @@ public class Interp {
                 int yEnd = getYCoordinate(t.getChild(2));
                 startTime = Float.parseFloat(t.getChild(3).getText());
                 endTime = Float.parseFloat(t.getChild(4).getText());
-                //animation.move(id,xIni,yIni,xEnd,yEnd,startTime,endTime);
+                animation.move(id,xIni,yIni,xEnd,yEnd,(int) startTime,(int) endTime);
                 return null;
 
             case SvgLexer.SCALE:
@@ -519,7 +521,7 @@ public class Interp {
                 float scaleY = Float.parseFloat(t.getChild(2).getText());
                 startTime = Float.parseFloat(t.getChild(3).getText());
                 endTime = Float.parseFloat(t.getChild(4).getText());
-                //animate.scale(id,scaleX,scaleY,startTime,endTime);
+                animation.scale(id,(int) scaleX,(int) scaleY,(int) startTime,(int) endTime);
                 return null;
 
             case SvgLexer.ROTATE:
@@ -528,7 +530,10 @@ public class Interp {
                 int endAngle = Integer.parseInt(t.getChild(2).getText());
                 startTime = Float.parseFloat(t.getChild(3).getText());
                 endTime = Float.parseFloat(t.getChild(4).getText());
-                //animate.rotate(id,startAngle,endAngle,startTime,endTime);
+                animation.rotate(id,startAngle,endAngle,(int) startTime,(int) endTime);
+                return null;
+
+            case SvgLexer.SOURCE:
                 return null;
 
             default: assert false; // Should never happen
@@ -785,11 +790,11 @@ public class Interp {
         if(type == SvgLexer.TEXT) {
             boolean textAttribute = Arrays.asList(textAtrributeTypes).contains(attr);
             if (!generalAttribute && !textAttribute) {
-                throw new RuntimeException ("Attribute '" + attr + "' does not exist");
+                throw new RuntimeException ("Attribute '" + attr + "' for " + Integer.toString(type) + " does not exist");
             }
         } else {
             if (!generalAttribute) {
-                throw new RuntimeException ("Attribute '" + attr + "' does not exist");
+                throw new RuntimeException ("Attribute '" + attr + "' for " + Integer.toString(type) + " does not exist");
             }
         }
     }
