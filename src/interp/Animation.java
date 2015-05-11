@@ -40,8 +40,6 @@ public class Animation{
      * y polígonos
      * @param attrs HashMap de atributos del objeto y sus valores en el momento
      * 0s de la animación
-     * @param text El texto de un objeto TEXT. null si el objeto es de cualquier
-     * otro tipo
      * @param creationTime Momento en segundos en el que aparecerá el objeto en la
      * animación
      */
