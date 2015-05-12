@@ -10,16 +10,12 @@ func main() {
   } else {
     write "Pepe";
   }
-//
-  //Create text t 0 0 "Attributes" {fill:(2,3,4),font-style:normal} 15.0;
-  //Destroy t 2; 
-  //Modify t {fill:red,line:green,orientation:vertical} 2 3;
-  //Create line l 0,2 3,4 1,2 7,8 {line-pattern:dots};
-  //Move l 5,7 30 40;
-  //Scale l 10 20 15.4 20;
-  //Rotate l 15 40 7.8 9.8;
-  //Source "pelopicopata.txt";
-
-
-
+  Create text t 0,0 0 "Attributes" {fill:(2,3,4),font-style:normal} 15.0;
+  Destroy t 2; 
+  Modify t {fill:red,line-color:green,font-orientation:vertical} 2 3;
+  Create line l 0,2 3,4 1,2 7,8 {line-pattern:dots} 0;
+  Move l 5,7 15,20 30 40;
+  Scale l 10 20 15.4 20;
+  Rotate l 15 40 7.8 9.8;
+  Source "pelopicopata.txt";
 }
