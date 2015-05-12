@@ -85,6 +85,10 @@ public class Stack {
         StackTrace.removeLast();
     }
 
+    public boolean existsVariable(String name) {
+        return CurrentAR.get(name) != null;
+    }
+
     /** Defines the value of a variable. If the variable does not
      * exist, it is created. If it exists, the value and type of
      * the variable are re-defined.

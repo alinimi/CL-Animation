@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import interp.Animation;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.io.*;
 
@@ -282,25 +283,25 @@ public class Interp {
         HashMap<String,Object> attrs = getGeneralAttributes(type, t.getChild(size - 2));
         switch (type) {
             case SvgLexer.TEXT:
-                attrs.put("text",t.getChild(3).getText());
+                attrs.put("text",t.getChild(4).getText());
                 break;
 
             case SvgLexer.CIRCLE:
-                attrs.put("r",Integer.parseInt(t.getChild(2).getText()));
+                attrs.put("r",Integer.parseInt(t.getChild(3).getText()));
                 break;
 
             case SvgLexer.RECTANGLE:
-                attrs.put("width",Integer.parseInt(t.getChild(3).getText()));
-                attrs.put("height",Integer.parseInt(t.getChild(4).getText()));
-                if (t.getChildCount() == 9) {
-                    attrs.put("rx",Integer.parseInt(t.getChild(5).getText()));
-                    attrs.put("ry",Integer.parseInt(t.getChild(6).getText()));
+                attrs.put("width",Integer.parseInt(t.getChild(4).getText()));
+                attrs.put("height",Integer.parseInt(t.getChild(5).getText()));
+                if (t.getChildCount() == 10) {
+                    attrs.put("rx",Integer.parseInt(t.getChild(6).getText()));
+                    attrs.put("ry",Integer.parseInt(t.getChild(7).getText()));
                 }
                 break;
 
             case SvgLexer.ELLIPSE:
-                attrs.put("rx",Integer.parseInt(t.getChild(3).getText()));
-                attrs.put("ry",Integer.parseInt(t.getChild(4).getText()));
+                attrs.put("rx",Integer.parseInt(t.getChild(4).getText()));
+                attrs.put("ry",Integer.parseInt(t.getChild(5).getText()));
                 break;
                 
         }
@@ -469,13 +470,20 @@ public class Interp {
             case SvgLexer.CREATE:
                 intType = t.getChild(0).getType();
                 id = t.getChild(1).getText();
+                if (Stack.existsVariable(id)) throw new RuntimeException ("Variable " + id + " it was previously declared");;
                 Stack.defineVariable (id, new Data(intType));
                 int[] initialCoords = generateCoordinates(t.getChild(2));
                 attrs = getAttributes(t);
                 startTime = Float.parseFloat(t.getChild(t.getChildCount() - 1).getText());
-                String text = t.getChild(3).getText();
                 animation.create(lexer2shape(intType),id, initialCoords,attrs, (int) startTime);
                 makeInitialTransformations(t);
+
+                System.out.println("");
+                System.out.println(intType);
+                System.out.println(id);
+                System.out.println(Arrays.toString(initialCoords));
+                System.out.println(attrs);
+                System.out.println(startTime);
                 return null;
 
             case SvgLexer.DESTROY:
@@ -484,23 +492,32 @@ public class Interp {
                 Stack.getVariable(id);
                 float time = Float.parseFloat(t.getChild(1).getText());
                 animation.destroy(id,(int) time);
+
+                System.out.println("");
+                System.out.println(id);
+                System.out.println(time);
                 return null;
 
             case SvgLexer.MODIFY:
-                // modify(String id, String name, String value)
                 id = t.getChild(0).getText();
                 intType = Stack.getVariable(id).getIntegerValue();
                 attrs = getGeneralAttributes(intType, t.getChild(1));
                 startTime = Float.parseFloat(t.getChild(2).getText());
                 endTime = -1;
                 if (t.getChildCount() == 4) endTime = Float.parseFloat(t.getChild(3).getText());
-                //SvgTree attrsTree = t.getChild(1);
-                //for (int i = 0; i < attrsTree.getChildCount(); i++) {
 
-                //}
-                //animation.modify(id, )
-                // endTime pot ser -1 en cas de que no s'hagi especificat final.
-                // svg.modify(id, intType, startTime, endTime); 
+                for (Map.Entry<String, Object> entry : attrs.entrySet()) {
+                    String key = entry.getKey();
+                    Object objValue = entry.getValue();
+                    animation.modify(id, key, objValue, startTime, endTime);
+                }
+
+                System.out.println("");
+                System.out.println(intType);
+                System.out.println(id);
+                System.out.println(attrs);
+                System.out.println(startTime);
+                System.out.println(endTime);
                 return null;
 
             case SvgLexer.MOVE:
@@ -513,6 +530,16 @@ public class Interp {
                 startTime = Float.parseFloat(t.getChild(3).getText());
                 endTime = Float.parseFloat(t.getChild(4).getText());
                 animation.move(id,xIni,yIni,xEnd,yEnd,(int) startTime,(int) endTime);
+
+                System.out.println("");
+                System.out.println(intType);
+                System.out.println(id);
+                System.out.println(xIni);
+                System.out.println(yIni);
+                System.out.println(xEnd);
+                System.out.println(yEnd);
+                System.out.println(startTime);
+                System.out.println(endTime);
                 return null;
 
             case SvgLexer.SCALE:
@@ -522,6 +549,13 @@ public class Interp {
                 startTime = Float.parseFloat(t.getChild(3).getText());
                 endTime = Float.parseFloat(t.getChild(4).getText());
                 animation.scale(id,(int) scaleX,(int) scaleY,(int) startTime,(int) endTime);
+
+                System.out.println("");
+                System.out.println(id);
+                System.out.println(scaleX);
+                System.out.println(scaleY);
+                System.out.println(startTime);
+                System.out.println(endTime);
                 return null;
 
             case SvgLexer.ROTATE:
@@ -531,6 +565,13 @@ public class Interp {
                 startTime = Float.parseFloat(t.getChild(3).getText());
                 endTime = Float.parseFloat(t.getChild(4).getText());
                 animation.rotate(id,startAngle,endAngle,(int) startTime,(int) endTime);
+                
+                System.out.println("");
+                System.out.println(id);
+                System.out.println(startAngle);
+                System.out.println(endAngle);
+                System.out.println(startTime);
+                System.out.println(endTime);
                 return null;
 
             case SvgLexer.SOURCE:
