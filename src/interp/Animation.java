@@ -93,7 +93,6 @@ public class Animation{
      * especificados
      * @param id Identificador del objeto
      * @param name Nombre del atributo
-     * @param valueIni Valor del atributo al inicio de la animación
      * @param valueEnd Valor final del atributo
      * @param timeStart Momento en el que empieza la animación (en segundos)
      * @param timeEnd Momento final de la animación (en segundos)
