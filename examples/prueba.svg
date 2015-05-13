@@ -11,6 +11,7 @@ func main() {
     write "Pepe";
   }
   Create text t 0,0 0 "Attributes" {fill:(2,3,4),font-style:normal} 15.0;
+  //Create rectangle r 5,9 20 25 30 {line-width:7} 3.0;
   Destroy t 2; 
   Modify t {fill:red,line-color:green,font-orientation:vertical} 2 3;
   Create line l 0,2 3,4 1,2 7,8 {line-pattern:dots} 0;
