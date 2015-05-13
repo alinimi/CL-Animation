@@ -101,6 +101,10 @@ public class Interp {
         executeFunction ("main", null);
     }
 
+    public String getSvgCode() {
+        return animation.toString();
+    }
+
     /** Returns the contents of the stack trace */
     public String getStackTrace() {
         return Stack.getStackTrace(lineNumber());
