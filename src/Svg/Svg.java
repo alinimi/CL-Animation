@@ -51,6 +51,8 @@ public class Svg{
 
     /** The file name of the program. */
     private static String infile = null;
+    /** The output file name of the program. */
+    private static String outfile = null;
     /** Name of the file representing the AST. */
     private static String astfile = null;
     /** Flag indicating that the AST must be written in dot format. */
@@ -59,7 +61,13 @@ public class Svg{
     private static String tracefile = null;
     /** Flag to indicate whether the program must be executed after parsing. */
     private static boolean execute = true;
-      
+    
+    private static void writeSvg(String svg) throws Exception {
+        PrintWriter writer = new PrintWriter(outfile, "UTF-8");
+        writer.println(svg);
+        writer.close();
+    }
+
     /** Main program that invokes the parser and the interpreter. */
     
     public static void main(String[] args) throws Exception {
@@ -121,6 +129,8 @@ public class Svg{
             try {
                 I = new Interp(t, tracefile); // prepares the interpreter
                 I.Run();                  // Executes the code
+                String svg = I.getSvgCode();
+                writeSvg(svg);
             } catch (RuntimeException e) {
                 if (I != null) linenumber = I.lineNumber();
                 System.err.print ("Runtime error");
@@ -169,7 +179,7 @@ public class Svg{
         CommandLineParser clp = new GnuParser();
         CommandLine line = null;
 
-        String cmdline = "Svg [options] file";
+        String cmdline = "Svg [options] infile outfile";
         
         
         // Parse the options
@@ -204,7 +214,7 @@ public class Svg{
 
         // Remaining arguments (the input file)
         String[] files = line.getArgs();
-        if (files.length != 1) {
+        if (files.length == 1 && !line.hasOption("noexec") || files.length > 2) {
             System.err.println ("Incorrect command line.");
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp (cmdline, options);
@@ -212,6 +222,7 @@ public class Svg{
         }
         
         infile = files[0];
+        if (files.length == 2) outfile = files[1];
         return true;
     }
 }
