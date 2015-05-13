@@ -26,6 +26,9 @@ src/parser/Svg.tokens
 *.dot
 *.ast
 
+# out files
+*.html
+
 # examples
 
 examples/
