@@ -46,6 +46,11 @@ public class Interp {
     private static final String[] textAtrributeTypes = {"font-style","font-weight","font-orientation"};
     private static final String[] generalAttributeTypes = {"fill","fill-opacity","line-color","line-pattern","line-width"};
 
+    private static final HashMap<String,Integer> defaultFunctions = new HashMap<String,Integer>(){{
+        put("size",1);
+        put("canvasSize",2);
+    }};
+
     /** Memory of the virtual machine. */
     private Stack Stack;
 
@@ -129,6 +134,12 @@ public class Interp {
             String fname = f.getChild(0).getText();
             if (FuncName2Tree.containsKey(fname)) {
                 throw new RuntimeException("Multiple definitions of function " + fname);
+            } else if (defaultFunctions.containsKey(fname)){
+                int numParams = f.getChild(1).getChildCount();
+                if (numParams == defaultFunctions.get(fname)) {
+                    throw new RuntimeException("Function " + fname + " with " + numParams + 
+                        " parameter is a default function of the language");
+                }
             }
             FuncName2Tree.put(fname, f);
         } 
