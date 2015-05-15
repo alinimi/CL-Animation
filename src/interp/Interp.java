@@ -298,7 +298,7 @@ public class Interp {
         HashMap<String,Object> attrs = getGeneralAttributes(type, t.getChild(size - 2));
         switch (type) {
             case SvgLexer.TEXT:
-                attrs.put("text",t.getChild(4).getText());
+                attrs.put("text",t.getChild(4).getStringValue());
                 break;
 
             case SvgLexer.CIRCLE:
