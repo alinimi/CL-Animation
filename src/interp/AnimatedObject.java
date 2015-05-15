@@ -147,17 +147,52 @@ private float creationTime;
         return s + "=\""+value+"\"";
     }
     
+    
+    public String getCoordString(){
+        String svg = "";
+        if(objectType == SvgObject.Shape.CIRCLE){
+            svg += " \"cx\"=" + coords[0];
+            svg += " \"cy\"" + coords[1];
+        }
+        else if(objectType == SvgObject.Shape.LINE ||
+                objectType == SvgObject.Shape.POLYGON){
+            svg += " points=\"" + coords[0] + ","+ coords[1]; 
+            for(int i = 2; i < coords.length; i+=2){
+                svg += " "+coords[i] + "," + coords[i+1];
+            }
+            svg += "\"";
+        }
+        else {
+            svg += " x=\"" + coords[0]+ "\"";
+            svg += " y=\"" + coords[1]+ "\"";
+        }
+       
+        return svg;
+    }
+    
+    
     @Override
     public String toString(){
         String tab = "\t";
         String tag = getTag();
         String svg = tab+"<"+tag;
+        
+        
+        svg += getCoordString();
+        
         for(String s: attributeMap.keySet()){
-            svg += " "+getAttributeString(s);
+            if(s!="text"){
+                svg += " "+getAttributeString(s);
+            }
         }
-        if(creationTime!=-1){
+        if(creationTime!=0){
             svg += " display=\"none\"";
         }
+        
+        if(objectType == SvgObject.Shape.LINE && !hasAttribute("fill")){
+            svg += " fill=\"none\"";
+        }
+        
         svg += ">\n";
         if(hasAttribute("text")){
             svg += "\t\t"+(String)getAttribute("text")+"\n";
@@ -166,10 +201,11 @@ private float creationTime;
             svg += "\t\t<set attributeName=\"display\" to=\"inline\""
                     + " begin=\""+creationTime+"s\" dur=\"indefinite\"/>\n";
         }
-        if(destructionTime!=-1){
+        if(destructionTime!=0){
             svg += "\t\t<set attributeName=\"display\" to=\"none\""
                     + " begin=\""+destructionTime+"s\" dur=\"indefinite\"/>\n";
         }
+        
         for(ObjectAnimation anim: animationList){
             svg += anim.toString();
         }

@@ -21,14 +21,18 @@ public class Animation{
     
     /**
      * Constructor. Crea una ventana de animación sin objetos
-     * @param w anchura de la ventana de la animación en píxeles
-     * @param h altura de la ventana de la animación en píxeles
      */
-    public Animation(int w, int h){
-        width = w;
-        height = h;
+    public Animation(){
+
         objects = new HashMap<String,AnimatedObject>();
     }
+    
+    public void setSize(int w, int h){
+        width = w;
+        height = h;
+    }
+    
+    
     
     /**
      * Crea un objeto y lo añade a la animación
