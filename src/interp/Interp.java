@@ -44,7 +44,7 @@ import java.io.*;
 public class Interp {
 
     private static final String[] textAtrributeTypes = {"font-style","font-weight","font-orientation"};
-    private static final String[] generalAttributeTypes = {"fill","fill-opacity","line-color","line-pattern","line-width"};
+    private static final String[] generalAttributeTypes = {"fill","fill-opacity","stroke","stroke-pattern","stroke-width"};
 
     private static final HashMap<String,Integer> defaultFunctions = new HashMap<String,Integer>(){{
         put("size",1);
@@ -822,7 +822,7 @@ public class Interp {
                 ret = value.getText();
                 break;
 
-            case SvgLexer.LINECOLOR:
+            case SvgLexer.STROKE:
                 checkColor(value);
                 ret = getColor(value);
                 break;

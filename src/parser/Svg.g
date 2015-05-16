@@ -157,9 +157,9 @@ attributes  : '{' attribute (',' attribute)* '}' -> ^(LIST_ATTR attribute+)
 
 attribute   : FILL^          ':'! color
             | FILLOPACITY^   ':'! FLOAT
-            | LINECOLOR^     ':'! color
-            | LINEPATTERN^   ':'! ('dots'|'lines'|'alternate')
-            | LINEWIDTH^     ':'! INT
+            | STROKE^        ':'! color
+            | STROKEPATTERN^ ':'! ('dots'|'lines'|'alternate')
+            | STROKEWIDTH^   ':'! INT
             | text_attributes
             ;
 
@@ -302,9 +302,9 @@ LINE    : 'line';
 POLYGON : 'polygon';
 FILL    : 'fill';
 FILLOPACITY : 'fill-opacity';
-LINECOLOR    : 'line-color';
-LINEPATTERN : 'line-pattern';
-LINEWIDTH : 'line-width' ;
+STROKE    : 'stroke';
+STROKEPATTERN : 'stroke-pattern';
+STROKEWIDTH : 'stroke-width' ;
 FONTSTYLE : 'font-style';
 FONTWEIGHT : 'font-weight';
 ORINENTATION : 'font-orientation';
