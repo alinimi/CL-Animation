@@ -39,20 +39,20 @@ package interp.data;
 
 import parser.*;
 
-public  class Data {
+public class Data {
     /** Types of data */
     public enum Type {VOID, BOOLEAN, INTEGER, FLOAT, STRING, OBJECT, ARRAY;}
 
     /** Type of data*/
     private Type type;
 
-    Data(Type t) {type = t;}
+    public Data(Type t) {type = t;}
 
     
     
     
     /** Constructor for void data */
-    Data() {type = Type.VOID; }
+    public Data() {type = Type.VOID; }
 
     /** Returns the type of data */
     public Type getType() { return type; }

@@ -56,8 +56,7 @@ INTERP_SRC =	$(INTERP)/Interp.java \
 				$(INTERP)/$(TARGET)Tree.java \
 				$(INTERP)/SvgTreeAdaptor.java \
 				$(INTERP)/AnimatedObject.java \
-				$(INTERP)/Animation.java \
-				$(INTERP)/Data.java
+				$(INTERP)/Animation.java
 
 
 ALL_SRC =		$(MAIN_SRC) $(PARSER_SRC) $(INTERP_SRC) $(DATA_SRC)

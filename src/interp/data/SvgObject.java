@@ -29,7 +29,7 @@ public class SvgObject extends Data{
         isNull = true;
     }
 
-    String getID(){
+    public String getID(){
         if(!isNull){
             return id;
         }

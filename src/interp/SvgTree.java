@@ -45,6 +45,8 @@ public class SvgTree extends CommonTree {
     /** Field to store string literals (without the enclosing quotes) */
     private String strValue;
 
+    private Float floValue;
+
     /** Constructor of the class */
     public SvgTree(Token t) {
         super(t);
@@ -60,6 +62,10 @@ public class SvgTree extends CommonTree {
 
     /** Define the integer value of the node. */
     public void setIntValue() { intValue = Integer.parseInt(getText()); }
+
+    public float getFloatValue() { return floValue;}
+
+    public  void setFloatValue() { floValue = Float.parseFloat(getText());}
 
     /** Get the Boolean value of the node. */
     public boolean getBooleanValue() { return intValue != 0; }

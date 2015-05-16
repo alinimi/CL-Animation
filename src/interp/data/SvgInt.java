@@ -17,7 +17,7 @@ public class SvgInt extends SvgNumber{
     private int value;
     
     
-    SvgInt(int v) {
+    public SvgInt(int v) {
         super(Type.INTEGER);
         value = v; 
     }

@@ -27,7 +27,7 @@
 
 package interp;
 
-import interp.Data;
+import interp.data.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -97,8 +97,8 @@ public class Stack {
      */
     public void defineVariable(String name, Data value) {
         Data d = CurrentAR.get(name);
-        if (d == null) CurrentAR.put(name, value); // New definition
-        else d.setData(value); // Use the previous data 
+        if (d != null) CurrentAR.remove(name);
+        CurrentAR.put(name,value); // Use the previous data 
     }
 
     /** Gets the value of the variable. The value is represented as
