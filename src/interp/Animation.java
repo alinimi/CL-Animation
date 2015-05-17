@@ -32,6 +32,10 @@ public class Animation{
         height = h;
     }
     
+    public void copyObject(String id, String newId){
+        AnimatedObject obj = new AnimatedObject(objects.get(id));
+        objects.put(newId, obj);
+    }
     
     
     /**

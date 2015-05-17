@@ -16,17 +16,37 @@ import java.util.HashMap;
  */
 public class AnimatedObject {
     public enum Transform{ROTATE,SCALE,TRANSLATE;}
-private float creationTime;
+    private float creationTime;
     private SvgObject.Shape objectType;
     private float destructionTime;
     private int[] coords;
-    String text;
+    private String text;
     private HashMap <String,Object> attributeMap;
     private ArrayList <ObjectAnimation> animationList;
     private ArrayList <ObjectTransform> transformList;
     private int rotationCenterX;
     private int rotationCenterY;
     
+    
+    public AnimatedObject(AnimatedObject x){
+        creationTime = x.creationTime;
+        objectType = x.objectType;
+        destructionTime = x.destructionTime;
+        coords = x.coords;
+        text = new String(x.text);
+        //Shallowcopy!!
+        attributeMap = new HashMap<String,Object>(x.attributeMap);
+        animationList = new ArrayList <ObjectAnimation>();
+        for(int i = 0; i < x.animationList.size();++i){
+            animationList.add(new ObjectAnimation(x.animationList.get(i)));
+        }
+        transformList = new ArrayList<ObjectTransform>();
+        for(int i = 0; i < x.transformList.size();++i){
+            transformList.add(new ObjectTransform(x.transformList.get(i)));
+        }
+        rotationCenterX = x.rotationCenterX;
+        rotationCenterY = x.rotationCenterY;
+    }
     
     //crear objeto
     public AnimatedObject(Shape type, int[] coordinates,
@@ -228,6 +248,12 @@ private float creationTime;
             attribute = attr;
             endValue = ev;
         }
+        public ObjectAnimation(ObjectAnimation x){
+            startTime = x.startTime;
+            endTime = x.endTime;
+            attribute = x.attribute;
+            endValue = x.endValue;
+        }
         
         @Override
         public String toString(){
@@ -256,6 +282,13 @@ private float creationTime;
             endTime = et;
             startValue = sv;
             endValue = ev;
+        }
+        public ObjectTransform(ObjectTransform x){
+            type = x.type;
+            startTime = x.startTime;
+            endTime = x.endTime;
+            startValue = x.startValue;
+            endValue = x.endValue;
         }
         
         public String getTag(){
