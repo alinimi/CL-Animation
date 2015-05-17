@@ -70,6 +70,20 @@ public class AnimatedObject {
         setRotationCenter();
     }
     
+    public boolean overlappingAnimations(String attr, float start, float end){
+        for(int i = 0; i < animationList.size();++i){
+            ObjectAnimation w = animationList.get(i);
+            if(w.attribute==attr){
+                if((start > w.startTime && start < w.endTime) ||
+                        (end > w.startTime && end < w.endTime))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
     public Shape getType(){
         return objectType;
     }
@@ -87,10 +101,12 @@ public class AnimatedObject {
         return attributeMap.get(name);
     }
     
-    public void addAnimation(float st, float et, String attr, 
+    public boolean addAnimation(float st, float et, String attr, 
                 Object ev){
+        boolean overlap = overlappingAnimations(attr,st,et);
         ObjectAnimation an = new ObjectAnimation(st,et,attr,ev);
         animationList.add(an);
+        return overlap;
     }
     
     public void addTransform(Transform type, float st, float et, String sv, String ev){
