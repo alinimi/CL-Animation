@@ -18,6 +18,7 @@ public abstract class SvgNumber extends Data{
     public SvgNumber(Type t){
         super(t);
     }
+    
        /**
      * Checks for zero (for division). It raises an exception in case
      * the value is zero.

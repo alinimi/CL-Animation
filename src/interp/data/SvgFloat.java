@@ -18,6 +18,11 @@ public class SvgFloat extends SvgNumber{
         value = v;
     }
     
+    public SvgFloat(SvgFloat x){
+        super(Type.FLOAT);
+        value = x.getValue();
+    }
+    
    public float getValue(){
        return value;
    }

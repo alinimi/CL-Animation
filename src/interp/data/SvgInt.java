@@ -17,13 +17,22 @@ public class SvgInt extends SvgNumber{
     private int value;
     
     
-    SvgInt(int v) {
+    public SvgInt(int v) {
         super(Type.INTEGER);
         value = v; 
     }
     
+    public SvgInt(SvgInt x){
+        super(Type.INTEGER);
+        value = x.getValue();
+    }
+    
     public int getValue(){
         return value;
+    }
+    
+    public void setValue(int v){
+        value = v;
     }
     
     public SvgInt evaluateArithmetic (int op, SvgInt d) {
