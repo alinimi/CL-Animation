@@ -81,7 +81,7 @@ public class Data {
     */
     
     /** Constructor for void data */
-    Data() {type = Type.VOID; }
+    public Data() {type = Type.VOID; }
 
     /** Returns the type of data */
     public Type getType() { return type; }
