@@ -124,14 +124,14 @@ array   : id=ID '[' INT ']'    -> ^(ARRAY[$id,$id.text] INT)
 // Create instruccion:
 //               |         objecte_create         |
 //        Create |ObjectType Name ObjectAttributes| GeneralAttributes   Time     
-create  : CREATE^ objecte_create                    attributes          (FLOAT|INT)
+create  : CREATE^ objecte_create                    attributes          num_expr
         ;
 
 //              type        Name     ObjectAttributes
-objecte_create: TEXT      ID       coord INT STRING
+objecte_create: TEXT      ID       coord num_expr STRING
               | CIRCLE    ID       coord INT
-              | RECTANGLE ID       coord INT INT INT (INT INT)?
-              | ELLIPSE   ID       coord INT INT INT
+              | RECTANGLE ID       coord num_expr INT INT (INT INT)?
+              | ELLIPSE   ID       coord num_expr INT INT
               | LINE      ID       list_min_2_coord
               | POLYGON   ID       list_min_2_coord
               ;

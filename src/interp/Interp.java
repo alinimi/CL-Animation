@@ -295,6 +295,7 @@ public class Interp {
     private HashMap<String,Object> getAttributes(SvgTree t) {
         int type = t.getChild(0).getType();
         int size = t.getChildCount();
+        Data d;
         HashMap<String,Object> attrs = getGeneralAttributes(type, t.getChild(size - 2));
         switch (type) {
             case SvgLexer.TEXT:
@@ -306,11 +307,15 @@ public class Interp {
                 break;
 
             case SvgLexer.RECTANGLE:
-                attrs.put("width",Integer.parseInt(t.getChild(4).getText()));
-                attrs.put("height",Integer.parseInt(t.getChild(5).getText()));
+                d = evaluateExpression(t.getChild(4)); checkNumber(d);
+                attrs.put("width",getFloatValue(d));
+                d = evaluateExpression(t.getChild(5)); checkNumber(d);
+                attrs.put("height",getFloatValue(d));
                 if (t.getChildCount() == 10) {
-                    attrs.put("rx",Integer.parseInt(t.getChild(6).getText()));
-                    attrs.put("ry",Integer.parseInt(t.getChild(7).getText()));
+                    d = evaluateExpression(t.getChild(6)); checkNumber(d);
+                    attrs.put("rx",getFloatValue(d));
+                    d = evaluateExpression(t.getChild(6)); checkNumber(d);
+                    attrs.put("ry",getFloatValue(d));
                 }
                 break;
 
@@ -329,6 +334,17 @@ public class Interp {
 
     private int getYCoordinate(SvgTree t) {
         return Integer.parseInt(t.getChild(1).getText());
+    }
+
+    private float getFloatValue(Data d) {
+        if (d.isInteger()) {
+            return ((SvgInt) d).getFloatValue();
+        } else if (d.isFloat()) {
+            return ((SvgFloat) d).getFloatValue();
+        } else {
+            throw new RuntimeException ("It was expected a Number type");
+        }
+        return 0;
     }
 
     private int[] generateCoordinates(SvgTree t) {
@@ -355,7 +371,9 @@ public class Interp {
             case SvgLexer.TEXT:
             case SvgLexer.RECTANGLE:
             case SvgLexer.ELLIPSE:
-            animation.rotate(id, Integer.parseInt(t.getChild(2).getText()));
+            Data d = evaluateExpression(t.getChild(2));
+            checkNumber(d);
+            animation.rotate(id, (int) getFloatValue(d));
         }
     }
 
@@ -489,8 +507,9 @@ public class Interp {
                 Stack.defineVariable (id, new Data(intType));
                 int[] initialCoords = generateCoordinates(t.getChild(2));
                 attrs = getAttributes(t);
-                startTime = Float.parseFloat(t.getChild(t.getChildCount() - 1).getText());
-                animation.create(lexer2shape(intType),id, initialCoords,attrs, (int) startTime);
+                value = evaluateExpression(t.getChild(t.getChildCount() - 1));
+                checkNumber(value);
+                animation.create(lexer2shape(intType),id, initialCoords,attrs, getFloatValue(value));
                 makeInitialTransformations(t);
 
                 System.out.println("");
@@ -747,6 +766,12 @@ public class Interp {
     private void checkBoolean (Data b) {
         if (!b.isBoolean()) {
             throw new RuntimeException ("Expecting Boolean expression");
+        }
+    }
+
+    private void checkNumber (Data b) {
+        if (!b.isNumber()) {
+            throw new RuntimeException ("Expecting Number expression");
         }
     }
     
