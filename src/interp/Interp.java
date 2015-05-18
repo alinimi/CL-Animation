@@ -306,7 +306,8 @@ public class Interp {
                 break;
 
             case SvgLexer.CIRCLE:
-                attrs.put("r",Integer.parseInt(t.getChild(3).getText()));
+                d = evaluateExpression(t.getChild(3)); checkNumber(d);
+                attrs.put("r",getFloatValue(d));
                 break;
 
             case SvgLexer.RECTANGLE:
@@ -317,14 +318,16 @@ public class Interp {
                 if (t.getChildCount() == 10) {
                     d = evaluateExpression(t.getChild(6)); checkNumber(d);
                     attrs.put("rx",getFloatValue(d));
-                    d = evaluateExpression(t.getChild(6)); checkNumber(d);
+                    d = evaluateExpression(t.getChild(7)); checkNumber(d);
                     attrs.put("ry",getFloatValue(d));
                 }
                 break;
 
             case SvgLexer.ELLIPSE:
-                attrs.put("rx",Integer.parseInt(t.getChild(4).getText()));
-                attrs.put("ry",Integer.parseInt(t.getChild(5).getText()));
+                d = evaluateExpression(t.getChild(4)); checkNumber(d);
+                attrs.put("rx",getFloatValue(d));
+                d = evaluateExpression(t.getChild(5)); checkNumber(d);
+                attrs.put("ry",getFloatValue(d));
                 break;
                 
         }
@@ -579,14 +582,17 @@ public class Interp {
                 checkSvgObject(d);
                 lexerId = shape2lexer(((SvgObject) d).getShape());
                 attrs = getGeneralAttributes(lexerId, t.getChild(1));
-                startTime = Float.parseFloat(t.getChild(2).getText());
+                Data startTimeData = evaluateExpression(t.getChild(2)); checkNumber(startTimeData);
                 endTime = -1;
-                if (t.getChildCount() == 4) endTime = Float.parseFloat(t.getChild(3).getText());
+                if (t.getChildCount() == 4) {
+                    Data endTimeData = evaluateExpression(t.getChild(3)); checkNumber(endTimeData);
+                    endTime = getFloatValue(endTimeData);
+                }
 
                 for (Map.Entry<String, Object> entry : attrs.entrySet()) {
                     String key = entry.getKey();
                     Object objValue = entry.getValue();
-                    animation.modify(id, key, objValue, startTime, endTime);
+                    animation.modify(id, key, objValue, getFloatValue(startTimeData), endTime);
                 }
 
                 System.out.println("");
