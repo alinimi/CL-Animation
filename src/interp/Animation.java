@@ -21,14 +21,22 @@ public class Animation{
     
     /**
      * Constructor. Crea una ventana de animación sin objetos
-     * @param w anchura de la ventana de la animación en píxeles
-     * @param h altura de la ventana de la animación en píxeles
      */
-    public Animation(int w, int h){
-        width = w;
-        height = h;
+    public Animation(){
+
         objects = new HashMap<String,AnimatedObject>();
     }
+    
+    public void setSize(int w, int h){
+        width = w;
+        height = h;
+    }
+    
+    public void copyObject(String id, String newId){
+        AnimatedObject obj = new AnimatedObject(objects.get(id));
+        objects.put(newId, obj);
+    }
+    
     
     /**
      * Crea un objeto y lo añade a la animación
@@ -96,13 +104,19 @@ public class Animation{
      * @param valueEnd Valor final del atributo
      * @param timeStart Momento en el que empieza la animación (en segundos)
      * @param timeEnd Momento final de la animación (en segundos)
+     * @return cierto si hay una animación del mismo atributo que se solapa en
+     * el tiempo con la nueva animación, falso si no existe el objeto id o si 
+     * ninguna animación se solapa
      */
-    public void modify(String id, String name, 
+    public boolean modify(String id, String name, 
             Object valueEnd, float timeStart, float timeEnd){
         if(objects.containsKey(id)){
+            
             AnimatedObject obj = objects.get(id);
-            obj.addAnimation(timeStart, timeEnd, name, valueEnd);
+            return obj.addAnimation(timeStart, timeEnd, name, valueEnd);
+            
         }
+        return false;
     }
     
     /**

@@ -18,8 +18,18 @@ public class SvgString extends Data{
         super(Type.STRING);
         value = s;
     }
+    
+    public SvgString(SvgString x){
+        super(Type.STRING);
+        value = x.getValue();
+    }
+    
     public String getValue(){
         return value;
+    }
+    
+    public void setValue(String v){
+        value = v;
     }
     
     public int getLength(){

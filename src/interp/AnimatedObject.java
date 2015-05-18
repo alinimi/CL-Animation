@@ -16,17 +16,37 @@ import java.util.HashMap;
  */
 public class AnimatedObject {
     public enum Transform{ROTATE,SCALE,TRANSLATE;}
-private float creationTime;
+    private float creationTime;
     private SvgObject.Shape objectType;
     private float destructionTime;
     private int[] coords;
-    String text;
+    private String text;
     private HashMap <String,Object> attributeMap;
     private ArrayList <ObjectAnimation> animationList;
     private ArrayList <ObjectTransform> transformList;
     private int rotationCenterX;
     private int rotationCenterY;
     
+    
+    public AnimatedObject(AnimatedObject x){
+        creationTime = x.creationTime;
+        objectType = x.objectType;
+        destructionTime = x.destructionTime;
+        coords = x.coords;
+        text = new String(x.text);
+        //Shallowcopy!!
+        attributeMap = new HashMap<String,Object>(x.attributeMap);
+        animationList = new ArrayList <ObjectAnimation>();
+        for(int i = 0; i < x.animationList.size();++i){
+            animationList.add(new ObjectAnimation(x.animationList.get(i)));
+        }
+        transformList = new ArrayList<ObjectTransform>();
+        for(int i = 0; i < x.transformList.size();++i){
+            transformList.add(new ObjectTransform(x.transformList.get(i)));
+        }
+        rotationCenterX = x.rotationCenterX;
+        rotationCenterY = x.rotationCenterY;
+    }
     
     //crear objeto
     public AnimatedObject(Shape type, int[] coordinates,
@@ -50,6 +70,20 @@ private float creationTime;
         setRotationCenter();
     }
     
+    public boolean overlappingAnimations(String attr, float start, float end){
+        for(int i = 0; i < animationList.size();++i){
+            ObjectAnimation w = animationList.get(i);
+            if(w.attribute==attr){
+                if((start > w.startTime && start < w.endTime) ||
+                        (end > w.startTime && end < w.endTime))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
     public Shape getType(){
         return objectType;
     }
@@ -67,10 +101,12 @@ private float creationTime;
         return attributeMap.get(name);
     }
     
-    public void addAnimation(float st, float et, String attr, 
+    public boolean addAnimation(float st, float et, String attr, 
                 Object ev){
+        boolean overlap = overlappingAnimations(attr,st,et);
         ObjectAnimation an = new ObjectAnimation(st,et,attr,ev);
         animationList.add(an);
+        return overlap;
     }
     
     public void addTransform(Transform type, float st, float et, String sv, String ev){
@@ -147,17 +183,52 @@ private float creationTime;
         return s + "=\""+value+"\"";
     }
     
+    
+    public String getCoordString(){
+        String svg = "";
+        if(objectType == SvgObject.Shape.CIRCLE){
+            svg += " \"cx\"=" + coords[0];
+            svg += " \"cy\"" + coords[1];
+        }
+        else if(objectType == SvgObject.Shape.LINE ||
+                objectType == SvgObject.Shape.POLYGON){
+            svg += " points=\"" + coords[0] + ","+ coords[1]; 
+            for(int i = 2; i < coords.length; i+=2){
+                svg += " "+coords[i] + "," + coords[i+1];
+            }
+            svg += "\"";
+        }
+        else {
+            svg += " x=\"" + coords[0]+ "\"";
+            svg += " y=\"" + coords[1]+ "\"";
+        }
+       
+        return svg;
+    }
+    
+    
     @Override
     public String toString(){
         String tab = "\t";
         String tag = getTag();
         String svg = tab+"<"+tag;
+        
+        
+        svg += getCoordString();
+        
         for(String s: attributeMap.keySet()){
-            svg += " "+getAttributeString(s);
+            if(s!="text"){
+                svg += " "+getAttributeString(s);
+            }
         }
-        if(creationTime!=-1){
+        if(creationTime!=0){
             svg += " display=\"none\"";
         }
+        
+        if(objectType == SvgObject.Shape.LINE && !hasAttribute("fill")){
+            svg += " fill=\"none\"";
+        }
+        
         svg += ">\n";
         if(hasAttribute("text")){
             svg += "\t\t"+(String)getAttribute("text")+"\n";
@@ -166,10 +237,11 @@ private float creationTime;
             svg += "\t\t<set attributeName=\"display\" to=\"inline\""
                     + " begin=\""+creationTime+"s\" dur=\"indefinite\"/>\n";
         }
-        if(destructionTime!=-1){
+        if(destructionTime!=0){
             svg += "\t\t<set attributeName=\"display\" to=\"none\""
                     + " begin=\""+destructionTime+"s\" dur=\"indefinite\"/>\n";
         }
+        
         for(ObjectAnimation anim: animationList){
             svg += anim.toString();
         }
@@ -191,6 +263,12 @@ private float creationTime;
             endTime = et;
             attribute = attr;
             endValue = ev;
+        }
+        public ObjectAnimation(ObjectAnimation x){
+            startTime = x.startTime;
+            endTime = x.endTime;
+            attribute = x.attribute;
+            endValue = x.endValue;
         }
         
         @Override
@@ -220,6 +298,13 @@ private float creationTime;
             endTime = et;
             startValue = sv;
             endValue = ev;
+        }
+        public ObjectTransform(ObjectTransform x){
+            type = x.type;
+            startTime = x.startTime;
+            endTime = x.endTime;
+            startValue = x.startValue;
+            endValue = x.endValue;
         }
         
         public String getTag(){

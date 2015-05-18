@@ -11,31 +11,39 @@ package interp.data;
  * @author Alicia
  */
 public class SvgObject extends Data{
-    private final String id;
-    private boolean isNull;
+    private String id;
     private Shape shape;
     
     public enum Shape {TEXT,CIRCLE,RECTANGLE,ELLIPSE,LINE,POLYGON;}
     //id como int o como string?
     public SvgObject(String ident, Shape s){
-        super(Type.STRING);
-        isNull = false;
+        super(Type.OBJECT);
         id = ident;
         shape = s;
     }
     
-    public SvgObject(){
-        id = "";
-        isNull = true;
+    public SvgObject(SvgObject x){
+        super(Type.OBJECT);
+        id = x.getID();
+        shape = x.getShape();
     }
 
-    String getID(){
-        if(!isNull){
-            return id;
-        }
-        return null;
+    public String getID(){
+        return id;
+  
     }
+    
+    
+    
     public Shape getShape(){
         return shape;
+    }
+    
+    public void setShape(Shape s){
+        shape = s;
+    }
+    
+    public void setID(String s){
+        id = s;
     }
 }

@@ -18,16 +18,25 @@ public class AnimationTest {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Animation anim = new Animation(300,300);
+        Animation anim = new Animation();
+        anim.setSize(300,300);
         int[] coords = {0,0};
         HashMap<String,Object> attribs = new HashMap<String,Object>();
         attribs.put("stroke", "green");
         attribs.put("stroke-width", 2);
         attribs.put("text", "hello");
-        anim.create(SvgObject.Shape.TEXT, "text", coords, attribs, 2);
-        anim.destroy("text",5);
-        anim.modify("text","y",200,0,2);
+        anim.create(SvgObject.Shape.TEXT, "t1", coords, attribs, 2);
+        anim.destroy("t1",5);
+        anim.modify("t1","y",200,0,2);
+        int[] c2 = {10,10,100,10,180,100,200,70};
+        attribs = new HashMap<String,Object>();
+        attribs.put("stroke", "green");
+        attribs.put("stroke-width", 2);
+        attribs.put("fill","red");
+        anim.create(SvgObject.Shape.LINE, "l1",c2, attribs, 2);
         System.out.println(anim);
+
+
     }
     
 }

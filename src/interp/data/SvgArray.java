@@ -6,7 +6,6 @@
 
 package interp.data;
 
-import static java.sql.Types.NULL;
 import java.util.ArrayList;
 
 /**
@@ -19,11 +18,20 @@ public class SvgArray extends Data{
     /** Value of the data */
 
 
+    public SvgArray(SvgArray x){
+        super(Type.ARRAY);
+        setValue(x.getAllValues());
+    }
     
   
     public SvgArray(){
         super(Type.ARRAY);
         value = new ArrayList<Data>();
+    }
+    
+    public SvgArray(ArrayList<Data> v){
+        super(Type.ARRAY);
+        setValue(v);
     }
     
     /**
@@ -47,6 +55,20 @@ public class SvgArray extends Data{
     public Data getValue(int index) {
         assert index < value.size();
         return value.get(index);
+    }
+    
+    public ArrayList<Data> getAllValues(){
+        return value;
+    }
+    
+    public void setValue(ArrayList<Data> d){
+        if(d.size()!=0){
+            elementType = d.get(0).getType();
+            value = d;
+        }
+        else{
+            value = d;
+        }
     }
 
 

@@ -18,7 +18,10 @@ public class SvgBoolean extends Data{
         super(Type.BOOLEAN);
         value = b;
     }
-    
+    public SvgBoolean(SvgBoolean x){
+        super(Type.BOOLEAN);
+        value = x.getValue();
+    }
     public boolean getValue(){
         return value;
     }

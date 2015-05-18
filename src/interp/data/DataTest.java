@@ -81,6 +81,9 @@ public class DataTest {
         SvgString t = (SvgString) s.concat(new SvgString("345"));
         System.out.println("Concat Test: "+t.getValue());
         testArrays();
+        SvgString y = (SvgString)new SvgString(t);
+        System.out.println("Copy constructor test: "+y.getValue());
+        
     }
     
 }
