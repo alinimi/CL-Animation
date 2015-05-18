@@ -85,7 +85,7 @@ public class Interp {
         assert T != null;
         MapFunctions(T);  // Creates the table to map function names into AST nodes
         PreProcessAST(T); // Some internal pre-processing ot the AST
-        animation = new Animation(500,500);
+        animation = new Animation();
         Stack = new Stack(); // Creates the memory of the virtual machine
         // Initializes the standard input of the program
         stdin = new Scanner (new BufferedReader(new InputStreamReader(System.in)));
@@ -184,6 +184,9 @@ public class Interp {
     private Data executeFunction (String funcname, SvgTree args) {
 
         if (funcname == "size" && args.getChildCount() == 2) {
+            int w = args.getChild(0).getIntValue();
+            int l = args.getChild(1).getIntValue();
+            animation.setSize(w,l);
             // set canvas size
         }
         // Get the AST of the function
@@ -750,11 +753,11 @@ public class Interp {
                     break;
                 case SvgLexer.MINUS:
                     checkInteger(value);
-                    value.setValue(-((SvgInt) value).getValue());
+                    ((SvgInt) value).setValue(-((SvgInt) value).getValue());
                     break;
                 case SvgLexer.NOT:
                     checkBoolean(value);
-                    value.setValue(!((SvgBoolean) value).getValue());
+                    ((SvgBoolean) value).setValue(!((SvgBoolean) value).getValue());
                     break;
                 default: assert false; // Should never happen
             }
