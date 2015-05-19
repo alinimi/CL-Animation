@@ -481,7 +481,13 @@ public class Interp {
             // Assignment
             case SvgLexer.ASSIGN:
                 value = evaluateExpression(t.getChild(1));
-                Stack.defineVariable (t.getChild(0).getText(), value);
+                SvgTree leftSide = t.getChild(0);
+                if (leftSide.getType() == SvgLexer.ARRAY) {
+                    int pos = leftSide.getChild(0).getIntValue();
+                    Stack.defineVariable (leftSide.getText(),pos,value);
+                } else {
+                    Stack.defineVariable (leftSide.getText(), value);
+                }
                 return null;
 
             // If-then-else
@@ -742,6 +748,11 @@ public class Interp {
                 break;
             case SvgLexer.STRING:
                 value = new SvgString(t.getStringValue());
+                break;
+            case SvgLexer.ARRAY:
+                int position = t.getChild(0).getIntValue();
+                //value = new Data(Stack.getVariable(t.getText(),position));
+                value = Stack.getVariable(t.getText(),position);
                 break;
             // A function call. Checks that the function returns a result.
             case SvgLexer.FUNCALL:

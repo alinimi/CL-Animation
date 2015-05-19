@@ -101,6 +101,17 @@ public class Stack {
         CurrentAR.put(name,value); // Use the previous data 
     }
 
+    public void defineVariable(String name, int position, Data value) {
+        Data d = CurrentAR.get(name);
+        if (d == null) CurrentAR.put(name, new SvgArray(value, position)); // New definition
+        else {
+            if (!d.isArray()) {
+                throw new RuntimeException ("Variable " + name + " is not an array");
+            }
+            ((SvgArray) d).setData(position, value);
+        }
+    }
+
     /** Gets the value of the variable. The value is represented as
      * a Data object. In this way, any modification of the object
      * implicitly modifies the value of the variable.
@@ -113,6 +124,17 @@ public class Stack {
             throw new RuntimeException ("Variable " + name + " not defined");
         }
         return v;
+    }
+
+    public Data getVariable(String name, int position) {
+        Data v = getVariable(name);
+        if (!v.isArray()) {
+            throw new RuntimeException ("Variable " + name + " is not an array");
+        }
+        if (position >= ((SvgArray) v).size()) {
+            throw new RuntimeException ("Variable " + name + ", index out of range");
+        }
+        return ((SvgArray) v).getValue(position);
     }
 
     /**
