@@ -55,4 +55,8 @@ public class SvgString extends Data{
         return null;
     }
     
+    @Override
+    public Data copy(){
+        return new SvgString(this);
+    }
 }

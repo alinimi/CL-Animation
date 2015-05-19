@@ -20,7 +20,11 @@ public class SvgArray extends Data{
 
     public SvgArray(SvgArray x){
         super(Type.ARRAY);
-        setValue(x.getAllValues());
+        value = new ArrayList<Data>();
+        ArrayList<Data> d = x.getAllValues();
+        for(int i = 0; i < d.size();++i){
+            d.get(i).copy();
+        }
     }
     
   
@@ -141,5 +145,11 @@ public class SvgArray extends Data{
                 }
                 break;
         }
+    }
+    
+    @Override
+    public Data copy(){
+        SvgArray x = new SvgArray(this);
+        return x;
     }
 }

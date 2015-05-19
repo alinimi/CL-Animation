@@ -57,6 +57,9 @@ public class SvgInt extends SvgNumber{
     public float getFloatValue() {
         return (float)value;
     }
-    
+    @Override
+    public Data copy(){
+        return new SvgInt(this);
+    }
 
 }

@@ -46,4 +46,9 @@ public class SvgObject extends Data{
     public void setID(String s){
         id = s;
     }
+    
+    @Override 
+    public Data copy(){
+        return new SvgObject(this);
+    }
 }

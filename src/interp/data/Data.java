@@ -39,7 +39,7 @@ package interp.data;
 
 import parser.*;
 
-public class Data {
+public abstract class Data {
     /** Types of data */
     public enum Type {VOID, BOOLEAN, INTEGER, FLOAT, STRING, OBJECT, ARRAY;}
 
@@ -49,6 +49,9 @@ public class Data {
     public Data(Type t) {
         type = t;
     }
+    
+    public abstract Data copy();
+    
 
     /*
     public Data(Data d){
@@ -117,4 +120,5 @@ public class Data {
         return null;
         //TODO
     }
+    
 }

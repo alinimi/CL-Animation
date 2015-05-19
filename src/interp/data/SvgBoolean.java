@@ -38,4 +38,9 @@ public class SvgBoolean extends Data{
         }
         return null;
     }
+    
+    @Override
+    public Data copy(){
+        return new SvgBoolean(this);
+    }
 }

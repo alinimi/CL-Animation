@@ -83,6 +83,9 @@ public class DataTest {
         testArrays();
         SvgString y = (SvgString)new SvgString(t);
         System.out.println("Copy constructor test: "+y.getValue());
+        Data w = y;
+        SvgString r = (SvgString)w.copy();
+        System.out.println("Copy method: "+r.getValue());
         
     }
     

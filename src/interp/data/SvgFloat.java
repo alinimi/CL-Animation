@@ -26,6 +26,7 @@ public class SvgFloat extends SvgNumber{
    public float getValue(){
        return value;
    }
+   
     
     @Override
     public float getFloatValue(){
@@ -34,6 +35,11 @@ public class SvgFloat extends SvgNumber{
     
     public void setValue(float v){
         value = v;
+    }
+    
+    @Override
+    public Data copy(){
+        return new SvgFloat(this);
     }
 
 }
