@@ -47,7 +47,7 @@ public class Interp {
 
     private static final HashMap<String,Integer> defaultFunctions = new HashMap<String,Integer>(){{
         put("size",1);
-        put("canvasSize",2);
+        put("canvas_size",2);
     }};
 
     /** Memory of the virtual machine. */
@@ -183,11 +183,16 @@ public class Interp {
      */
     private Data executeFunction (String funcname, SvgTree args) {
 
-        if (funcname == "size" && args.getChildCount() == 2) {
+        if (funcname.equals("canvas_size") && args.getChildCount() == 2) {
             int w = args.getChild(0).getIntValue();
             int l = args.getChild(1).getIntValue();
             animation.setSize(w,l);
+            return new Data();
             // set canvas size
+        } else if (funcname.equals("size") && args.getChildCount() == 1) {
+            Data d = evaluateExpression(args.getChild(0));
+            checkArray(d);
+            return new SvgInt(((SvgArray) d).size());
         }
         // Get the AST of the function
         SvgTree f = FuncName2Tree.get(funcname);
@@ -859,6 +864,12 @@ public class Interp {
     private void checkNumber(Data b) {
         if (!b.isNumber()) {
             throw new RuntimeException ("Expecting a number");
+        }
+    }
+
+    private void checkArray(Data b) {
+        if (!b.isArray()) {
+            throw new RuntimeException ("Expecting an array");
         }
     }
 
