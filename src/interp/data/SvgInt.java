@@ -57,6 +57,11 @@ public class SvgInt extends SvgNumber{
     public float getFloatValue() {
         return (float)value;
     }
+
+    @Override
+    public String toString() {
+        return Integer.toString(getValue());
+    }
     
 
 }

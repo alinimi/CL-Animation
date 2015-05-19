@@ -114,7 +114,7 @@ public class Data {
     
     /** Returns a string representing the data in textual form. */
     public String toString() {
-        return null;
+        return "This variable cannot be written";
         //TODO
     }
 }

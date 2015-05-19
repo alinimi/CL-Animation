@@ -38,4 +38,10 @@ public class SvgBoolean extends Data{
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        if (value) return "true";
+        else return "false";
+    }
 }
