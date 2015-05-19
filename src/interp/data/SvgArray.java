@@ -60,6 +60,10 @@ public class SvgArray extends Data{
         assert index < value.size();
         return value.get(index);
     }
+
+    public int size() {
+        return value.size();
+    }
     
     public ArrayList<Data> getAllValues(){
         return value;

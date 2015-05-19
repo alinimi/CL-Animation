@@ -84,7 +84,7 @@ public abstract class Data {
     */
     
     /** Constructor for void data */
-    Data() {type = Type.VOID; }
+    public Data() {type = Type.VOID; }
 
     /** Returns the type of data */
     public Type getType() { return type; }
@@ -117,7 +117,7 @@ public abstract class Data {
     
     /** Returns a string representing the data in textual form. */
     public String toString() {
-        return null;
+        return "This variable cannot be written";
         //TODO
     }
     

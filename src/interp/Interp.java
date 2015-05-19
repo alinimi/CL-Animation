@@ -27,9 +27,8 @@
 
 package interp;
 
-import interp.Data;
+import interp.data.*;
 import parser.*;
-import interp.data.SvgObject;
 
 import java.util.ArrayList;
 import interp.Animation;
@@ -48,7 +47,7 @@ public class Interp {
 
     private static final HashMap<String,Integer> defaultFunctions = new HashMap<String,Integer>(){{
         put("size",1);
-        put("canvasSize",2);
+        put("canvas_size",2);
     }};
 
     /** Memory of the virtual machine. */
@@ -86,7 +85,7 @@ public class Interp {
         assert T != null;
         MapFunctions(T);  // Creates the table to map function names into AST nodes
         PreProcessAST(T); // Some internal pre-processing ot the AST
-        animation = new Animation(500,500);
+        animation = new Animation();
         Stack = new Stack(); // Creates the memory of the virtual machine
         // Initializes the standard input of the program
         stdin = new Scanner (new BufferedReader(new InputStreamReader(System.in)));
@@ -156,6 +155,7 @@ public class Interp {
             case SvgLexer.INT: T.setIntValue(); break;
             case SvgLexer.STRING: T.setStringValue(); break;
             case SvgLexer.BOOLEAN: T.setBooleanValue(); break;
+            case SvgLexer.FLOAT: T.setFloatValue(); break;
             default: break;
         }
         int n = T.getChildCount();
@@ -183,8 +183,16 @@ public class Interp {
      */
     private Data executeFunction (String funcname, SvgTree args) {
 
-        if (funcname == "size" && args.getChildCount() == 2) {
+        if (funcname.equals("canvas_size") && args.getChildCount() == 2) {
+            int w = args.getChild(0).getIntValue();
+            int l = args.getChild(1).getIntValue();
+            animation.setSize(w,l);
+            return new Data();
             // set canvas size
+        } else if (funcname.equals("size") && args.getChildCount() == 1) {
+            Data d = evaluateExpression(args.getChild(0));
+            checkArray(d);
+            return new SvgInt(((SvgArray) d).size());
         }
         // Get the AST of the function
         SvgTree f = FuncName2Tree.get(funcname);
@@ -259,13 +267,13 @@ public class Interp {
         return result;
     }
 
-    private Data evaluateITE (SvgTree t) {
+    private SvgBoolean evaluateITE (SvgTree t) {
         assert t != null;
-        if (t.getType() == SvgLexer.ELSE) return new Data(true);
+        if (t.getType() == SvgLexer.ELSE) return new SvgBoolean(true);
         else {
             Data value = evaluateExpression(t.getChild(0));
             checkBoolean(value);
-            return value;
+            return (SvgBoolean) value;
         }
     }
 
@@ -295,6 +303,7 @@ public class Interp {
     private HashMap<String,Object> getAttributes(SvgTree t) {
         int type = t.getChild(0).getType();
         int size = t.getChildCount();
+        Data d;
         HashMap<String,Object> attrs = getGeneralAttributes(type, t.getChild(size - 2));
         switch (type) {
             case SvgLexer.TEXT:
@@ -302,21 +311,28 @@ public class Interp {
                 break;
 
             case SvgLexer.CIRCLE:
-                attrs.put("r",Integer.parseInt(t.getChild(3).getText()));
+                d = evaluateExpression(t.getChild(3)); checkNumber(d);
+                attrs.put("r",getFloatValue(d));
                 break;
 
             case SvgLexer.RECTANGLE:
-                attrs.put("width",Integer.parseInt(t.getChild(4).getText()));
-                attrs.put("height",Integer.parseInt(t.getChild(5).getText()));
+                d = evaluateExpression(t.getChild(4)); checkNumber(d);
+                attrs.put("width",getFloatValue(d));
+                d = evaluateExpression(t.getChild(5)); checkNumber(d);
+                attrs.put("height",getFloatValue(d));
                 if (t.getChildCount() == 10) {
-                    attrs.put("rx",Integer.parseInt(t.getChild(6).getText()));
-                    attrs.put("ry",Integer.parseInt(t.getChild(7).getText()));
+                    d = evaluateExpression(t.getChild(6)); checkNumber(d);
+                    attrs.put("rx",getFloatValue(d));
+                    d = evaluateExpression(t.getChild(7)); checkNumber(d);
+                    attrs.put("ry",getFloatValue(d));
                 }
                 break;
 
             case SvgLexer.ELLIPSE:
-                attrs.put("rx",Integer.parseInt(t.getChild(4).getText()));
-                attrs.put("ry",Integer.parseInt(t.getChild(5).getText()));
+                d = evaluateExpression(t.getChild(4)); checkNumber(d);
+                attrs.put("rx",getFloatValue(d));
+                d = evaluateExpression(t.getChild(5)); checkNumber(d);
+                attrs.put("ry",getFloatValue(d));
                 break;
                 
         }
@@ -329,6 +345,16 @@ public class Interp {
 
     private int getYCoordinate(SvgTree t) {
         return Integer.parseInt(t.getChild(1).getText());
+    }
+
+    private float getFloatValue(Data d) {
+        if (d.isInteger()) {
+            return ((SvgInt) d).getFloatValue();
+        } else if (d.isFloat()) {
+            return ((SvgFloat) d).getFloatValue();
+        } else {
+            throw new RuntimeException ("It was expected a Number type");
+        }
     }
 
     private int[] generateCoordinates(SvgTree t) {
@@ -349,13 +375,15 @@ public class Interp {
 
     private void makeInitialTransformations(SvgTree t) {
         assert t != null;
-        int type = t.getType();
-        String id = t.getChild(0).getText();
+        int type = t.getChild(0).getType();
+        String id = t.getChild(1).getText();
         switch(type) {
             case SvgLexer.TEXT:
             case SvgLexer.RECTANGLE:
             case SvgLexer.ELLIPSE:
-            animation.rotate(id, Integer.parseInt(t.getChild(2).getText()));
+            Data d = evaluateExpression(t.getChild(3));
+            checkNumber(d);
+            animation.rotate(id, (int) getFloatValue(d));
         }
     }
 
@@ -391,6 +419,39 @@ public class Interp {
         }
         return shape;
     }
+
+        private int shape2lexer(SvgObject.Shape shapeId) {
+        int lexer;
+        switch(shapeId) {
+            case TEXT:
+                lexer = SvgLexer.TEXT;
+                break;
+
+            case CIRCLE:
+                lexer = SvgLexer.CIRCLE;
+                break;
+
+            case RECTANGLE:
+                lexer = SvgLexer.RECTANGLE;
+                break;
+
+            case ELLIPSE:
+                lexer = SvgLexer.ELLIPSE;
+                break;
+
+            case LINE:
+                lexer = SvgLexer.LINE;
+                break;
+
+            case POLYGON:
+                lexer = SvgLexer.POLYGON;
+                break;
+
+            default:
+                throw new RuntimeException ("Not correct lexer " + shapeId);
+        }
+        return lexer;
+    }
     
     /**
      * Executes an instruction. 
@@ -406,7 +467,10 @@ public class Interp {
         setLineNumber(t);
         Data value; // The returned value
         String id;
+        Data d;
         int intType;
+        int lexerId;
+        SvgBoolean booleanValue;
         float startTime;
         float endTime;
         HashMap<String,Object> attrs;
@@ -417,7 +481,13 @@ public class Interp {
             // Assignment
             case SvgLexer.ASSIGN:
                 value = evaluateExpression(t.getChild(1));
-                Stack.defineVariable (t.getChild(0).getText(), value);
+                SvgTree leftSide = t.getChild(0);
+                if (leftSide.getType() == SvgLexer.ARRAY) {
+                    int pos = leftSide.getChild(0).getIntValue();
+                    Stack.defineVariable (leftSide.getText(),pos,value);
+                } else {
+                    Stack.defineVariable (leftSide.getText(), value);
+                }
                 return null;
 
             // If-then-else
@@ -425,8 +495,8 @@ public class Interp {
                 int ninstr = t.getChildCount();
                 for (int i = 0; i < ninstr; ++i) {
                     SvgTree currentTree = t.getChild(i);
-                    value = evaluateITE(currentTree);
-                    if(value.getBooleanValue()) return executeITE(currentTree);
+                    booleanValue = evaluateITE(currentTree);
+                    if(booleanValue.getValue()) return executeITE(currentTree);
                 }
                 return null;
 
@@ -437,7 +507,7 @@ public class Interp {
                 while (true) {
                     value = evaluateExpression(t.getChild(1));
                     checkBoolean(value);
-                    if (!value.getBooleanValue()) return null;
+                    if (!((SvgBoolean) value).getValue()) return null;
                     Data r = executeInstructions(inst);
                     if (r != null) return r;
                     executeInstruction(t.getChild(2));
@@ -454,10 +524,10 @@ public class Interp {
             // in case of a format error.
             case SvgLexer.READ:
                 String token = null;
-                Data val = new Data(0);;
+                Data val;
                 try {
                     token = stdin.next();
-                    val.setValue(Integer.parseInt(token)); 
+                    val = new SvgInt(Integer.parseInt(token)); 
                 } catch (NumberFormatException ex) {
                     throw new RuntimeException ("Format error when reading a number: " + token);
                 }
@@ -483,28 +553,31 @@ public class Interp {
                 return null;
 
             case SvgLexer.CREATE:
-                intType = t.getChild(0).getType();
+                SvgObject.Shape shapeType = lexer2shape(t.getChild(0).getType());
                 id = t.getChild(1).getText();
-                if (Stack.existsVariable(id)) throw new RuntimeException ("Variable " + id + " it was previously declared");;
-                Stack.defineVariable (id, new Data(intType));
+                if (Stack.existsVariable(id)) throw new RuntimeException ("Variable " + id + " it was previously declared");
+                d = new SvgObject(id, shapeType);
+                Stack.defineVariable (id, d);
                 int[] initialCoords = generateCoordinates(t.getChild(2));
                 attrs = getAttributes(t);
-                startTime = Float.parseFloat(t.getChild(t.getChildCount() - 1).getText());
-                animation.create(lexer2shape(intType),id, initialCoords,attrs, (int) startTime);
+                value = evaluateExpression(t.getChild(t.getChildCount() - 1));
+                checkNumber(value);
+                animation.create(shapeType,id, initialCoords,attrs, getFloatValue(value));
                 makeInitialTransformations(t);
 
                 System.out.println("");
-                System.out.println(intType);
+                System.out.println(shapeType);
                 System.out.println(id);
                 System.out.println(Arrays.toString(initialCoords));
                 System.out.println(attrs);
-                System.out.println(startTime);
+                System.out.println(getFloatValue(value));
                 return null;
 
             case SvgLexer.DESTROY:
                 id = t.getChild(0).getText();
                 // Comprobació de que existeix l'objecte.
-                Stack.getVariable(id);
+                d = Stack.getVariable(id);
+                checkSvgObject(d);
                 float time = Float.parseFloat(t.getChild(1).getText());
                 animation.destroy(id,(int) time);
 
@@ -515,29 +588,35 @@ public class Interp {
 
             case SvgLexer.MODIFY:
                 id = t.getChild(0).getText();
-                intType = Stack.getVariable(id).getIntegerValue();
-                attrs = getGeneralAttributes(intType, t.getChild(1));
-                startTime = Float.parseFloat(t.getChild(2).getText());
+                d = Stack.getVariable(id);
+                checkSvgObject(d);
+                lexerId = shape2lexer(((SvgObject) d).getShape());
+                attrs = getGeneralAttributes(lexerId, t.getChild(1));
+                Data startTimeData = evaluateExpression(t.getChild(2)); checkNumber(startTimeData);
                 endTime = -1;
-                if (t.getChildCount() == 4) endTime = Float.parseFloat(t.getChild(3).getText());
+                if (t.getChildCount() == 4) {
+                    Data endTimeData = evaluateExpression(t.getChild(3)); checkNumber(endTimeData);
+                    endTime = getFloatValue(endTimeData);
+                }
 
                 for (Map.Entry<String, Object> entry : attrs.entrySet()) {
                     String key = entry.getKey();
                     Object objValue = entry.getValue();
-                    animation.modify(id, key, objValue, startTime, endTime);
+                    animation.modify(id, key, objValue, getFloatValue(startTimeData), endTime);
                 }
 
                 System.out.println("");
-                System.out.println(intType);
+                System.out.println(lexerId);
                 System.out.println(id);
                 System.out.println(attrs);
-                System.out.println(startTime);
+                System.out.println(getFloatValue(startTimeData));
                 System.out.println(endTime);
                 return null;
 
             case SvgLexer.MOVE:
                 id = t.getChild(0).getText();
-                intType = Stack.getVariable(id).getIntegerValue();
+                d = Stack.getVariable(id);
+                checkSvgObject(d);
                 int xIni = getXCoordinate(t.getChild(1));
                 int yIni = getYCoordinate(t.getChild(1));
                 int xEnd = getXCoordinate(t.getChild(2));
@@ -547,7 +626,6 @@ public class Interp {
                 animation.move(id,xIni,yIni,xEnd,yEnd,(int) startTime,(int) endTime);
 
                 System.out.println("");
-                System.out.println(intType);
                 System.out.println(id);
                 System.out.println(xIni);
                 System.out.println(yIni);
@@ -559,6 +637,8 @@ public class Interp {
 
             case SvgLexer.SCALE:
                 id = t.getChild(0).getText();
+                d = Stack.getVariable(id);
+                checkSvgObject(d);
                 float scaleX = Float.parseFloat(t.getChild(1).getText());
                 float scaleY = Float.parseFloat(t.getChild(2).getText());
                 startTime = Float.parseFloat(t.getChild(3).getText());
@@ -575,6 +655,8 @@ public class Interp {
 
             case SvgLexer.ROTATE:
                 id = t.getChild(0).getText();
+                d = Stack.getVariable(id);
+                checkSvgObject(d);
                 int startAngle = Integer.parseInt(t.getChild(1).getText());
                 int endAngle = Integer.parseInt(t.getChild(2).getText());
                 startTime = Float.parseFloat(t.getChild(3).getText());
@@ -600,6 +682,38 @@ public class Interp {
         return null;
     }
 
+    Data evaluateRelational(Data value1, Data value2, int type) {
+        if (value1.getType() == value2.getType()) {
+            if (value1.isNumber()) {
+                value1 = ((SvgNumber) value1).evaluateRelational(type, (SvgNumber) value2);
+            } else if (value1.isString()) {
+                value1 = ((SvgString) value1).evaluateRelational(type, (SvgString) value2);
+            } else if (value1.isBoolean()) {
+                value1 = ((SvgBoolean) value1).evaluateRelational(type, (SvgBoolean) value2);
+            } else {
+                throw new RuntimeException("Data type cannot be compared");
+            }   
+        } else {
+            throw new RuntimeException ("Incompatible types in relational expression");
+        }
+        return value1;
+    }
+
+    Data evaluateArithmetic(Data value1, Data value2, int type) {
+        if (value1.getType() == value2.getType()) {
+            checkNumber(value1);
+            if (value1.isInteger()) {
+                value1 = ((SvgInt) value1).evaluateArithmetic(type, (SvgInt) value2);
+            } else {
+                value1 = ((SvgNumber) value1).evaluateArithmetic(type, (SvgNumber) value2);
+            }            
+            
+        } else {
+            throw new RuntimeException("Error at performing an arithmetic operation with elements of different type");
+        }
+        return value1;        
+    }
+
     /**
      * Evaluates the expression represented in the AST t.
      * @param t The AST of the expression
@@ -618,15 +732,27 @@ public class Interp {
         switch (type) {
             // A variable
             case SvgLexer.ID:
-                value = new Data(Stack.getVariable(t.getText()));
+                //value = new Data(Stack.getVariable(t.getText()));
+                value = Stack.getVariable(t.getText());
                 break;
             // An integer literal
             case SvgLexer.INT:
-                value = new Data(t.getIntValue());
+                value = new SvgInt(t.getIntValue());
                 break;
             // A Boolean literal
             case SvgLexer.BOOLEAN:
-                value = new Data(t.getBooleanValue());
+                value = new SvgBoolean(t.getBooleanValue());
+                break;
+            case SvgLexer.FLOAT:
+                value = new SvgFloat(t.getFloatValue());
+                break;
+            case SvgLexer.STRING:
+                value = new SvgString(t.getStringValue());
+                break;
+            case SvgLexer.ARRAY:
+                int position = t.getChild(0).getIntValue();
+                //value = new Data(Stack.getVariable(t.getText(),position));
+                value = Stack.getVariable(t.getText(),position);
                 break;
             // A function call. Checks that the function returns a result.
             case SvgLexer.FUNCALL:
@@ -654,11 +780,11 @@ public class Interp {
                     break;
                 case SvgLexer.MINUS:
                     checkInteger(value);
-                    value.setValue(-value.getIntegerValue());
+                    ((SvgInt) value).setValue(-((SvgInt) value).getValue());
                     break;
                 case SvgLexer.NOT:
                     checkBoolean(value);
-                    value.setValue(!value.getBooleanValue());
+                    ((SvgBoolean) value).setValue(!((SvgBoolean) value).getValue());
                     break;
                 default: assert false; // Should never happen
             }
@@ -677,10 +803,7 @@ public class Interp {
             case SvgLexer.GT:
             case SvgLexer.GE:
                 value2 = evaluateExpression(t.getChild(1));
-                if (value.getType() != value2.getType()) {
-                  throw new RuntimeException ("Incompatible types in relational expression");
-                }
-                value = value.evaluateRelational(type, value2);
+                value = evaluateRelational(value, value2, type);
                 break;
 
             // Arithmetic operators
@@ -690,8 +813,7 @@ public class Interp {
             case SvgLexer.DIV:
             case SvgLexer.MOD:
                 value2 = evaluateExpression(t.getChild(1));
-                checkInteger(value); checkInteger(value2);
-                value.evaluateArithmetic(type, value2);
+                value = evaluateArithmetic(value, value2, type);
                 break;
 
             // Boolean operators
@@ -700,7 +822,7 @@ public class Interp {
                 // The first operand is evaluated, but the second
                 // is deferred (lazy, short-circuit evaluation).
                 checkBoolean(value);
-                value = evaluateBoolean(type, value, t.getChild(1));
+                value = evaluateBoolean(type, (SvgBoolean) value, t.getChild(1));
                 break;
 
             default: assert false; // Should never happen
@@ -720,33 +842,52 @@ public class Interp {
      * @param t AST node of the second operand.
      * @return An Boolean data with the value of the expression.
      */
-    private Data evaluateBoolean (int type, Data v, SvgTree t) {
+    private SvgBoolean evaluateBoolean (int type, SvgBoolean v, SvgTree t) {
         // Boolean evaluation with short-circuit
 
         switch (type) {
             case SvgLexer.AND:
                 // Short circuit if v is false
-                if (!v.getBooleanValue()) return v;
+                if (!v.getValue()) return v;
                 break;
         
             case SvgLexer.OR:
                 // Short circuit if v is true
-                if (v.getBooleanValue()) return v;
+                if (v.getValue()) return v;
                 break;
                 
             default: assert false;
         }
 
         // Return the value of the second expression
-        v = evaluateExpression(t);
-        checkBoolean(v);
-        return v;
+        Data d = evaluateExpression(t);
+        checkBoolean(d);
+        return (SvgBoolean) d;
     }
 
     /** Checks that the data is Boolean and raises an exception if it is not. */
     private void checkBoolean (Data b) {
         if (!b.isBoolean()) {
             throw new RuntimeException ("Expecting Boolean expression");
+        }
+    }
+
+    private void checkNumber(Data b) {
+        if (!b.isNumber()) {
+            throw new RuntimeException ("Expecting a number");
+        }
+    }
+
+    private void checkArray(Data b) {
+        if (!b.isArray()) {
+            throw new RuntimeException ("Expecting an array");
+        }
+    }
+
+    private void checkSvgObject(Data b) {
+        if (!b.isObject()) {
+            String id = ((SvgObject) b).getID();
+            throw new RuntimeException ("Variable " + id + " it is not a figure");
         }
     }
     

@@ -124,14 +124,17 @@ array   : id=ID '[' INT ']'    -> ^(ARRAY[$id,$id.text] INT)
 // Create instruccion:
 //               |         objecte_create         |
 //        Create |ObjectType Name ObjectAttributes| GeneralAttributes   Time     
-create  : CREATE^ objecte_create                    attributes          (FLOAT|INT)
+create  : CREATE^ objecte_create                    attributes          object_expr
         ;
 
+object_expr     : ('('! num_expr ')'! | FLOAT | INT | ID | array)
+                ;
+
 //              type        Name     ObjectAttributes
-objecte_create: TEXT      ID       coord INT STRING
-              | CIRCLE    ID       coord INT
-              | RECTANGLE ID       coord INT INT INT (INT INT)?
-              | ELLIPSE   ID       coord INT INT INT
+objecte_create: TEXT      ID       coord object_expr STRING
+              | CIRCLE    ID       coord object_expr
+              | RECTANGLE ID       coord object_expr object_expr object_expr (object_expr object_expr)?
+              | ELLIPSE   ID       coord object_expr object_expr object_expr
               | LINE      ID       list_min_2_coord
               | POLYGON   ID       list_min_2_coord
               ;
@@ -149,7 +152,7 @@ destroy : DESTROY^  ID       (FLOAT|INT)
 
 // Modify instrucction:
 //        Modify    ObjectId    GeneralAttributes   tStart      tEnd
-modify  : MODIFY^   ID          attributes          (FLOAT|INT) (FLOAT|INT)?
+modify  : MODIFY^   ID          attributes          object_expr object_expr?
         ;
 
 attributes  : '{' attribute (',' attribute)* '}' -> ^(LIST_ATTR attribute+)
@@ -222,7 +225,7 @@ read    :   READ^ ID
         ;
 
 // Write a variable
-write   :   WRITE^ (expr | STRING )
+write   :   WRITE^ expr
         ;
 
 // Grammar for expressions with boolean, relational and aritmetic operators
@@ -248,6 +251,7 @@ atom    :   ID
         |   array
         |   INT
         |   FLOAT
+        |   STRING
         |   (b=TRUE | b=FALSE)  -> ^(BOOLEAN[$b,$b.text])
         |   funcall
         |   '('! expr ')'!

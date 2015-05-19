@@ -43,4 +43,10 @@ public class SvgBoolean extends Data{
     public Data copy(){
         return new SvgBoolean(this);
     }
+        
+    @Override
+    public String toString() {
+        if (value) return "true";
+        else return "false";
+    }
 }

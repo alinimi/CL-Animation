@@ -30,7 +30,6 @@ public class SvgObject extends Data{
 
     public String getID(){
         return id;
-  
     }
     
     

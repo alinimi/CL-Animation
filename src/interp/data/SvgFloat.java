@@ -42,4 +42,9 @@ public class SvgFloat extends SvgNumber{
         return new SvgFloat(this);
     }
 
+    @Override
+    public String toString() {
+        return Float.toString(getValue());
+    }
+
 }
