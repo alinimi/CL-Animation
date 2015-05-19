@@ -350,7 +350,6 @@ public class Interp {
         } else {
             throw new RuntimeException ("It was expected a Number type");
         }
-        return 0;
     }
 
     private int[] generateCoordinates(SvgTree t) {
@@ -371,13 +370,13 @@ public class Interp {
 
     private void makeInitialTransformations(SvgTree t) {
         assert t != null;
-        int type = t.getType();
-        String id = t.getChild(0).getText();
+        int type = t.getChild(0).getType();
+        String id = t.getChild(1).getText();
         switch(type) {
             case SvgLexer.TEXT:
             case SvgLexer.RECTANGLE:
             case SvgLexer.ELLIPSE:
-            Data d = evaluateExpression(t.getChild(2));
+            Data d = evaluateExpression(t.getChild(3));
             checkNumber(d);
             animation.rotate(id, (int) getFloatValue(d));
         }
@@ -552,15 +551,15 @@ public class Interp {
                 attrs = getAttributes(t);
                 value = evaluateExpression(t.getChild(t.getChildCount() - 1));
                 checkNumber(value);
-                animation.create(lexer2shape(intType),id, initialCoords,attrs, getFloatValue(value));
+                animation.create(shapeType,id, initialCoords,attrs, getFloatValue(value));
                 makeInitialTransformations(t);
 
                 System.out.println("");
-                System.out.println(intType);
+                System.out.println(shapeType);
                 System.out.println(id);
                 System.out.println(Arrays.toString(initialCoords));
                 System.out.println(attrs);
-                System.out.println(startTime);
+                System.out.println(getFloatValue(value));
                 return null;
 
             case SvgLexer.DESTROY:
@@ -599,7 +598,7 @@ public class Interp {
                 System.out.println(lexerId);
                 System.out.println(id);
                 System.out.println(attrs);
-                System.out.println(startTime);
+                System.out.println(getFloatValue(startTimeData));
                 System.out.println(endTime);
                 return null;
 
@@ -692,7 +691,12 @@ public class Interp {
     Data evaluateArithmetic(Data value1, Data value2, int type) {
         if (value1.getType() == value2.getType()) {
             checkNumber(value1);
-            ((SvgNumber) value1).evaluateArithmetic(type, (SvgNumber) value2);
+            if (value1.isInteger()) {
+                value1 = ((SvgInt) value1).evaluateArithmetic(type, (SvgInt) value2);
+            } else {
+                value1 = ((SvgNumber) value1).evaluateArithmetic(type, (SvgNumber) value2);
+            }            
+            
         } else {
             throw new RuntimeException("Error at performing an arithmetic operation with elements of different type");
         }
@@ -717,7 +721,8 @@ public class Interp {
         switch (type) {
             // A variable
             case SvgLexer.ID:
-                value = new Data(Stack.getVariable(t.getText()));
+                //value = new Data(Stack.getVariable(t.getText()));
+                value = Stack.getVariable(t.getText());
                 break;
             // An integer literal
             case SvgLexer.INT:

@@ -127,7 +127,7 @@ array   : id=ID '[' INT ']'    -> ^(ARRAY[$id,$id.text] INT)
 create  : CREATE^ objecte_create                    attributes          object_expr
         ;
 
-object_expr     : ('('! num_expr ')'! | FLOAT | INT)
+object_expr     : ('('! num_expr ')'! | FLOAT | INT | ID | array)
                 ;
 
 //              type        Name     ObjectAttributes
@@ -225,7 +225,7 @@ read    :   READ^ ID
         ;
 
 // Write a variable
-write   :   WRITE^ (expr | STRING )
+write   :   WRITE^ expr
         ;
 
 // Grammar for expressions with boolean, relational and aritmetic operators
@@ -251,6 +251,7 @@ atom    :   ID
         |   array
         |   INT
         |   FLOAT
+        |   STRING
         |   (b=TRUE | b=FALSE)  -> ^(BOOLEAN[$b,$b.text])
         |   funcall
         |   '('! expr ')'!
