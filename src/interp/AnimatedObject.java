@@ -24,6 +24,8 @@ public class AnimatedObject {
     private HashMap <String,Object> attributeMap;
     private ArrayList <ObjectAnimation> animationList;
     private ArrayList <ObjectTransform> transformList;
+    private ArrayList <ObjectSet> setList;
+
     private int rotationCenterX;
     private int rotationCenterY;
     
@@ -66,6 +68,7 @@ public class AnimatedObject {
         
         animationList = new ArrayList <ObjectAnimation>();
         transformList = new ArrayList <ObjectTransform>();
+        setList = new ArrayList <ObjectSet>();
         
         setRotationCenter();
     }
@@ -107,6 +110,11 @@ public class AnimatedObject {
         ObjectAnimation an = new ObjectAnimation(st,et,attr,ev);
         animationList.add(an);
         return overlap;
+    }
+    
+    public void addSet(float time, String attr, Object ev){
+        ObjectSet an = new ObjectSet(time,attr,ev);
+        setList.add(an);
     }
     
     public void addTransform(Transform type, float st, float et, String sv, String ev){
@@ -248,6 +256,9 @@ public class AnimatedObject {
         for(ObjectTransform tr: transformList){
             svg += tr.toString();
         }
+        for(ObjectSet tr: setList){
+            svg += tr.toString();
+        }
         svg += "\t</"+tag+">\n";
         return svg;
     }
@@ -283,9 +294,38 @@ public class AnimatedObject {
             svg += "/>\n";
             return svg;
         }
-
-
     }
+    
+    
+    private class ObjectSet{
+        private final float time;
+        private final String attribute;
+        private final Object value;
+        public ObjectSet(float t , String attr, 
+                Object ev){
+            time = t;
+            attribute = attr;
+            value = ev;
+        }
+        public ObjectSet(ObjectSet x){
+            time = x.time;
+            attribute = x.attribute;
+            value = x.value;
+        }
+        
+        @Override
+        public String toString(){
+            String svg = "\t\t<set";
+            svg += " attributeName=\""+attribute+"\"";
+            svg += " to=\""+value.toString()+"\"";
+            svg += " begin=\""+time+"\"";
+            svg += " dur=\"indefinite\"";
+            svg += "/>\n";
+            return svg;
+        }
+    }
+    
+    
     private class ObjectTransform{
         private final Transform type;
         private final String startValue;

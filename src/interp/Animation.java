@@ -119,6 +119,16 @@ public class Animation{
         return false;
     }
     
+    public void modify(String id, String name, Object valueEnd,
+            float time){
+        if(objects.containsKey(id)){
+            
+            AnimatedObject obj = objects.get(id);
+            obj.addSet(time, name, valueEnd);
+            
+        }
+    }
+    
     /**
      * Mueve el objeto con identificador id de (xIni,yIni) a (xEnd,yEnd) en el
      * intervalo [timeStart,timeEnd]

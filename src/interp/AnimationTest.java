@@ -34,6 +34,7 @@ public class AnimationTest {
         attribs.put("stroke-width", 2);
         attribs.put("fill","red");
         anim.create(SvgObject.Shape.LINE, "l1",c2, attribs, 2);
+        anim.modify("l1", "fill", "white", 10);
         System.out.println(anim);
 
 
