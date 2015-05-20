@@ -9,8 +9,10 @@ package interp.data;
  *
  * @author alicia
  */
-public class SvgVoid {
-    public SvgVoid(){
-        
+public class SvgVoid extends Data {
+    public SvgVoid(){}
+
+    public Data copy() {
+    	return new SvgVoid();
     }
 }
