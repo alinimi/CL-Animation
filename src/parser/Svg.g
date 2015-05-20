@@ -118,7 +118,7 @@ return_stmt :   RETURN^ expr?
 variable:   (ID|array)
         ;
 
-array   : id=ID '[' INT ']'    -> ^(ARRAY[$id,$id.text] INT)
+array   : id=ID '[' object_expr ']'    -> ^(ARRAY[$id,$id.text] object_expr)
         ;
 
 // Create instruccion:
@@ -130,7 +130,7 @@ create  : CREATE^ objecte_create                    attributes          object_e
 object_expr     : ('('! num_expr ')'! | FLOAT | INT | ID | array)
                 ;
 
-//              type        Name     ObjectAttributes
+//              type      Name     ObjectAttributes
 objecte_create: TEXT      ID       coord object_expr STRING
               | CIRCLE    ID       coord object_expr
               | RECTANGLE ID       coord object_expr object_expr object_expr (object_expr object_expr)?
@@ -142,12 +142,12 @@ objecte_create: TEXT      ID       coord object_expr STRING
 list_min_2_coord : coord coord coord* -> ^(LIST_COORD coord+)
                  ;
 
-coord : INT ',' INT     -> ^(COORD INT INT)
+coord : object_expr ',' object_expr     -> ^(COORD object_expr object_expr)
       ;
 
 // Destroy instrucction:
 //        Destroy   ObjectId Time
-destroy : DESTROY^  ID       (FLOAT|INT)
+destroy : DESTROY^  ID       object_expr
         ;
 
 // Modify instrucction:
@@ -174,17 +174,17 @@ text_attributes : FONTSTYLE^ ':'! ('normal' | 'italic' | 'oblique')
 color : ('red'|'blue'|'green'|'yellow'|rgb)
       ;
 
-rgb   : '(' INT ',' INT ',' INT ')' -> ^(RGB INT INT INT)
+rgb   : '(' object_expr ',' object_expr ',' object_expr ')' -> ^(RGB object_expr object_expr object_expr)
       ;
 
 // Move instrucction: 
 //      Move  objectId xS,yS    xE,yE   TStart      TEnd
-move  : MOVE^ ID       coord    coord   (FLOAT|INT) (FLOAT|INT)
+move  : MOVE^ ID       coord    coord   object_expr object_expr
       ;
 
 // Scale instrucction:
-//      Scale   Name    SizeStart   SizeEnd TStart      TEnd
-scale : SCALE^  ID      INT         INT     (FLOAT|INT) (FLOAT|INT)
+//      Scale   Name    SizeStart   SizeEnd     TStart      TEnd
+scale : SCALE^  ID      object_expr object_expr object_expr object_expr
       ;
 
 // Rotate instrucction:

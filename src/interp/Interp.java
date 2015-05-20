@@ -340,11 +340,15 @@ public class Interp {
     }
 
     private int getXCoordinate(SvgTree t) {
-        return Integer.parseInt(t.getChild(0).getText());
+        Data d = evaluateExpression(t.getChild(0));
+        checkNumber(d);
+        return getIntValue(d);
     }
 
     private int getYCoordinate(SvgTree t) {
-        return Integer.parseInt(t.getChild(1).getText());
+        Data d = evaluateExpression(t.getChild(1));
+        checkNumber(d);
+        return getIntValue(d);
     }
 
     private float getFloatValue(Data d) {
@@ -355,6 +359,10 @@ public class Interp {
         } else {
             throw new RuntimeException ("It was expected a Number type");
         }
+    }
+
+    private int getIntValue(Data d) {
+        return (int) getFloatValue(d);
     }
 
     private int[] generateCoordinates(SvgTree t) {
@@ -473,6 +481,8 @@ public class Interp {
         SvgBoolean booleanValue;
         float startTime;
         float endTime;
+        Data startTimeD;
+        Data endTimeD;
         HashMap<String,Object> attrs;
 
         // A big switch for all type of instructions
@@ -578,12 +588,13 @@ public class Interp {
                 // Comprobació de que existeix l'objecte.
                 d = Stack.getVariable(id);
                 checkSvgObject(d);
-                float time = Float.parseFloat(t.getChild(1).getText());
-                animation.destroy(id,(int) time);
+                value = evaluateExpression(t.getChild(1));
+                checkNumber(value);
+                animation.destroy(id, getIntValue(value));
 
                 System.out.println("");
                 System.out.println(id);
-                System.out.println(time);
+                System.out.println(getIntValue(value));
                 return null;
 
             case SvgLexer.MODIFY:
@@ -592,24 +603,24 @@ public class Interp {
                 checkSvgObject(d);
                 lexerId = shape2lexer(((SvgObject) d).getShape());
                 attrs = getGeneralAttributes(lexerId, t.getChild(1));
-                Data startTimeData = evaluateExpression(t.getChild(2)); checkNumber(startTimeData);
+                startTimeD = evaluateExpression(t.getChild(2)); checkNumber(startTimeD);
                 endTime = -1;
                 if (t.getChildCount() == 4) {
-                    Data endTimeData = evaluateExpression(t.getChild(3)); checkNumber(endTimeData);
-                    endTime = getFloatValue(endTimeData);
+                    endTimeD = evaluateExpression(t.getChild(3)); checkNumber(endTimeD);
+                    endTime = getFloatValue(endTimeD);
                 }
 
                 for (Map.Entry<String, Object> entry : attrs.entrySet()) {
                     String key = entry.getKey();
                     Object objValue = entry.getValue();
-                    animation.modify(id, key, objValue, getFloatValue(startTimeData), endTime);
+                    animation.modify(id, key, objValue, getFloatValue(startTimeD), endTime);
                 }
 
                 System.out.println("");
                 System.out.println(lexerId);
                 System.out.println(id);
                 System.out.println(attrs);
-                System.out.println(getFloatValue(startTimeData));
+                System.out.println(getFloatValue(startTimeD));
                 System.out.println(endTime);
                 return null;
 
@@ -621,9 +632,11 @@ public class Interp {
                 int yIni = getYCoordinate(t.getChild(1));
                 int xEnd = getXCoordinate(t.getChild(2));
                 int yEnd = getYCoordinate(t.getChild(2));
-                startTime = Float.parseFloat(t.getChild(3).getText());
-                endTime = Float.parseFloat(t.getChild(4).getText());
-                animation.move(id,xIni,yIni,xEnd,yEnd,(int) startTime,(int) endTime);
+                startTimeD = evaluateExpression(t.getChild(3));
+                checkNumber(startTimeD);
+                endTimeD = evaluateExpression(t.getChild(4));
+                checkNumber(endTimeD);
+                animation.move(id,xIni,yIni,xEnd,yEnd,getIntValue(startTimeD),getIntValue(endTimeD));
 
                 System.out.println("");
                 System.out.println(id);
@@ -631,44 +644,46 @@ public class Interp {
                 System.out.println(yIni);
                 System.out.println(xEnd);
                 System.out.println(yEnd);
-                System.out.println(startTime);
-                System.out.println(endTime);
+                System.out.println(getIntValue(startTimeD));
+                System.out.println(getIntValue(endTimeD));
                 return null;
 
             case SvgLexer.SCALE:
                 id = t.getChild(0).getText();
                 d = Stack.getVariable(id);
                 checkSvgObject(d);
-                float scaleX = Float.parseFloat(t.getChild(1).getText());
-                float scaleY = Float.parseFloat(t.getChild(2).getText());
-                startTime = Float.parseFloat(t.getChild(3).getText());
-                endTime = Float.parseFloat(t.getChild(4).getText());
-                animation.scale(id,(int) scaleX,(int) scaleY,(int) startTime,(int) endTime);
+                Data scaleX = evaluateExpression(t.getChild(1)); checkInteger(scaleX);
+                Data scaleY = evaluateExpression(t.getChild(2)); checkInteger(scaleY);
+                startTimeD = evaluateExpression(t.getChild(3)); checkNumber(startTimeD);
+                endTimeD = evaluateExpression(t.getChild(4)); checkNumber(endTimeD);
+                animation.scale(id,(int) getFloatValue(scaleX),(int) getFloatValue(scaleY),
+                    getFloatValue(startTimeD),getFloatValue(endTimeD));
 
                 System.out.println("");
                 System.out.println(id);
                 System.out.println(scaleX);
                 System.out.println(scaleY);
-                System.out.println(startTime);
-                System.out.println(endTime);
+                System.out.println(getFloatValue(startTimeD));
+                System.out.println(getFloatValue(endTimeD));
                 return null;
 
             case SvgLexer.ROTATE:
                 id = t.getChild(0).getText();
                 d = Stack.getVariable(id);
                 checkSvgObject(d);
-                int startAngle = Integer.parseInt(t.getChild(1).getText());
-                int endAngle = Integer.parseInt(t.getChild(2).getText());
-                startTime = Float.parseFloat(t.getChild(3).getText());
-                endTime = Float.parseFloat(t.getChild(4).getText());
-                animation.rotate(id,startAngle,endAngle,(int) startTime,(int) endTime);
+                Data startAngle = evaluateExpression(t.getChild(1)); checkInteger(startAngle);
+                Data endAngle = evaluateExpression(t.getChild(2)); checkInteger(endAngle);
+                startTimeD = evaluateExpression(t.getChild(3)); checkNumber(startTimeD);
+                endTimeD = evaluateExpression(t.getChild(4)); checkNumber(endTimeD);
+                animation.rotate(id,getIntValue(startAngle),getIntValue(endAngle),
+                    getFloatValue(startTimeD),getFloatValue(endTimeD));
                 
                 System.out.println("");
                 System.out.println(id);
-                System.out.println(startAngle);
-                System.out.println(endAngle);
-                System.out.println(startTime);
-                System.out.println(endTime);
+                System.out.println(getIntValue(startAngle));
+                System.out.println(getIntValue(endAngle));
+                System.out.println(getFloatValue(startTimeD));
+                System.out.println(getFloatValue(endTimeD));
                 return null;
 
             case SvgLexer.SOURCE:
@@ -749,8 +764,9 @@ public class Interp {
                 value = new SvgString(t.getStringValue());
                 break;
             case SvgLexer.ARRAY:
-                int position = t.getChild(0).getIntValue();
-                value = Stack.getVariable(t.getText(),position).copy();
+                Data position = evaluateExpression(t.getChild(0));
+                checkInteger(position);
+                value = Stack.getVariable(t.getText(), getIntValue(position)).copy();
                 break;
             // A function call. Checks that the function returns a result.
             case SvgLexer.FUNCALL:
@@ -915,8 +931,9 @@ public class Interp {
         if (t.getType() == SvgLexer.RGB) {
             String[] a = new String[3];
             for(int i = 0; i < 3; i++) {
-                SvgTree child = t.getChild(i);
-                a[i] = child.getText();
+                Data d  = evaluateExpression(t.getChild(i));
+                checkInteger(d);
+                a[i] = d.toString();
             }
             color = "rgb(" + a[0] + "," + a[1] + "," + a[2] + ")";
         } else {
