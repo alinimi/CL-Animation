@@ -20,10 +20,11 @@ public class SvgArray extends Data{
 
     public SvgArray(SvgArray x){
         super(Type.ARRAY);
+        elementType = x.getElementType();
         value = new ArrayList<Data>();
         ArrayList<Data> d = x.getAllValues();
         for(int i = 0; i < d.size();++i){
-            d.get(i).copy();
+            value.add(d.get(i).copy());
         }
     }
     
@@ -107,9 +108,9 @@ public class SvgArray extends Data{
     /** Returns a string representing the data in textual form. */
     @Override
     public String toString() {
-        String s = "[";
+        String s = "[ ";
         for(int i = 0; i< value.size();++i){
-            s+=value.get(i).toString();
+            s += value.get(i).toString() + " ";
         }
         s += "]";
         return s;
