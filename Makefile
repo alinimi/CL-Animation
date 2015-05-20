@@ -49,7 +49,8 @@ DATA_SRC = 		$(INTERP)/data/Data.java \
 				$(INTERP)/data/SvgInt.java \
 				$(INTERP)/data/SvgNumber.java \
 				$(INTERP)/data/SvgObject.java \
-				$(INTERP)/data/SvgString.java
+				$(INTERP)/data/SvgString.java \
+				$(INTERP)/data/SvgVoid.java
 
 INTERP_SRC =	$(INTERP)/Interp.java \
 				$(INTERP)/Stack.java \
