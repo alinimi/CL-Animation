@@ -187,7 +187,7 @@ public class Interp {
             int w = args.getChild(0).getIntValue();
             int l = args.getChild(1).getIntValue();
             animation.setSize(w,l);
-            return new Data();
+            return new SvgVoid();
             // set canvas size
         } else if (funcname.equals("size") && args.getChildCount() == 1) {
             Data d = evaluateExpression(args.getChild(0));
@@ -226,7 +226,7 @@ public class Interp {
         Data result = executeListInstructions (f.getChild(2));
 
         // If the result is null, then the function returns void
-        if (result == null) result = new Data();
+        if (result == null) result = new SvgVoid();
         
         // Dumps trace information
         if (trace != null) traceReturn(f, result, Arg_values);
@@ -518,7 +518,7 @@ public class Interp {
                 if (t.getChildCount() != 0) {
                     return evaluateExpression(t.getChild(0));
                 }
-                return new Data(); // No expression: returns void data
+                return new SvgVoid(); // No expression: returns void data
 
             // Read statement: reads a variable and raises an exception
             // in case of a format error.
@@ -732,8 +732,7 @@ public class Interp {
         switch (type) {
             // A variable
             case SvgLexer.ID:
-                //value = new Data(Stack.getVariable(t.getText()));
-                value = Stack.getVariable(t.getText());
+                value = Stack.getVariable(t.getText()).copy();
                 break;
             // An integer literal
             case SvgLexer.INT:
@@ -751,8 +750,7 @@ public class Interp {
                 break;
             case SvgLexer.ARRAY:
                 int position = t.getChild(0).getIntValue();
-                //value = new Data(Stack.getVariable(t.getText(),position));
-                value = Stack.getVariable(t.getText(),position);
+                value = Stack.getVariable(t.getText(),position).copy();
                 break;
             // A function call. Checks that the function returns a result.
             case SvgLexer.FUNCALL:
