@@ -493,8 +493,8 @@ public class Interp {
                 value = evaluateExpression(t.getChild(1));
                 SvgTree leftSide = t.getChild(0);
                 if (leftSide.getType() == SvgLexer.ARRAY) {
-                    int pos = leftSide.getChild(0).getIntValue();
-                    Stack.defineVariable (leftSide.getText(),pos,value);
+                    Data position = evaluateExpression(leftSide.getChild(0)); checkInteger(position);
+                    Stack.defineVariable (leftSide.getText(),getIntValue(position),value);
                 } else {
                     Stack.defineVariable (leftSide.getText(), value);
                 }
