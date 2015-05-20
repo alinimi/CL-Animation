@@ -393,7 +393,7 @@ public class AnimatedObject {
             svg += " from=\""+startValue+"\"";
             svg += " to=\""+endValue+"\"";
             svg += " begin=\""+startTime+"\"";
-            svg += " end=\""+endTime+"\"";
+            svg += " dur=\""+(endTime-startTime)+"\"";
             svg += " additive=\"sum\"";
             svg += "/>\n";
             return svg;
