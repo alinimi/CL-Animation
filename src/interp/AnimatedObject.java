@@ -187,8 +187,16 @@ public class AnimatedObject {
     }
     
     public String getAttributeString(String s){
-        String value = attributeMap.get(s).toString();
-        return s + "=\""+value+"\"";
+        if(s.equals("text-orientation")){
+            if(((String)attributeMap.get(s)).equals("vertical")){
+                return "writing-mode=\"tb\" glyph-orientation-vertical=\"0\"";
+            }
+            else{
+                return "";
+            }
+        }
+        String value = getValueString(s,attributeMap.get(s));
+        return getNameString(s) + "=\""+value+"\"";
     }
     
     
@@ -285,8 +293,8 @@ public class AnimatedObject {
         @Override
         public String toString(){
             String svg = "\t\t<animate";
-            svg += " attributeName=\""+attribute+"\"";
-            svg += " to=\""+endValue.toString()+"\"";
+            svg += " attributeName=\""+getNameString(attribute)+"\"";
+            svg += " to=\""+getValueString(attribute,endValue)+"\"";
             float dur = endTime-startTime;
             svg += " begin=\""+startTime+"\"";
             svg += " dur=\""+dur+"\"";
@@ -315,13 +323,30 @@ public class AnimatedObject {
         
         @Override
         public String toString(){
-            String svg = "\t\t<set";
-            svg += " attributeName=\""+attribute+"\"";
-            svg += " to=\""+value.toString()+"\"";
-            svg += " begin=\""+time+"\"";
-            svg += " dur=\"indefinite\"";
-            svg += "/>\n";
-            return svg;
+            if(attribute.equals("text-orientation")){
+                String svg = "\t\t<set";
+                svg += " attributeName=\"writing-mode\"";
+                svg += " to=\"tb\"";
+                svg += " begin=\""+time+"\"";
+                svg += " dur=\"indefinite\"";
+                svg += "/>\n";
+                svg += "\t\t<set";
+                svg += " attributeName=\"glyph-orientation-vertical\"";
+                svg += " to=\"0\"";
+                svg += " begin=\""+time+"\"";
+                svg += " dur=\"indefinite\"";
+                svg += "/>\n";
+                return svg;
+            }
+            else{
+                String svg = "\t\t<set";
+                svg += " attributeName=\""+getNameString(attribute)+"\"";
+                svg += " to=\""+getValueString(attribute,value)+"\"";
+                svg += " begin=\""+time+"\"";
+                svg += " dur=\"indefinite\"";
+                svg += "/>\n";
+                return svg;
+            }
         }
     }
     
@@ -375,4 +400,53 @@ public class AnimatedObject {
         }
     }
     
+    
+    public String getNameString(String name){
+        if("line-pattern".equals(name)){
+            return "stroke-dasharray";
+        }
+        return name;
+    }
+    
+    public String getValueString(String name, Object value){
+        if("line-pattern".equals(name)){
+            String v = (String) value;
+            
+            if(attributeMap.containsKey("stroke-width")){
+                
+                int sw = (int)attributeMap.get("stroke-width");
+                if(v.equals("dots")){
+                    return sw+","+sw;
+                }
+                
+                else if (v.equals("lines")){
+                    sw = 2*sw; 
+                    return sw+","+sw;
+                }
+                else if (v.equals("alternate")){
+                    return 2*sw+","+sw+","+sw+","+sw;
+                }
+                else return "0";
+            }
+            else{
+                if(v.equals("dots")){
+                    return "2,2";
+                }
+                else if(v.equals("lines")){
+                    return "4,4";
+                }
+                else if(v.equals("alternate")){
+                    return "4,2,2,2";
+                }
+                else return "0";
+                    
+            }
+            
+            
+        }
+
+        else{
+            return value.toString();
+        }
+    }
 }
