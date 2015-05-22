@@ -522,6 +522,10 @@ public class Interp {
                 } else {
                     Stack.defineVariable (leftSide.getText(), value);
                 }
+                if (value.isObject()) {
+                    String oldVar = t.getChild(1).getText();
+                    animation.copyObject(oldVar,leftSide.getText());
+                }
                 return null;
 
             // If-then-else
