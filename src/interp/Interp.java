@@ -641,7 +641,11 @@ public class Interp {
                 for (Map.Entry<String, Object> entry : attrs.entrySet()) {
                     String key = entry.getKey();
                     Object objValue = entry.getValue();
-                    animation.modify(id, key, objValue, getFloatValue(startTimeD), endTime);
+                    boolean overlap = animation.modify(id, key, objValue, getFloatValue(startTimeD), endTime);
+                    if (overlap) {
+                        System.out.println("WARNING: Object " + id + " has multiple definitions of modify " +
+                            "in the interval of time from " + getFloatValue(startTimeD) + " to " + endTime);
+                    }
                 }
 
                 System.out.println("");
