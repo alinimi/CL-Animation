@@ -35,7 +35,10 @@ public class AnimatedObject {
         objectType = x.objectType;
         destructionTime = x.destructionTime;
         coords = x.coords;
-        text = new String(x.text);
+        if(x.objectType == SvgObject.Shape.TEXT){
+            text = new String(x.text);
+
+        }
         //Shallowcopy!!
         attributeMap = new HashMap<String,Object>(x.attributeMap);
         animationList = new ArrayList <ObjectAnimation>();

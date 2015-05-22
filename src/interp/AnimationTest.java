@@ -38,6 +38,11 @@ public class AnimationTest {
         anim.create(SvgObject.Shape.LINE, "l1",c2, attribs, 2);
         anim.modify("l1", "fill", "white", 10);
         System.out.println(anim);
+        
+        
+        //Create rectangle r 10,10 5 50 50 {fill:red,stroke:green} 0;
+        anim.create(SvgObject.Shape.RECTANGLE,"r",c2,attribs,0);
+        anim.copyObject("r", "s");
 
 
     }
