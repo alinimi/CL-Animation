@@ -1,0 +1,5 @@
+func main() {
+  read j;
+  write "source main";
+  Create text t 0,0 0 "WEEsfdkdflkd" {fill:(2,3,4),font-style:normal} 15.0;
+}

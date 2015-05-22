@@ -1,0 +1,23 @@
+func main() {
+  canvas_size(1000,1000);
+  //write p;
+  //write "\n";
+  //write q;
+  //write "\n";
+  //write p;
+  //for(i = 0; i < 15; i = i + 1) write i;
+  Create text t 100,100 0 "Attributes" {fill:(2,3,4),font-style:normal} 0.0;
+  //Create rectangle r 5,9 20 25 30 {line-width:7} 3.0;
+  i = 7 + 6;
+  Destroy t 30; 
+  Modify t {fill:red,stroke:green,font-orientation:vertical} 20 30;
+  Create line l 0,20 100,100 220,150 2,500 {stroke:green,stroke-width:10} (i/2);
+  Create rectangle r 10,10 5 50 50 {fill:red,stroke:green} 0;
+  o = r;
+  Move r 100,100 800,800 0 6;
+  n = r;
+  Move l 5,7 15,20 30 40;
+  Scale l 10 20 15.4 20;
+  Rotate l 15 40 7.8 9.8;
+  //Source "pelopicopata.txt";
+}

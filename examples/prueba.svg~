@@ -18,5 +18,5 @@ func main() {
   Move l 5,7 15,20 30 40;
   Scale l 10 20 15.4 20;
   Rotate l 15 40 7.8 9.8;
-  Source "/home/alicia/CL/svg/CL-Animation/examples/pelopicopata.svg";
+  Source "examples/pelopicopata.svg";
 }

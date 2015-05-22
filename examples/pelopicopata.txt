@@ -1,0 +1,5 @@
+func main() {
+  write "Source";
+  Create text t 20,20 0 "Source" {fill:(2,3,4),font-style:normal} 2.0;
+
+}
