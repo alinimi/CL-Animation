@@ -79,7 +79,6 @@ public class Svg{
         CharStream input = null;
         try {
             input = new ANTLRFileStream(infile);
-            ANTLRFileStream in = new ANTLRFileStream("examples/pelopicopata.svg");
         } catch (IOException e) {
             System.err.println ("Error: file " + infile + " could not be opened.");
             System.exit(1);

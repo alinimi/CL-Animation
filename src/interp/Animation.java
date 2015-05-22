@@ -25,7 +25,8 @@ public class Animation{
      * Constructor. Crea una ventana de animación sin objetos
      */
     public Animation(){
-
+        width = 500;
+        height = 500;
         objects = new HashMap<String,AnimatedObject>();
         lastID = 0;
     }
@@ -143,8 +144,8 @@ public class Animation{
      * @param timeStart
      * @param timeEnd
      */
-    public void move(String id, int xIni, int yIni, 
-            int xEnd, int yEnd, float timeStart, float timeEnd){
+    public void move(String id, float xIni, float yIni, 
+            float xEnd, float yEnd, float timeStart, float timeEnd){
         if(objects.containsKey(id)){
             AnimatedObject obj = objects.get(id);
             obj.addTransform(
@@ -160,7 +161,7 @@ public class Animation{
      * @param xEnd
      * @param yEnd
      */
-    public void move(String id, int xEnd, int yEnd){
+    public void move(String id, float xEnd, float yEnd){
         if(objects.containsKey(id)){
             AnimatedObject obj = objects.get(id);
             String newAttr = "translate("+xEnd+","+yEnd+")";
@@ -181,7 +182,7 @@ public class Animation{
      * @param id
      * @param sizeEnd
      */
-    public void scale(String id, int sizeEnd){
+    public void scale(String id, float sizeEnd){
         if(objects.containsKey(id)){
             AnimatedObject obj = objects.get(id);
             String newAttr = "scale("+sizeEnd+","+sizeEnd+")";
@@ -205,7 +206,7 @@ public class Animation{
      * @param timeStart
      * @param timeEnd
      */
-    public void scale(String id, int sizeStart, int sizeEnd, float timeStart, float timeEnd){
+    public void scale(String id, float sizeStart, float sizeEnd, float timeStart, float timeEnd){
         if(objects.containsKey(id)){
             AnimatedObject obj = objects.get(id);
             obj.addTransform(
@@ -220,7 +221,7 @@ public class Animation{
      * @param id
      * @param angleEnd
      */
-    public void rotate(String id, int angleEnd){
+    public void rotate(String id, float angleEnd){
         if(objects.containsKey(id)){
             AnimatedObject obj = objects.get(id);
             String newAttr = "rotate("+angleEnd+" "+
@@ -246,7 +247,7 @@ public class Animation{
      * @param timeStart
      * @param timeEnd
      */
-    public void rotate(String id, int angleStart, int angleEnd, float timeStart, float timeEnd){
+    public void rotate(String id, float angleStart, float angleEnd, float timeStart, float timeEnd){
         if(objects.containsKey(id)){
             AnimatedObject obj = objects.get(id);
             obj.addTransform(
