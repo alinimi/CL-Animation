@@ -49,6 +49,10 @@ public class AnimatedObject {
         for(int i = 0; i < x.transformList.size();++i){
             transformList.add(new ObjectTransform(x.transformList.get(i)));
         }
+        setList = new ArrayList<ObjectSet>();
+        for(int i = 0; i < x.setList.size();++i){
+            setList.add(new ObjectSet(x.setList.get(i)));
+        }
         rotationCenterX = x.rotationCenterX;
         rotationCenterY = x.rotationCenterY;
     }

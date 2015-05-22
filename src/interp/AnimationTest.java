@@ -43,6 +43,8 @@ public class AnimationTest {
         //Create rectangle r 10,10 5 50 50 {fill:red,stroke:green} 0;
         anim.create(SvgObject.Shape.RECTANGLE,"r",c2,attribs,0);
         anim.copyObject("r", "s");
+        anim.rotate("r",0,30,2,3);
+        System.out.println(anim);
 
 
     }
