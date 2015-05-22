@@ -9,6 +9,7 @@ package interp;
 import interp.AnimatedObject.Transform;
 import interp.data.SvgObject.Shape;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  *
@@ -18,6 +19,7 @@ public class Animation{
     private HashMap<String,AnimatedObject> objects;
     private int width;
     private int height;
+    int lastID;
     
     /**
      * Constructor. Crea una ventana de animación sin objetos
@@ -25,6 +27,7 @@ public class Animation{
     public Animation(){
 
         objects = new HashMap<String,AnimatedObject>();
+        lastID = 0;
     }
     
     public void setSize(int w, int h){
@@ -273,5 +276,12 @@ public class Animation{
         }
         svg = svg+"</svg>\n";
         return svg;
+    }
+    
+    public void merge(Animation x){
+        for(AnimatedObject obj: x.objects.values()){
+            objects.put(Integer.toString(lastID), obj);
+            ++lastID;
+        }
     }
 }

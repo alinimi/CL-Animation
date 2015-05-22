@@ -37,6 +37,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.io.*;
+import org.antlr.runtime.ANTLRFileStream;
+import org.antlr.runtime.CharStream;
+import org.antlr.runtime.CommonTokenStream;
 
 /** Class that implements the interpreter of the language. */
 
@@ -82,6 +85,7 @@ public class Interp {
      * data structures for the execution of the main program.
      */
     public Interp(SvgTree T, String tracefile) {
+        System.out.println("Init interp");
         assert T != null;
         MapFunctions(T);  // Creates the table to map function names into AST nodes
         PreProcessAST(T); // Some internal pre-processing ot the AST
@@ -99,6 +103,27 @@ public class Interp {
         }
         function_nesting = -1;
     }
+    
+    
+    
+    /**
+     * Constructor of the interpreter. It prepares the main
+     * data structures for the execution of the main program.
+     */
+    public Interp(SvgTree T, PrintWriter pw) {
+        assert T != null;
+        MapFunctions(T);  // Creates the table to map function names into AST nodes
+        PreProcessAST(T); // Some internal pre-processing ot the AST
+        animation = new Animation();
+        Stack = new Stack(); // Creates the memory of the virtual machine
+        // Initializes the standard input of the program
+        stdin = new Scanner (new BufferedReader(new InputStreamReader(System.in)));
+        trace = pw;
+
+        function_nesting = -1;
+    }
+    
+    
 
     /** Runs the program by calling the main function without parameters. */
     public void Run() {
@@ -471,7 +496,6 @@ public class Interp {
      */
     private Data executeInstruction (SvgTree t) {
         assert t != null;
-        
         setLineNumber(t);
         Data value; // The returned value
         String id;
@@ -687,8 +711,62 @@ public class Interp {
                 return null;
 
             case SvgLexer.SOURCE:
-                return null;
+                String file = t.getChild(0).getText();
+                file = file.substring(1, file.length()-1);
+                ANTLRFileStream in = null;
+                try {
+                    in = new ANTLRFileStream(file);
+                } catch (IOException e) {
+                    System.err.println ("Error: file " + file + " could not be opened.");
+                    System.exit(1);
+                }
 
+                // Creates the lexer
+                SvgLexer lex = new SvgLexer(in);
+                CommonTokenStream tokens = new CommonTokenStream(lex);
+
+                // Creates and runs the parser. As a result, an AST is created
+                SvgParser parser = new SvgParser(tokens);
+                SvgTreeAdaptor adaptor = new SvgTreeAdaptor();
+                parser.setTreeAdaptor(adaptor);
+                SvgParser.prog_return result = null;
+                try {
+                    result = parser.prog();
+                } catch (Exception e) {} // Just catch the exception (nothing to do)
+
+                // Check for parsing errors
+                int nerrors = parser.getNumberOfSyntaxErrors();
+                if (nerrors > 0) {
+                    System.err.println (nerrors + " errors detected. " +
+                                    "The program has not been executed.");
+                    System.exit(1);
+                }
+
+                // Get the AST
+                SvgTree newT = (SvgTree)result.getTree();
+                System.out.println(newT.toString());
+                System.out.println(newT.getChild(0).toString());
+                Interp I = null;
+                int linenumber = -1;
+                try {
+                    I = new Interp(newT, trace); // prepares the interpreter
+                    I.Run();                  // Executes the code
+                    animation.merge(I.animation);
+                } catch (RuntimeException e) {
+                    if (I != null) linenumber = I.lineNumber();
+                    System.err.print ("Runtime error");
+                    if (linenumber < 0) System.err.print (": ");
+                    else System.err.print (" (" + file + ", line " + linenumber + "): ");
+                    System.err.println (e.getMessage() + ".");
+                    System.err.format (I.getStackTrace());
+                } catch (StackOverflowError e) {
+                    if (I != null) linenumber = I.lineNumber();
+                    System.err.print("Stack overflow error");
+                    if (linenumber < 0) System.err.print (".");
+                    else System.err.println (" (" + file + ", line " + linenumber + ").");
+                    System.err.format (I.getStackTrace(5));
+                }
+                return null;
             default: assert false; // Should never happen
         }
 
@@ -776,6 +854,13 @@ public class Interp {
                     throw new RuntimeException ("function expected to return a value");
                 }
                 break;
+            
+                
+                
+                
+                
+                
+                
             default: break;
         }
 
