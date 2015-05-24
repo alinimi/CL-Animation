@@ -45,6 +45,7 @@ import org.antlr.runtime.CommonTokenStream;
 
 public class Interp {
 
+    private static final String[] rectangleAttribueTypes = {"rx","ry"};
     private static final String[] textAtrributeTypes = {"font-style","font-weight","font-orientation"};
     private static final String[] generalAttributeTypes = {"fill","fill-opacity","stroke","stroke-pattern","stroke-width"};
 
@@ -1081,6 +1082,13 @@ public class Interp {
                 ret = value.getText();
                 break;
 
+            case SvgLexer.RX:
+            case SvgLexer.RY:
+                Data d = evaluateExpression(value);
+                checkNumber(d);
+                ret = getFloatValue(d);
+                break;
+
             default:
                 ret = value.getText();
                 break;
@@ -1091,16 +1099,26 @@ public class Interp {
     private void existAttribute (int type, String attr) {
         boolean generalAttribute = Arrays.asList(generalAttributeTypes).contains(attr);
 
-        // if it is a TEXT, we check into TEXT attributes.
-        if(type == SvgLexer.TEXT) {
-            boolean textAttribute = Arrays.asList(textAtrributeTypes).contains(attr);
-            if (!generalAttribute && !textAttribute) {
-                throw new RuntimeException ("Attribute '" + attr + "' for " + Integer.toString(type) + " does not exist");
-            }
-        } else {
-            if (!generalAttribute) {
-                throw new RuntimeException ("Attribute '" + attr + "' for " + Integer.toString(type) + " does not exist");
-            }
+        switch (type) {
+            case SvgLexer.TEXT:
+                boolean textAttribute = Arrays.asList(textAtrributeTypes).contains(attr);
+                if (!generalAttribute && !textAttribute) {
+                    throw new RuntimeException ("The attribute '" + attr + "' for variable " + Integer.toString(type) + " of type TEXT does not exist");
+                }
+                break;
+
+            case SvgLexer.RECTANGLE:
+                boolean rectangleAttrigute = Arrays.asList(rectangleAttribueTypes).contains(attr);
+                if (!generalAttribute && !rectangleAttrigute) {
+                    throw new RuntimeException ("The attribute '" + attr + "' for variable" + Integer.toString(type)
+                    + " of type RECTANGLE does not exist");
+                }
+                break;
+
+            default:
+                if (!generalAttribute) {
+                    throw new RuntimeException ("Attribute '" + attr + "' for " + Integer.toString(type) + " does not exist");
+                }
         }
     }
 
