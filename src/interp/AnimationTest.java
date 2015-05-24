@@ -45,6 +45,8 @@ public class AnimationTest {
         System.out.println("overlap?: " + b);
         b = anim.modify("r", "x", 400, 2, 4);
         System.out.println("overlap?: " + b);
+        b = anim.modify("r", "x", 400, 0, 4);
+        System.out.println("overlap?: " + b);
         
         anim.copyObject("r", "s");
         anim.rotate("r",0,30,2,3);

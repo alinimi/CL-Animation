@@ -23,12 +23,12 @@ public class AnimatedObject {
     private int[] coords;
     private String text;
     private HashMap <String,Object> attributeMap;
-    private PriorityQueue <ObjectAnimation> animationList;
-    private PriorityQueue <ObjectTransform> transformList;
-    private PriorityQueue <ObjectSet> setList;
+    private ArrayList <ObjectAnimation> animationList;
+    private ArrayList <ObjectTransform> transformList;
+    private ArrayList <ObjectSet> setList;
 
-    private int rotationCenterX;
-    private int rotationCenterY;
+    private float rotationCenterX;
+    private float rotationCenterY;
     
     
     public AnimatedObject(AnimatedObject x){
@@ -42,15 +42,15 @@ public class AnimatedObject {
         }
         //Shallowcopy!!
         attributeMap = new HashMap<String,Object>(x.attributeMap);
-        animationList = new PriorityQueue <ObjectAnimation>();
+        animationList = new ArrayList <ObjectAnimation>();
         for(ObjectAnimation obj:animationList){
             animationList.add(new ObjectAnimation(obj));
         }
-        transformList = new PriorityQueue<ObjectTransform>();
+        transformList = new ArrayList<ObjectTransform>();
         for(ObjectTransform obj:transformList){
             transformList.add(new ObjectTransform(obj));
         }
-        setList = new PriorityQueue<ObjectSet>();
+        setList = new ArrayList<ObjectSet>();
         for(ObjectSet obj:setList){
             setList.add(new ObjectSet(obj));
         }
@@ -74,9 +74,9 @@ public class AnimatedObject {
         
         creationTime = startTime;
         
-        animationList = new PriorityQueue <ObjectAnimation>();
-        transformList = new PriorityQueue <ObjectTransform>();
-        setList = new PriorityQueue <ObjectSet>();
+        animationList = new ArrayList <ObjectAnimation>();
+        transformList = new ArrayList <ObjectTransform>();
+        setList = new ArrayList <ObjectSet>();
         
         setRotationCenter();
     }
@@ -168,6 +168,23 @@ public class AnimatedObject {
     }
     
     public float getDynamicRotationCenterX(float time){
+        float finalX = rotationCenterX;
+        float finalTimeX = 0;
+        for(ObjectSet set:setList){
+            if(set.getTime()<= time){
+                String attr=set.getAttribute();
+                
+                if(attr=="x" && set.getTime()>= finalTimeX){
+                    finalX = (float)set.getValue();
+                }
+            }
+            
+        }
+        for(ObjectAnimation anim:animationList){
+            if(anim.startTime >= finalTimeX && anim.startTime < time){
+                
+            }
+        }
         return 0;
     }
     
@@ -183,6 +200,7 @@ public class AnimatedObject {
         return rotationCenterY;
     }
     
+
     public String getTag(){
         switch(objectType){
             case RECTANGLE:
@@ -287,6 +305,8 @@ public class AnimatedObject {
             svg += tr.toString();
         }
         svg += "\t</"+tag+">\n";
+        
+
         return svg;
     }
     
@@ -345,6 +365,7 @@ public class AnimatedObject {
         private final float endTime;
         private final String attribute;
         private final Object endValue;
+        
         public ObjectAnimation(float st, float et, String attr, 
                 Object ev){
             startTime = st;
@@ -402,10 +423,10 @@ public class AnimatedObject {
         public String getAttribute(){
             return attribute;
         }
-        public Object value(){
+        public Object getValue(){
             return value;
         }
-        public float time(){
+        public float getTime(){
             return time;
         }
         @Override
