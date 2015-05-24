@@ -49,6 +49,7 @@ public class AnimationTest {
         anim.copyObject("r", "s");
         anim.rotate("r",0,30,2,3);
         System.out.println(anim);
+        
 
 
     }

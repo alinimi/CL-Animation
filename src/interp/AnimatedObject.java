@@ -9,6 +9,7 @@ import interp.data.SvgObject;
 import interp.data.SvgObject.Shape;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 
 /**
  *
@@ -22,9 +23,9 @@ public class AnimatedObject {
     private int[] coords;
     private String text;
     private HashMap <String,Object> attributeMap;
-    private ArrayList <ObjectAnimation> animationList;
-    private ArrayList <ObjectTransform> transformList;
-    private ArrayList <ObjectSet> setList;
+    private PriorityQueue <ObjectAnimation> animationList;
+    private PriorityQueue <ObjectTransform> transformList;
+    private PriorityQueue <ObjectSet> setList;
 
     private int rotationCenterX;
     private int rotationCenterY;
@@ -41,17 +42,17 @@ public class AnimatedObject {
         }
         //Shallowcopy!!
         attributeMap = new HashMap<String,Object>(x.attributeMap);
-        animationList = new ArrayList <ObjectAnimation>();
-        for(int i = 0; i < x.animationList.size();++i){
-            animationList.add(new ObjectAnimation(x.animationList.get(i)));
+        animationList = new PriorityQueue <ObjectAnimation>();
+        for(ObjectAnimation obj:animationList){
+            animationList.add(new ObjectAnimation(obj));
         }
-        transformList = new ArrayList<ObjectTransform>();
-        for(int i = 0; i < x.transformList.size();++i){
-            transformList.add(new ObjectTransform(x.transformList.get(i)));
+        transformList = new PriorityQueue<ObjectTransform>();
+        for(ObjectTransform obj:transformList){
+            transformList.add(new ObjectTransform(obj));
         }
-        setList = new ArrayList<ObjectSet>();
-        for(int i = 0; i < x.setList.size();++i){
-            setList.add(new ObjectSet(x.setList.get(i)));
+        setList = new PriorityQueue<ObjectSet>();
+        for(ObjectSet obj:setList){
+            setList.add(new ObjectSet(obj));
         }
         rotationCenterX = x.rotationCenterX;
         rotationCenterY = x.rotationCenterY;
@@ -73,16 +74,15 @@ public class AnimatedObject {
         
         creationTime = startTime;
         
-        animationList = new ArrayList <ObjectAnimation>();
-        transformList = new ArrayList <ObjectTransform>();
-        setList = new ArrayList <ObjectSet>();
+        animationList = new PriorityQueue <ObjectAnimation>();
+        transformList = new PriorityQueue <ObjectTransform>();
+        setList = new PriorityQueue <ObjectSet>();
         
         setRotationCenter();
     }
     
     public boolean overlappingAnimations(String attr, float start, float end){
-        for(int i = 0; i < animationList.size();++i){
-            ObjectAnimation w = animationList.get(i);
+        for(ObjectAnimation w:animationList){
             if(w.attribute==attr){
                 if((start > w.startTime && start < w.endTime) ||
                         (end > w.startTime && end < w.endTime))
@@ -290,7 +290,57 @@ public class AnimatedObject {
         return svg;
     }
     
-    private class ObjectAnimation {
+    
+    public String getNameString(String name){
+        if("line-pattern".equals(name)){
+            return "stroke-dasharray";
+        }
+        return name;
+    }
+    
+    public String getValueString(String name, Object value){
+        if("line-pattern".equals(name)){
+            String v = (String) value;
+            
+            if(attributeMap.containsKey("stroke-width")){
+                
+                int sw = (int)attributeMap.get("stroke-width");
+                if(v.equals("dots")){
+                    return sw+","+sw;
+                }
+                
+                else if (v.equals("lines")){
+                    sw = 2*sw; 
+                    return sw+","+sw;
+                }
+                else if (v.equals("alternate")){
+                    return 2*sw+","+sw+","+sw+","+sw;
+                }
+                else return "0";
+            }
+            else{
+                if(v.equals("dots")){
+                    return "2,2";
+                }
+                else if(v.equals("lines")){
+                    return "4,4";
+                }
+                else if(v.equals("alternate")){
+                    return "4,2,2,2";
+                }
+                else return "0";
+                    
+            }
+            
+            
+        }
+
+        else{
+            return value.toString();
+        }
+    }
+    
+    private class ObjectAnimation implements Comparable{
         private final float startTime;
         private final float endTime;
         private final String attribute;
@@ -321,10 +371,19 @@ public class AnimatedObject {
             svg += "/>\n";
             return svg;
         }
+
+        @Override
+        public int compareTo(Object t) {
+            float thisTime = startTime;
+            float time = ((ObjectAnimation)t).startTime;
+            if(thisTime < time) return -1;
+            if(thisTime == time) return 0;
+            return 1;
+        }
     }
     
     
-    private class ObjectSet{
+    private class ObjectSet implements Comparable{
         private final float time;
         private final String attribute;
         private final Object value;
@@ -359,10 +418,19 @@ public class AnimatedObject {
             svg += "/>\n";
             return svg;
         }
+        
+        @Override
+        public int compareTo(Object t) {
+            float thisTime = time;
+            float time = ((ObjectSet)t).time;
+            if(thisTime < time) return -1;
+            if(thisTime == time) return 0;
+            return 1;
+        }
     }
     
     
-    private class ObjectTransform{
+    private class ObjectTransform implements Comparable{
         private final Transform type;
         private final String startValue;
         private final String endValue;
@@ -418,55 +486,16 @@ public class AnimatedObject {
             svg += "/>\n";
             return svg;
         }
+        @Override
+        public int compareTo(Object t) {
+            float thisTime = startTime;
+            float time = ((ObjectAnimation)t).startTime;
+            if(thisTime < time) return -1;
+            if(thisTime == time) return 0;
+            return 1;
+        }
     }
     
     
-    public String getNameString(String name){
-        if("line-pattern".equals(name)){
-            return "stroke-dasharray";
-        }
-        return name;
-    }
     
-    public String getValueString(String name, Object value){
-        if("line-pattern".equals(name)){
-            String v = (String) value;
-            
-            if(attributeMap.containsKey("stroke-width")){
-                
-                int sw = (int)attributeMap.get("stroke-width");
-                if(v.equals("dots")){
-                    return sw+","+sw;
-                }
-                
-                else if (v.equals("lines")){
-                    sw = 2*sw; 
-                    return sw+","+sw;
-                }
-                else if (v.equals("alternate")){
-                    return 2*sw+","+sw+","+sw+","+sw;
-                }
-                else return "0";
-            }
-            else{
-                if(v.equals("dots")){
-                    return "2,2";
-                }
-                else if(v.equals("lines")){
-                    return "4,4";
-                }
-                else if(v.equals("alternate")){
-                    return "4,2,2,2";
-                }
-                else return "0";
-                    
-            }
-            
-            
-        }
-
-        else{
-            return value.toString();
-        }
-    }
 }
