@@ -133,7 +133,7 @@ object_expr     : ('('! num_expr ')'! | FLOAT | INT | ID | array)
 //              type      Name     ObjectAttributes
 objecte_create: TEXT      ID       coord object_expr STRING
               | CIRCLE    ID       coord object_expr
-              | RECTANGLE ID       coord object_expr object_expr object_expr (object_expr object_expr)?
+              | RECTANGLE ID       coord object_expr object_expr object_expr
               | ELLIPSE   ID       coord object_expr object_expr object_expr
               | LINE      ID       list_min_2_coord
               | POLYGON   ID       list_min_2_coord
@@ -164,12 +164,17 @@ attribute   : FILL^          ':'! color
             | STROKEPATTERN^ ':'! ('dots'|'lines'|'alternate')
             | STROKEWIDTH^   ':'! INT
             | text_attributes
+            | rectangle_attributes
             ;
 
 text_attributes : FONTSTYLE^ ':'! ('normal' | 'italic' | 'oblique')
                 | FONTWEIGHT^ ':'! ('normal' | 'bold' | 'bolder' | 'lighter' | INT)
                 | ORINENTATION^ ':'! ('horizontal'|'vertical')
                 ;
+
+rectangle_attributes    : RX^ ':'! object_expr
+                        | RY^ ':'! object_expr
+                        ;
 
 color : ('red'|'blue'|'green'|'yellow'|rgb)
       ;
@@ -312,6 +317,8 @@ STROKEWIDTH : 'stroke-width' ;
 FONTSTYLE : 'font-style';
 FONTWEIGHT : 'font-weight';
 ORINENTATION : 'font-orientation';
+RX      : 'rx';
+RY      : 'ry';
 ELIF    : 'elif' ;
 ENDIF   : 'endif' ;
 FUNC    : 'func' ;

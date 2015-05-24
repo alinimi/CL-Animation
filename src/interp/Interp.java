@@ -45,6 +45,7 @@ import org.antlr.runtime.CommonTokenStream;
 
 public class Interp {
 
+    private static final String[] rectangleAttribueTypes = {"rx","ry"};
     private static final String[] textAtrributeTypes = {"font-style","font-weight","font-orientation"};
     private static final String[] generalAttributeTypes = {"fill","fill-opacity","stroke","stroke-pattern","stroke-width"};
 
@@ -641,7 +642,16 @@ public class Interp {
                 for (Map.Entry<String, Object> entry : attrs.entrySet()) {
                     String key = entry.getKey();
                     Object objValue = entry.getValue();
-                    animation.modify(id, key, objValue, getFloatValue(startTimeD), endTime);
+                    boolean overlap = false;
+                    if (t.getChildCount() == 4) {
+                        overlap = animation.modify(id, key, objValue, getFloatValue(startTimeD), endTime);
+                    } else {
+                        animation.modify(id,key,objValue, getFloatValue(startTimeD));
+                    }
+                    if (overlap) {
+                        System.out.println("WARNING: Object " + id + " has multiple definitions of modify " +
+                            "in the interval of time from " + getFloatValue(startTimeD) + " to " + endTime);
+                    }
                 }
 
                 System.out.println("");
@@ -664,7 +674,7 @@ public class Interp {
                 checkNumber(startTimeD);
                 endTimeD = evaluateExpression(t.getChild(4));
                 checkNumber(endTimeD);
-                animation.move(id,xIni,yIni,xEnd,yEnd,getIntValue(startTimeD),getIntValue(endTimeD));
+                animation.move(id,xIni,yIni,xEnd,yEnd,getFloatValue(startTimeD),getFloatValue(endTimeD));
 
                 System.out.println("");
                 System.out.println(id);
@@ -684,7 +694,7 @@ public class Interp {
                 Data scaleY = evaluateExpression(t.getChild(2)); checkInteger(scaleY);
                 startTimeD = evaluateExpression(t.getChild(3)); checkNumber(startTimeD);
                 endTimeD = evaluateExpression(t.getChild(4)); checkNumber(endTimeD);
-                animation.scale(id,(int) getFloatValue(scaleX),(int) getFloatValue(scaleY),
+                animation.scale(id,getFloatValue(scaleX), getFloatValue(scaleY),
                     getFloatValue(startTimeD),getFloatValue(endTimeD));
 
                 System.out.println("");
@@ -699,11 +709,11 @@ public class Interp {
                 id = t.getChild(0).getText();
                 d = Stack.getVariable(id);
                 checkSvgObject(d);
-                Data startAngle = evaluateExpression(t.getChild(1)); checkInteger(startAngle);
-                Data endAngle = evaluateExpression(t.getChild(2)); checkInteger(endAngle);
+                Data startAngle = evaluateExpression(t.getChild(1)); checkNumber(startAngle);
+                Data endAngle = evaluateExpression(t.getChild(2)); checkNumber(endAngle);
                 startTimeD = evaluateExpression(t.getChild(3)); checkNumber(startTimeD);
                 endTimeD = evaluateExpression(t.getChild(4)); checkNumber(endTimeD);
-                animation.rotate(id,getIntValue(startAngle),getIntValue(endAngle),
+                animation.rotate(id,getFloatValue(startAngle),getFloatValue(endAngle),
                     getFloatValue(startTimeD),getFloatValue(endTimeD));
                 
                 System.out.println("");
@@ -997,7 +1007,7 @@ public class Interp {
     /** Checks that the data is integer and raises an exception if it is not. */
     private void checkInteger (Data b) {
         if (!b.isInteger()) {
-            throw new RuntimeException ("Expecting numerical expression");
+            throw new RuntimeException ("Expecting integer expression");
         }
     }
 
@@ -1006,7 +1016,9 @@ public class Interp {
         assert t != null;
         if (t.getType() == SvgLexer.RGB) {
             for(int i = 0; i < 3; i++) {
-                int value = Integer.parseInt(t.getChild(i).getText());
+                Data d = evaluateExpression(t.getChild(i));
+                checkInteger(d);
+                int value = getIntValue(d);
                 if (value < 0 || value > 255) {
                     throw new RuntimeException("Color value " + value + " not valid, correct range [0,255]");
                 }
@@ -1019,9 +1031,9 @@ public class Interp {
         String color;
         if (t.getType() == SvgLexer.RGB) {
             String[] a = new String[3];
+            checkColor(t);
             for(int i = 0; i < 3; i++) {
                 Data d  = evaluateExpression(t.getChild(i));
-                checkInteger(d);
                 a[i] = d.toString();
             }
             color = "rgb(" + a[0] + "," + a[1] + "," + a[2] + ")";
@@ -1077,6 +1089,13 @@ public class Interp {
                 ret = value.getText();
                 break;
 
+            case SvgLexer.RX:
+            case SvgLexer.RY:
+                Data d = evaluateExpression(value);
+                checkNumber(d);
+                ret = getFloatValue(d);
+                break;
+
             default:
                 ret = value.getText();
                 break;
@@ -1087,16 +1106,26 @@ public class Interp {
     private void existAttribute (int type, String attr) {
         boolean generalAttribute = Arrays.asList(generalAttributeTypes).contains(attr);
 
-        // if it is a TEXT, we check into TEXT attributes.
-        if(type == SvgLexer.TEXT) {
-            boolean textAttribute = Arrays.asList(textAtrributeTypes).contains(attr);
-            if (!generalAttribute && !textAttribute) {
-                throw new RuntimeException ("Attribute '" + attr + "' for " + Integer.toString(type) + " does not exist");
-            }
-        } else {
-            if (!generalAttribute) {
-                throw new RuntimeException ("Attribute '" + attr + "' for " + Integer.toString(type) + " does not exist");
-            }
+        switch (type) {
+            case SvgLexer.TEXT:
+                boolean textAttribute = Arrays.asList(textAtrributeTypes).contains(attr);
+                if (!generalAttribute && !textAttribute) {
+                    throw new RuntimeException ("The attribute '" + attr + "' for variable " + Integer.toString(type) + " of type TEXT does not exist");
+                }
+                break;
+
+            case SvgLexer.RECTANGLE:
+                boolean rectangleAttrigute = Arrays.asList(rectangleAttribueTypes).contains(attr);
+                if (!generalAttribute && !rectangleAttrigute) {
+                    throw new RuntimeException ("The attribute '" + attr + "' for variable" + Integer.toString(type)
+                    + " of type RECTANGLE does not exist");
+                }
+                break;
+
+            default:
+                if (!generalAttribute) {
+                    throw new RuntimeException ("Attribute '" + attr + "' for " + Integer.toString(type) + " does not exist");
+                }
         }
     }
 
