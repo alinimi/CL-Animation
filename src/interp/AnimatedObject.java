@@ -166,10 +166,20 @@ public class AnimatedObject {
             rotationCenterY = coords[1];
         }
     }
-    public int getRotationCenterX(){
+    
+    public float getDynamicRotationCenterX(float time){
+        return 0;
+    }
+    
+    public float getDynamicRotationCenterY(float time){
+        for(ObjectSet set:setList){
+        }
+        return 0;
+    }
+    public float getRotationCenterX(){
         return rotationCenterX;
     }
-    public int getRotationCenterY(){
+    public float getRotationCenterY(){
         return rotationCenterY;
     }
     
@@ -228,6 +238,8 @@ public class AnimatedObject {
        
         return svg;
     }
+    
+    
     
     
     @Override
@@ -328,32 +340,24 @@ public class AnimatedObject {
             value = x.value;
         }
         
+        public String getAttribute(){
+            return attribute;
+        }
+        public Object value(){
+            return value;
+        }
+        public float time(){
+            return time;
+        }
         @Override
         public String toString(){
-            if(attribute.equals("text-orientation")){
-                String svg = "\t\t<set";
-                svg += " attributeName=\"writing-mode\"";
-                svg += " to=\"tb\"";
-                svg += " begin=\""+time+"\"";
-                svg += " dur=\"indefinite\"";
-                svg += "/>\n";
-                svg += "\t\t<set";
-                svg += " attributeName=\"glyph-orientation-vertical\"";
-                svg += " to=\"0\"";
-                svg += " begin=\""+time+"\"";
-                svg += " dur=\"indefinite\"";
-                svg += "/>\n";
-                return svg;
-            }
-            else{
-                String svg = "\t\t<set";
-                svg += " attributeName=\""+getNameString(attribute)+"\"";
-                svg += " to=\""+getValueString(attribute,value)+"\"";
-                svg += " begin=\""+time+"\"";
-                svg += " dur=\"indefinite\"";
-                svg += "/>\n";
-                return svg;
-            }
+            String svg = "\t\t<set";
+            svg += " attributeName=\""+getNameString(attribute)+"\"";
+            svg += " to=\""+getValueString(attribute,value)+"\"";
+            svg += " begin=\""+time+"\"";
+            svg += " dur=\"indefinite\"";
+            svg += "/>\n";
+            return svg;
         }
     }
     
@@ -396,12 +400,21 @@ public class AnimatedObject {
         public String toString(){
             String tag = getTag();
             String svg = "\t\t<animateTransform";
+            svg += " attributeName=\"transform\"";
             svg += " type=\""+tag+"\"";
-            svg += " from=\""+startValue+"\"";
+            svg += " from=\""+startValue;
+            if(type==Transform.ROTATE){
+                
+            }
+            svg +=  "\"";
             svg += " to=\""+endValue+"\"";
+            if(type==Transform.ROTATE){
+                
+            }
             svg += " begin=\""+startTime+"\"";
             svg += " dur=\""+(endTime-startTime)+"\"";
             svg += " additive=\"sum\"";
+            svg += " fill=\"freeze\"";
             svg += "/>\n";
             return svg;
         }
