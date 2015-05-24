@@ -674,7 +674,7 @@ public class Interp {
                 checkNumber(startTimeD);
                 endTimeD = evaluateExpression(t.getChild(4));
                 checkNumber(endTimeD);
-                animation.move(id,xIni,yIni,xEnd,yEnd,getIntValue(startTimeD),getIntValue(endTimeD));
+                animation.move(id,xIni,yIni,xEnd,yEnd,getFloatValue(startTimeD),getFloatValue(endTimeD));
 
                 System.out.println("");
                 System.out.println(id);
@@ -694,7 +694,7 @@ public class Interp {
                 Data scaleY = evaluateExpression(t.getChild(2)); checkInteger(scaleY);
                 startTimeD = evaluateExpression(t.getChild(3)); checkNumber(startTimeD);
                 endTimeD = evaluateExpression(t.getChild(4)); checkNumber(endTimeD);
-                animation.scale(id,(int) getFloatValue(scaleX),(int) getFloatValue(scaleY),
+                animation.scale(id,getFloatValue(scaleX), getFloatValue(scaleY),
                     getFloatValue(startTimeD),getFloatValue(endTimeD));
 
                 System.out.println("");
@@ -709,11 +709,11 @@ public class Interp {
                 id = t.getChild(0).getText();
                 d = Stack.getVariable(id);
                 checkSvgObject(d);
-                Data startAngle = evaluateExpression(t.getChild(1)); checkInteger(startAngle);
-                Data endAngle = evaluateExpression(t.getChild(2)); checkInteger(endAngle);
+                Data startAngle = evaluateExpression(t.getChild(1)); checkNumber(startAngle);
+                Data endAngle = evaluateExpression(t.getChild(2)); checkNumber(endAngle);
                 startTimeD = evaluateExpression(t.getChild(3)); checkNumber(startTimeD);
                 endTimeD = evaluateExpression(t.getChild(4)); checkNumber(endTimeD);
-                animation.rotate(id,getIntValue(startAngle),getIntValue(endAngle),
+                animation.rotate(id,getFloatValue(startAngle),getFloatValue(endAngle),
                     getFloatValue(startTimeD),getFloatValue(endTimeD));
                 
                 System.out.println("");
