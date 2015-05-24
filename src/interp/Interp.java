@@ -1002,7 +1002,7 @@ public class Interp {
     /** Checks that the data is integer and raises an exception if it is not. */
     private void checkInteger (Data b) {
         if (!b.isInteger()) {
-            throw new RuntimeException ("Expecting numerical expression");
+            throw new RuntimeException ("Expecting integer expression");
         }
     }
 
@@ -1011,7 +1011,9 @@ public class Interp {
         assert t != null;
         if (t.getType() == SvgLexer.RGB) {
             for(int i = 0; i < 3; i++) {
-                int value = Integer.parseInt(t.getChild(i).getText());
+                Data d = evaluateExpression(t.getChild(i));
+                checkInteger(d);
+                int value = getIntValue(d);
                 if (value < 0 || value > 255) {
                     throw new RuntimeException("Color value " + value + " not valid, correct range [0,255]");
                 }
@@ -1024,9 +1026,9 @@ public class Interp {
         String color;
         if (t.getType() == SvgLexer.RGB) {
             String[] a = new String[3];
+            checkColor(t);
             for(int i = 0; i < 3; i++) {
                 Data d  = evaluateExpression(t.getChild(i));
-                checkInteger(d);
                 a[i] = d.toString();
             }
             color = "rgb(" + a[0] + "," + a[1] + "," + a[2] + ")";
