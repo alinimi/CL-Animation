@@ -9,6 +9,7 @@ import interp.data.SvgObject;
 import interp.data.SvgObject.Shape;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 
 /**
  *
@@ -26,8 +27,8 @@ public class AnimatedObject {
     private ArrayList <ObjectTransform> transformList;
     private ArrayList <ObjectSet> setList;
 
-    private int rotationCenterX;
-    private int rotationCenterY;
+    private float rotationCenterX;
+    private float rotationCenterY;
     
     
     public AnimatedObject(AnimatedObject x){
@@ -42,16 +43,16 @@ public class AnimatedObject {
         //Shallowcopy!!
         attributeMap = new HashMap<String,Object>(x.attributeMap);
         animationList = new ArrayList <ObjectAnimation>();
-        for(int i = 0; i < x.animationList.size();++i){
-            animationList.add(new ObjectAnimation(x.animationList.get(i)));
+        for(ObjectAnimation obj:animationList){
+            animationList.add(new ObjectAnimation(obj));
         }
         transformList = new ArrayList<ObjectTransform>();
-        for(int i = 0; i < x.transformList.size();++i){
-            transformList.add(new ObjectTransform(x.transformList.get(i)));
+        for(ObjectTransform obj:transformList){
+            transformList.add(new ObjectTransform(obj));
         }
         setList = new ArrayList<ObjectSet>();
-        for(int i = 0; i < x.setList.size();++i){
-            setList.add(new ObjectSet(x.setList.get(i)));
+        for(ObjectSet obj:setList){
+            setList.add(new ObjectSet(obj));
         }
         rotationCenterX = x.rotationCenterX;
         rotationCenterY = x.rotationCenterY;
@@ -81,8 +82,7 @@ public class AnimatedObject {
     }
     
     public boolean overlappingAnimations(String attr, float start, float end){
-        for(int i = 0; i < animationList.size();++i){
-            ObjectAnimation w = animationList.get(i);
+        for(ObjectAnimation w:animationList){
             if(w.attribute==attr){
                 if((start > w.startTime && start < w.endTime) ||
                         (end > w.startTime && end < w.endTime))
@@ -166,13 +166,41 @@ public class AnimatedObject {
             rotationCenterY = coords[1];
         }
     }
-    public int getRotationCenterX(){
+    
+    public float getDynamicRotationCenterX(float time){
+        float finalX = rotationCenterX;
+        float finalTimeX = 0;
+        for(ObjectSet set:setList){
+            if(set.getTime()<= time){
+                String attr=set.getAttribute();
+                
+                if(attr=="x" && set.getTime()>= finalTimeX){
+                    finalX = (float)set.getValue();
+                }
+            }
+            
+        }
+        for(ObjectAnimation anim:animationList){
+            if(anim.startTime >= finalTimeX && anim.startTime < time){
+                
+            }
+        }
+        return 0;
+    }
+    
+    public float getDynamicRotationCenterY(float time){
+        for(ObjectSet set:setList){
+        }
+        return 0;
+    }
+    public float getRotationCenterX(){
         return rotationCenterX;
     }
-    public int getRotationCenterY(){
+    public float getRotationCenterY(){
         return rotationCenterY;
     }
     
+
     public String getTag(){
         switch(objectType){
             case RECTANGLE:
@@ -230,6 +258,8 @@ public class AnimatedObject {
     }
     
     
+    
+    
     @Override
     public String toString(){
         String tab = "\t";
@@ -275,136 +305,9 @@ public class AnimatedObject {
             svg += tr.toString();
         }
         svg += "\t</"+tag+">\n";
+        
+
         return svg;
-    }
-    
-    private class ObjectAnimation {
-        private final float startTime;
-        private final float endTime;
-        private final String attribute;
-        private final Object endValue;
-        public ObjectAnimation(float st, float et, String attr, 
-                Object ev){
-            startTime = st;
-            endTime = et;
-            attribute = attr;
-            endValue = ev;
-        }
-        public ObjectAnimation(ObjectAnimation x){
-            startTime = x.startTime;
-            endTime = x.endTime;
-            attribute = x.attribute;
-            endValue = x.endValue;
-        }
-        
-        @Override
-        public String toString(){
-            String svg = "\t\t<animate";
-            svg += " attributeName=\""+getNameString(attribute)+"\"";
-            svg += " to=\""+getValueString(attribute,endValue)+"\"";
-            float dur = endTime-startTime;
-            svg += " begin=\""+startTime+"\"";
-            svg += " dur=\""+dur+"\"";
-            svg += " fill=\"freeze\"";
-            svg += "/>\n";
-            return svg;
-        }
-    }
-    
-    
-    private class ObjectSet{
-        private final float time;
-        private final String attribute;
-        private final Object value;
-        public ObjectSet(float t , String attr, 
-                Object ev){
-            time = t;
-            attribute = attr;
-            value = ev;
-        }
-        public ObjectSet(ObjectSet x){
-            time = x.time;
-            attribute = x.attribute;
-            value = x.value;
-        }
-        
-        @Override
-        public String toString(){
-            if(attribute.equals("text-orientation")){
-                String svg = "\t\t<set";
-                svg += " attributeName=\"writing-mode\"";
-                svg += " to=\"tb\"";
-                svg += " begin=\""+time+"\"";
-                svg += " dur=\"indefinite\"";
-                svg += "/>\n";
-                svg += "\t\t<set";
-                svg += " attributeName=\"glyph-orientation-vertical\"";
-                svg += " to=\"0\"";
-                svg += " begin=\""+time+"\"";
-                svg += " dur=\"indefinite\"";
-                svg += "/>\n";
-                return svg;
-            }
-            else{
-                String svg = "\t\t<set";
-                svg += " attributeName=\""+getNameString(attribute)+"\"";
-                svg += " to=\""+getValueString(attribute,value)+"\"";
-                svg += " begin=\""+time+"\"";
-                svg += " dur=\"indefinite\"";
-                svg += "/>\n";
-                return svg;
-            }
-        }
-    }
-    
-    
-    private class ObjectTransform{
-        private final Transform type;
-        private final String startValue;
-        private final String endValue;
-        private final float startTime;
-        private final float endTime;
-        public ObjectTransform(float st, float et, Transform t, String sv, String ev){
-            type = t;
-            startTime = st;
-            endTime = et;
-            startValue = sv;
-            endValue = ev;
-        }
-        public ObjectTransform(ObjectTransform x){
-            type = x.type;
-            startTime = x.startTime;
-            endTime = x.endTime;
-            startValue = x.startValue;
-            endValue = x.endValue;
-        }
-        
-        public String getTag(){
-            switch(type){
-                case TRANSLATE:
-                    return "translate";
-                case ROTATE:
-                    return "rotate";
-                case SCALE:
-                    return "scale";
-                default:
-                    return null;
-            }
-        }
-        
-        @Override
-        public String toString(){
-            String tag = getTag();
-            String svg = "\t\t<animateTransform";
-            svg += " type=\""+tag+"\"";
-            svg += " from=\""+startValue+"\"";
-            svg += " to=\""+endValue+"\"";
-            svg += " begin=\""+startTime+"\"";
-            svg += " dur=\""+(endTime-startTime)+"\"";
-            svg += " additive=\"sum\"";
-            svg += "/>\n";
-            return svg;
-        }
     }
     
     
@@ -456,4 +359,164 @@ public class AnimatedObject {
             return value.toString();
         }
     }
+    
+    private class ObjectAnimation implements Comparable{
+        private final float startTime;
+        private final float endTime;
+        private final String attribute;
+        private final Object endValue;
+        
+        public ObjectAnimation(float st, float et, String attr, 
+                Object ev){
+            startTime = st;
+            endTime = et;
+            attribute = attr;
+            endValue = ev;
+        }
+        public ObjectAnimation(ObjectAnimation x){
+            startTime = x.startTime;
+            endTime = x.endTime;
+            attribute = x.attribute;
+            endValue = x.endValue;
+        }
+        
+        @Override
+        public String toString(){
+            String svg = "\t\t<animate";
+            svg += " attributeName=\""+getNameString(attribute)+"\"";
+            svg += " to=\""+getValueString(attribute,endValue)+"\"";
+            float dur = endTime-startTime;
+            svg += " begin=\""+startTime+"\"";
+            svg += " dur=\""+dur+"\"";
+            svg += " fill=\"freeze\"";
+            svg += "/>\n";
+            return svg;
+        }
+
+        @Override
+        public int compareTo(Object t) {
+            float thisTime = startTime;
+            float time = ((ObjectAnimation)t).startTime;
+            if(thisTime < time) return -1;
+            if(thisTime == time) return 0;
+            return 1;
+        }
+    }
+    
+    
+    private class ObjectSet implements Comparable{
+        private final float time;
+        private final String attribute;
+        private final Object value;
+        public ObjectSet(float t , String attr, 
+                Object ev){
+            time = t;
+            attribute = attr;
+            value = ev;
+        }
+        public ObjectSet(ObjectSet x){
+            time = x.time;
+            attribute = x.attribute;
+            value = x.value;
+        }
+        
+        public String getAttribute(){
+            return attribute;
+        }
+        public Object getValue(){
+            return value;
+        }
+        public float getTime(){
+            return time;
+        }
+        @Override
+        public String toString(){
+            String svg = "\t\t<set";
+            svg += " attributeName=\""+getNameString(attribute)+"\"";
+            svg += " to=\""+getValueString(attribute,value)+"\"";
+            svg += " begin=\""+time+"\"";
+            svg += " dur=\"indefinite\"";
+            svg += "/>\n";
+            return svg;
+        }
+        
+        @Override
+        public int compareTo(Object t) {
+            float thisTime = time;
+            float time = ((ObjectSet)t).time;
+            if(thisTime < time) return -1;
+            if(thisTime == time) return 0;
+            return 1;
+        }
+    }
+    
+    
+    private class ObjectTransform implements Comparable{
+        private final Transform type;
+        private final String startValue;
+        private final String endValue;
+        private final float startTime;
+        private final float endTime;
+        public ObjectTransform(float st, float et, Transform t, String sv, String ev){
+            type = t;
+            startTime = st;
+            endTime = et;
+            startValue = sv;
+            endValue = ev;
+        }
+        public ObjectTransform(ObjectTransform x){
+            type = x.type;
+            startTime = x.startTime;
+            endTime = x.endTime;
+            startValue = x.startValue;
+            endValue = x.endValue;
+        }
+        
+        public String getTag(){
+            switch(type){
+                case TRANSLATE:
+                    return "translate";
+                case ROTATE:
+                    return "rotate";
+                case SCALE:
+                    return "scale";
+                default:
+                    return null;
+            }
+        }
+        
+        @Override
+        public String toString(){
+            String tag = getTag();
+            String svg = "\t\t<animateTransform";
+            svg += " attributeName=\"transform\"";
+            svg += " type=\""+tag+"\"";
+            svg += " from=\""+startValue;
+            if(type==Transform.ROTATE){
+                
+            }
+            svg +=  "\"";
+            svg += " to=\""+endValue+"\"";
+            if(type==Transform.ROTATE){
+                
+            }
+            svg += " begin=\""+startTime+"\"";
+            svg += " dur=\""+(endTime-startTime)+"\"";
+            svg += " additive=\"sum\"";
+            svg += " fill=\"freeze\"";
+            svg += "/>\n";
+            return svg;
+        }
+        @Override
+        public int compareTo(Object t) {
+            float thisTime = startTime;
+            float time = ((ObjectAnimation)t).startTime;
+            if(thisTime < time) return -1;
+            if(thisTime == time) return 0;
+            return 1;
+        }
+    }
+    
+    
+    
 }

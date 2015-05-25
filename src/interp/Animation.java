@@ -253,10 +253,7 @@ public class Animation{
             AnimatedObject obj = objects.get(id);
             obj.addTransform(
                     Transform.ROTATE, timeStart, timeEnd, 
-                    angleStart+" "+obj.getRotationCenterX()+" "+
-                            obj.getRotationCenterY(), angleEnd+" "+
-                                    obj.getRotationCenterX()+" "+
-                                    obj.getRotationCenterY());
+                    angleStart+" ", angleEnd+" ");
             
         }
     }

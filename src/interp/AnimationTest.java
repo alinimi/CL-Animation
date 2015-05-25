@@ -37,14 +37,21 @@ public class AnimationTest {
         attribs.put("line-pattern", "alternate");
         anim.create(SvgObject.Shape.LINE, "l1",c2, attribs, 2);
         anim.modify("l1", "fill", "white", 10);
-        System.out.println(anim);
         
         
         //Create rectangle r 10,10 5 50 50 {fill:red,stroke:green} 0;
-        anim.create(SvgObject.Shape.RECTANGLE,"r",c2,attribs,0);
+        anim.create(SvgObject.Shape.RECTANGLE,"r",coords,attribs,0);
+        boolean b = anim.modify("r", "x", 300, 1, 3);
+        System.out.println("overlap?: " + b);
+        b = anim.modify("r", "x", 400, 2, 4);
+        System.out.println("overlap?: " + b);
+        b = anim.modify("r", "x", 400, 0, 4);
+        System.out.println("overlap?: " + b);
+        
         anim.copyObject("r", "s");
         anim.rotate("r",0,30,2,3);
         System.out.println(anim);
+        
 
 
     }
