@@ -517,7 +517,7 @@ public class Interp {
             case SvgLexer.ASSIGN:
                 value = evaluateExpression(t.getChild(1));
                 SvgTree leftSide = t.getChild(0);
-                if (leftSide.getType() == SvgLexer.ARRAY) {
+                if (leftSide.getType() == SvgLexer.ARRAY_POS) {
                     Data position = evaluateExpression(leftSide.getChild(0)); checkInteger(position);
                     Stack.defineVariable (leftSide.getText(),getIntValue(position),value);
                 } else {
@@ -855,11 +855,27 @@ public class Interp {
             case SvgLexer.STRING:
                 value = new SvgString(t.getStringValue());
                 break;
-            case SvgLexer.ARRAY:
+            case SvgLexer.ARRAY_POS:
                 Data position = evaluateExpression(t.getChild(0));
                 checkInteger(position);
                 value = Stack.getVariable(t.getText(), getIntValue(position)).copy();
                 break;
+
+            case SvgLexer.ARRAY_CONST:
+                ArrayList<Data> aux = new ArrayList<Data>();
+                if (t.getChildCount() > 0) {
+                    Data.Type dataType = evaluateExpression(t.getChild(0)).getType();
+                    for (int i = 0; i < t.getChildCount(); i++) {
+                        Data d = evaluateExpression(t.getChild(i));
+                        if (dataType != d.getType()) {
+                            throw new RuntimeException ("All positions in an array have to be of the same data type");
+                        }
+                        aux.add(d);
+                    }
+                }
+                value = new SvgArray(aux);
+                break;
+
             // A function call. Checks that the function returns a result.
             case SvgLexer.FUNCALL:
                 value = executeFunction(t.getChild(0).getText(), t.getChild(1));

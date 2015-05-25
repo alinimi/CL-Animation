@@ -47,7 +47,8 @@ tokens {
     ARGLIST;    // List of arguments passed in a function call
     LIST_INSTR; // Block of instructions
     BOOLEAN;    // Boolean atom (for Boolean constants "true" or "false")
-    ARRAY;
+    ARRAY_POS;
+    ARRAY_CONST;
     PVALUE;     // Parameter by value in the list of parameters
     PREF;       // Parameter by reference in the list of parameters
 }
@@ -115,10 +116,10 @@ assign  :   variable eq=EQUAL expr -> ^(ASSIGN[$eq,":="] variable expr)
 return_stmt :   RETURN^ expr?
         ;
 
-variable:   (ID|array)
+variable:   (ID|array_pos)
         ;
 
-array   : id=ID '[' object_expr ']'    -> ^(ARRAY[$id,$id.text] object_expr)
+array_pos   : id=ID '[' object_expr ']'    -> ^(ARRAY_POS[$id,$id.text] object_expr)
         ;
 
 // Create instruccion:
@@ -127,7 +128,7 @@ array   : id=ID '[' object_expr ']'    -> ^(ARRAY[$id,$id.text] object_expr)
 create  : CREATE^ objecte_create                    attributes          object_expr ('s'!)?
         ;
 
-object_expr     : ('('! num_expr ')'! | FLOAT | INT | ID | array)
+object_expr     : ('('! num_expr ')'! | FLOAT | INT | ID | array_pos)
                 ;
 
 //              type      Name     ObjectAttributes
@@ -253,7 +254,8 @@ factor  :   (NOT^ | PLUS^ | MINUS^)? atom
         ;
 
 atom    :   ID
-        |   array
+        |   array_pos
+        |   array_const
         |   INT
         |   FLOAT
         |   STRING
@@ -262,7 +264,8 @@ atom    :   ID
         |   '('! expr ')'!
         ;
 
-
+array_const : '[' (expr (',' expr)*)? ']' ->^(ARRAY_CONST expr*)
+            ;
 
 // A function call has a lits of arguments in parenthesis (possibly empty)
 funcall :   ID '(' expr_list? ')' -> ^(FUNCALL ID ^(ARGLIST expr_list?))
