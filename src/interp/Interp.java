@@ -314,23 +314,23 @@ public class Interp {
         return result;
     }
 
-    private HashMap<String,Object> getGeneralAttributes(int type, SvgTree t) {
+    private HashMap<String,Object> getGeneralAttributes(int type, SvgTree t, boolean creationTime) {
         assert t != null;
         HashMap<String,Object> attrs = new HashMap<String,Object>();
         for (int i = 0; i < t.getChildCount(); i++) {
             SvgTree attr = t.getChild(i);
-            existAttribute(type, attr.getText());
+            existAttribute(type, attr.getText(), creationTime);
             Object o = generateAttribute(attr);
             attrs.put(attr.getText(), o);
         }
         return attrs;
     }
 
-    private HashMap<String,Object> getAttributes(SvgTree t) {
+    private HashMap<String,Object> getAttributes(SvgTree t, boolean creationTime) {
         int type = t.getChild(0).getType();
         int size = t.getChildCount();
         Data d;
-        HashMap<String,Object> attrs = getGeneralAttributes(type, t.getChild(size - 2));
+        HashMap<String,Object> attrs = getGeneralAttributes(type, t.getChild(size - 2), creationTime);
         switch (type) {
             case SvgLexer.TEXT:
                 attrs.put("text",t.getChild(4).getStringValue());
@@ -598,7 +598,7 @@ public class Interp {
                 d = new SvgObject(id, shapeType);
                 Stack.defineVariable (id, d);
                 int[] initialCoords = generateCoordinates(t.getChild(2));
-                attrs = getAttributes(t);
+                attrs = getAttributes(t, true);
                 value = evaluateExpression(t.getChild(t.getChildCount() - 1));
                 checkNumber(value);
                 animation.create(shapeType,id, initialCoords,attrs, getFloatValue(value));
@@ -631,7 +631,7 @@ public class Interp {
                 d = Stack.getVariable(id);
                 checkSvgObject(d);
                 lexerId = shape2lexer(((SvgObject) d).getShape());
-                attrs = getGeneralAttributes(lexerId, t.getChild(1));
+                attrs = getGeneralAttributes(lexerId, t.getChild(1), false);
                 startTimeD = evaluateExpression(t.getChild(2)); checkNumber(startTimeD);
                 endTime = -1;
                 if (t.getChildCount() == 4) {
@@ -1103,12 +1103,15 @@ public class Interp {
         return ret;
     }
 
-    private void existAttribute (int type, String attr) {
+    private void existAttribute (int type, String attr, boolean creationTime) {
         boolean generalAttribute = Arrays.asList(generalAttributeTypes).contains(attr);
 
         switch (type) {
             case SvgLexer.TEXT:
                 boolean textAttribute = Arrays.asList(textAtrributeTypes).contains(attr);
+                if (attr.equals("font-orientation") && !creationTime) {
+                    throw new RuntimeException("Atrribute 'font-orientation' of type TEXT can only be defined at the creation statement");
+                }
                 if (!generalAttribute && !textAttribute) {
                     throw new RuntimeException ("The attribute '" + attr + "' for variable " + Integer.toString(type) + " of type TEXT does not exist");
                 }
