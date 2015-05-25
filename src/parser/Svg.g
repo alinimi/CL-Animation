@@ -124,17 +124,17 @@ array   : id=ID '[' object_expr ']'    -> ^(ARRAY[$id,$id.text] object_expr)
 // Create instruccion:
 //               |         objecte_create         |
 //        Create |ObjectType Name ObjectAttributes| GeneralAttributes   Time     
-create  : CREATE^ objecte_create                    attributes          object_expr
+create  : CREATE^ objecte_create                    attributes          object_expr ('s'!)?
         ;
 
 object_expr     : ('('! num_expr ')'! | FLOAT | INT | ID | array)
                 ;
 
 //              type      Name     ObjectAttributes
-objecte_create: TEXT      ID       coord object_expr STRING
+objecte_create: TEXT      ID       coord object_expr ('º'!)? STRING
               | CIRCLE    ID       coord object_expr
-              | RECTANGLE ID       coord object_expr object_expr object_expr
-              | ELLIPSE   ID       coord object_expr object_expr object_expr
+              | RECTANGLE ID       coord object_expr ('º'!)? object_expr object_expr
+              | ELLIPSE   ID       coord object_expr ('º'!)? object_expr object_expr
               | LINE      ID       list_min_2_coord
               | POLYGON   ID       list_min_2_coord
               ;
@@ -151,8 +151,8 @@ destroy : DESTROY^  ID       object_expr
         ;
 
 // Modify instrucction:
-//        Modify    ObjectId    GeneralAttributes   tStart      tEnd
-modify  : MODIFY^   ID          attributes          object_expr object_expr?
+//        Modify    ObjectId    GeneralAttributes   tStart              tEnd
+modify  : MODIFY^   ID          attributes          object_expr ('s'!)? (object_expr ('s'!)?)?
         ;
 
 attributes  : '{' attribute (',' attribute)* '}' -> ^(LIST_ATTR attribute+)
@@ -183,18 +183,18 @@ rgb   : '(' object_expr ',' object_expr ',' object_expr ')' -> ^(RGB object_expr
       ;
 
 // Move instrucction: 
-//      Move  objectId xS,yS    xE,yE   TStart      TEnd
-move  : MOVE^ ID       coord    coord   object_expr object_expr
+//      Move  objectId xS,yS    xE,yE   TStart              TEnd
+move  : MOVE^ ID       coord    coord   object_expr ('s'!)? object_expr ('s'!)?
       ;
 
 // Scale instrucction:
-//      Scale   Name    SizeStart   SizeEnd     TStart      TEnd
-scale : SCALE^  ID      object_expr object_expr object_expr object_expr
+//      Scale   Name    SizeStart   SizeEnd     TStart              TEnd
+scale : SCALE^  ID      object_expr object_expr object_expr ('s'!)? object_expr('s'!)?
       ;
 
 // Rotate instrucction:
-//       Rotate     Name    AngleStart  AngleEnd    TStart      TEnd
-rotate : ROTATE^    ID      (FLOAT|INT) (FLOAT|INT) (FLOAT|INT) (FLOAT|INT)
+//       Rotate     Name    AngleStart          AngleEnd            TStart              TEnd
+rotate : ROTATE^    ID      object_expr ('º'!)? object_expr ('º'!)? object_expr ('s'!)? object_expr ('s'!)?
        ;
 
 // Source instrucction:
