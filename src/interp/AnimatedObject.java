@@ -171,8 +171,9 @@ public class AnimatedObject {
             }
             rotationCenterX = sumX/coords.length*2;
             rotationCenterY = sumY/coords.length*2;
-        }                
+        } 
         else{
+            
             rotationCenterX = coords[0];
             rotationCenterY = coords[1];
         }
@@ -205,14 +206,13 @@ public class AnimatedObject {
            float time, float closestTime, float oldX){
         float finalX = oldX;
         float finalTimeX = 0;
-        float finalTimeCX = 0;
         
         for(ObjectSet set:setList){
             if(set.getTime()<= time && set.getTime() > closestTime){
                 String attr=set.getAttribute();
                 
-                if((attr=="x" || attr=="cx") && set.getTime()>= finalTimeX){
-                    finalX = (float)set.getValue();
+                if((attr=="width") && set.getTime()>= finalTimeX){
+                    finalX = coords[0]+(float)set.getValue()/2;
                 }
             }
             
@@ -220,8 +220,7 @@ public class AnimatedObject {
         
         int i = 0; 
         while( i < animations.size() && 
-                (!animations.get(i).get(0).attribute.equals("x")||
-                !animations.get(i).get(0).attribute.equals("cx")) ){
+                !animations.get(i).get(0).attribute.equals("width") ){
             ++i;
         }
         int j = 0;
@@ -593,13 +592,16 @@ public class AnimatedObject {
             svg += " type=\""+tag+"\"";
             svg += " from=\""+startValue;
             if(type==Transform.ROTATE){
-                
+                svg += " "+ rotationCenterX;
+                svg += " "+ rotationCenterY;
             }
             svg +=  "\"";
-            svg += " to=\""+endValue+"\"";
+            svg += " to=\""+endValue;
             if(type==Transform.ROTATE){
-                
+                svg += " "+ rotationCenterX;
+                svg += " "+ rotationCenterY;
             }
+            svg +=  "\"";
             svg += " begin=\""+startTime+"\"";
             svg += " dur=\""+(endTime-startTime)+"\"";
             svg += " additive=\"sum\"";
