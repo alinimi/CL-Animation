@@ -163,7 +163,7 @@ attribute   : FILL^          ':'! color
             | FILLOPACITY^   ':'! FLOAT
             | STROKE^        ':'! color
             | STROKEPATTERN^ ':'! ('dots'|'lines'|'alternate')
-            | STROKEWIDTH^   ':'! INT
+            | STROKEWIDTH^   ':'! INT ('px'!)?
             | text_attributes
             | rectangle_attributes
             ;
