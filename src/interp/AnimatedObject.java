@@ -8,14 +8,21 @@ package interp;
 import interp.data.SvgObject;
 import interp.data.SvgObject.Shape;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.TreeMap;
 
 /**
  *
  * @author alicia
  */
 public class AnimatedObject {
+
+    
     public enum Transform{ROTATE,SCALE,TRANSLATE;}
     private float creationTime;
     private SvgObject.Shape objectType;
@@ -26,7 +33,7 @@ public class AnimatedObject {
     private ArrayList <ObjectAnimation> animationList;
     private ArrayList <ObjectTransform> transformList;
     private ArrayList <ObjectSet> setList;
-
+    private TreeMap <Float,Coord> dynamicCenters;
     private float rotationCenterX;
     private float rotationCenterY;
     
@@ -56,6 +63,8 @@ public class AnimatedObject {
         }
         rotationCenterX = x.rotationCenterX;
         rotationCenterY = x.rotationCenterY;
+        dynamicCenters = new TreeMap<Float,Coord>();
+        dynamicCenters.put((float)0.0,new Coord(rotationCenterX,rotationCenterY));
     }
     
     //crear objeto
@@ -79,6 +88,8 @@ public class AnimatedObject {
         setList = new ArrayList <ObjectSet>();
         
         setRotationCenter();
+        dynamicCenters = new TreeMap<Float,Coord>();
+        dynamicCenters.put((float)0.0,new Coord(rotationCenterX,rotationCenterY));
     }
     
     public boolean overlappingAnimations(String attr, float start, float end){
@@ -167,28 +178,81 @@ public class AnimatedObject {
         }
     }
     
-    public float getDynamicRotationCenterX(float time){
-        float finalX = rotationCenterX;
+    
+    public Coord getDynamicRotationCenter(float time){
+        Map.Entry<Float,Coord> closest = dynamicCenters.floorEntry(time);
+        float x = rotationCenterX,y = rotationCenterY;
+        
+        ObjectAnimation[] sortedAnims = (ObjectAnimation[])animationList.toArray();
+        Arrays.sort(sortedAnims);
+        ArrayList<ArrayList<ObjectAnimation> > split = splitAnims(sortedAnims);
+
+        if(closest == null){
+            x = getDynamicRotationCenterX(split,time,0,rotationCenterX);
+            y = getDynamicRotationCenterY(split,time,0,rotationCenterY);
+        }
+        else{
+            x = getDynamicRotationCenterX(split,time,closest.getKey(),closest.getValue().x);
+            y = getDynamicRotationCenterY(split,time,closest.getKey(),closest.getValue().y);
+        }
+        dynamicCenters.put(time, new Coord(x,y));
+        return new Coord(x,y);
+
+    }
+    
+    
+    public float getDynamicRotationCenterX(ArrayList<ArrayList<ObjectAnimation> > animations, 
+           float time, float closestTime, float oldX){
+        float finalX = oldX;
         float finalTimeX = 0;
+        float finalTimeCX = 0;
+        
         for(ObjectSet set:setList){
-            if(set.getTime()<= time){
+            if(set.getTime()<= time && set.getTime() > closestTime){
                 String attr=set.getAttribute();
                 
-                if(attr=="x" && set.getTime()>= finalTimeX){
+                if((attr=="x" || attr=="cx") && set.getTime()>= finalTimeX){
                     finalX = (float)set.getValue();
                 }
             }
             
         }
-        for(ObjectAnimation anim:animationList){
-            if(anim.startTime >= finalTimeX && anim.startTime < time){
+        
+        int i = 0; 
+        while( i < animations.size() && 
+                (!animations.get(i).get(0).attribute.equals("x")||
+                !animations.get(i).get(0).attribute.equals("cx")) ){
+            ++i;
+        }
+        int j = 0;
+        ArrayList<ObjectAnimation> xAnims = animations.get(i);
+        while(j < xAnims.size() && xAnims.get(j).startTime < time){
+            if(xAnims.get(j).startTime > finalTimeX){
+                /////coords son ints o floats?
+                float difference = (int)xAnims.get(j).endValue-finalX;
+                float st = xAnims.get(j).startTime;
+                float et = xAnims.get(j).endTime;
+                //Anim se corta por otra animación
+                if(xAnims.size()>j+1 && xAnims.get(j+1).startTime < xAnims.get(j).endTime){
+                    float cutTime = xAnims.get(j+1).startTime;
+                    finalX = finalX+difference*(cutTime-st)/(et-st);
+                    
+                }
+                else{
+                    finalX = finalX+difference;
+                }
                 
             }
+            ++j;
         }
+
         return 0;
     }
     
-    public float getDynamicRotationCenterY(float time){
+    
+    
+    public float getDynamicRotationCenterY(ArrayList<ArrayList<ObjectAnimation> >anims,
+            float time, float closestTime, float oldX){
         for(ObjectSet set:setList){
         }
         return 0;
@@ -360,6 +424,33 @@ public class AnimatedObject {
         }
     }
     
+    private static ArrayList<ArrayList<ObjectAnimation> > splitAnims(ObjectAnimation[] animations){
+        int i;
+        int j;
+        i = j = 0;
+        ArrayList<ArrayList<ObjectAnimation> > ret = new ArrayList<ArrayList<ObjectAnimation> > ();
+        for(ObjectAnimation anim:animations){
+            if(ret.get(i)==null){
+                ret.set(i, new ArrayList<ObjectAnimation>());
+                ret.get(i).add(anim);
+                ++j;
+            }
+            else{
+                if(anim.attribute.equals(ret.get(i).get(j-1).attribute)){
+                    ret.get(i).add(anim);
+                    ++j;
+                }
+                else{
+                    ++i;
+                    ret.set(i,new ArrayList<ObjectAnimation>());
+                    ret.get(i).add(anim);
+                    j = 1;
+                }
+            }
+        }
+        return ret;
+    }
+    
     private class ObjectAnimation implements Comparable{
         private final float startTime;
         private final float endTime;
@@ -397,10 +488,18 @@ public class AnimatedObject {
         public int compareTo(Object t) {
             float thisTime = startTime;
             float time = ((ObjectAnimation)t).startTime;
-            if(thisTime < time) return -1;
-            if(thisTime == time) return 0;
-            return 1;
+            String thisAttr = attribute;
+            String attr = ((ObjectAnimation)t).attribute;
+            int compare = thisAttr.compareTo(attr);
+            if(compare != 0) return compare;
+            return ((Float)thisTime).compareTo((Float)time);
         }
+        
+        public String getAttrib(){
+            return attribute;
+        }
+        
+        
     }
     
     
@@ -448,6 +547,7 @@ public class AnimatedObject {
             if(thisTime == time) return 0;
             return 1;
         }
+
     }
     
     
@@ -518,5 +618,13 @@ public class AnimatedObject {
     }
     
     
-    
+
+    private static class Coord {
+        float x;
+        float y;
+        public Coord(float x, float y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
 }
