@@ -171,13 +171,14 @@ attribute   : FILL^          ':'! color
 text_attributes : FONTSTYLE^ ':'! ('normal' | 'italic' | 'oblique')
                 | FONTWEIGHT^ ':'! ('normal' | 'bold' | 'bolder' | 'lighter' | INT)
                 | ORINENTATION^ ':'! ('horizontal'|'vertical')
+                | FONTSIZE^ ':'! INT ('px'!)?
                 ;
 
 rectangle_attributes    : RX^ ':'! object_expr
                         | RY^ ':'! object_expr
                         ;
 
-color : ('red'|'blue'|'green'|'yellow'|rgb)
+color : ('red'|'blue'|'green'|'yellow'|'black'|'white'|rgb)
       ;
 
 rgb   : '(' object_expr ',' object_expr ',' object_expr ')' -> ^(RGB object_expr object_expr object_expr)
@@ -318,6 +319,7 @@ STROKE    : 'stroke';
 STROKEPATTERN : 'stroke-pattern';
 STROKEWIDTH : 'stroke-width' ;
 FONTSTYLE : 'font-style';
+FONTSIZE : 'font-size' ;
 FONTWEIGHT : 'font-weight';
 ORINENTATION : 'font-orientation';
 RX      : 'rx';

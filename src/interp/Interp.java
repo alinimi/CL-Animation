@@ -46,7 +46,7 @@ import org.antlr.runtime.CommonTokenStream;
 public class Interp {
 
     private static final String[] rectangleAttribueTypes = {"rx","ry"};
-    private static final String[] textAtrributeTypes = {"font-style","font-weight","font-orientation"};
+    private static final String[] textAtrributeTypes = {"font-style","font-weight","font-orientation","font-size"};
     private static final String[] generalAttributeTypes = {"fill","fill-opacity","stroke","stroke-pattern","stroke-width"};
 
     private static final HashMap<String,Integer> defaultFunctions = new HashMap<String,Integer>(){{
@@ -690,8 +690,8 @@ public class Interp {
                 id = t.getChild(0).getText();
                 d = Stack.getVariable(id);
                 checkSvgObject(d);
-                Data scaleX = evaluateExpression(t.getChild(1)); checkInteger(scaleX);
-                Data scaleY = evaluateExpression(t.getChild(2)); checkInteger(scaleY);
+                Data scaleX = evaluateExpression(t.getChild(1)); checkNumber(scaleX);
+                Data scaleY = evaluateExpression(t.getChild(2)); checkNumber(scaleY);
                 startTimeD = evaluateExpression(t.getChild(3)); checkNumber(startTimeD);
                 endTimeD = evaluateExpression(t.getChild(4)); checkNumber(endTimeD);
                 animation.scale(id,getFloatValue(scaleX), getFloatValue(scaleY),
