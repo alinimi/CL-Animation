@@ -47,7 +47,8 @@ tokens {
     ARGLIST;    // List of arguments passed in a function call
     LIST_INSTR; // Block of instructions
     BOOLEAN;    // Boolean atom (for Boolean constants "true" or "false")
-    ARRAY;
+    ARRAY_POS;
+    ARRAY_CONST;
     PVALUE;     // Parameter by value in the list of parameters
     PREF;       // Parameter by reference in the list of parameters
 }
@@ -115,26 +116,26 @@ assign  :   variable eq=EQUAL expr -> ^(ASSIGN[$eq,":="] variable expr)
 return_stmt :   RETURN^ expr?
         ;
 
-variable:   (ID|array)
+variable:   (ID|array_pos)
         ;
 
-array   : id=ID '[' object_expr ']'    -> ^(ARRAY[$id,$id.text] object_expr)
+array_pos   : id=ID '[' object_expr ']'    -> ^(ARRAY_POS[$id,$id.text] object_expr)
         ;
 
 // Create instruccion:
 //               |         objecte_create         |
 //        Create |ObjectType Name ObjectAttributes| GeneralAttributes   Time     
-create  : CREATE^ objecte_create                    attributes          object_expr
+create  : CREATE^ objecte_create                    attributes          object_expr ('s'!)?
         ;
 
-object_expr     : ('('! num_expr ')'! | FLOAT | INT | ID | array)
+object_expr     : ('('! num_expr ')'! | FLOAT | INT | ID | array_pos)
                 ;
 
 //              type      Name     ObjectAttributes
-objecte_create: TEXT      ID       coord object_expr STRING
+objecte_create: TEXT      ID       coord object_expr ('º'!)? STRING
               | CIRCLE    ID       coord object_expr
-              | RECTANGLE ID       coord object_expr object_expr object_expr
-              | ELLIPSE   ID       coord object_expr object_expr object_expr
+              | RECTANGLE ID       coord object_expr ('º'!)? object_expr object_expr
+              | ELLIPSE   ID       coord object_expr ('º'!)? object_expr object_expr
               | LINE      ID       list_min_2_coord
               | POLYGON   ID       list_min_2_coord
               ;
@@ -151,8 +152,8 @@ destroy : DESTROY^  ID       object_expr
         ;
 
 // Modify instrucction:
-//        Modify    ObjectId    GeneralAttributes   tStart      tEnd
-modify  : MODIFY^   ID          attributes          object_expr object_expr?
+//        Modify    ObjectId    GeneralAttributes   tStart              tEnd
+modify  : MODIFY^   ID          attributes          object_expr ('s'!)? (object_expr ('s'!)?)?
         ;
 
 attributes  : '{' attribute (',' attribute)* '}' -> ^(LIST_ATTR attribute+)
@@ -162,7 +163,7 @@ attribute   : FILL^          ':'! color
             | FILLOPACITY^   ':'! FLOAT
             | STROKE^        ':'! color
             | STROKEPATTERN^ ':'! ('dots'|'lines'|'alternate')
-            | STROKEWIDTH^   ':'! INT
+            | STROKEWIDTH^   ':'! INT ('px'!)?
             | text_attributes
             | rectangle_attributes
             ;
@@ -170,31 +171,32 @@ attribute   : FILL^          ':'! color
 text_attributes : FONTSTYLE^ ':'! ('normal' | 'italic' | 'oblique')
                 | FONTWEIGHT^ ':'! ('normal' | 'bold' | 'bolder' | 'lighter' | INT)
                 | ORINENTATION^ ':'! ('horizontal'|'vertical')
+                | FONTSIZE^ ':'! INT ('px'!)?
                 ;
 
 rectangle_attributes    : RX^ ':'! object_expr
                         | RY^ ':'! object_expr
                         ;
 
-color : ('red'|'blue'|'green'|'yellow'|rgb)
+color : ('red'|'blue'|'green'|'yellow'|'black'|'white'|rgb)
       ;
 
 rgb   : '(' object_expr ',' object_expr ',' object_expr ')' -> ^(RGB object_expr object_expr object_expr)
       ;
 
 // Move instrucction: 
-//      Move  objectId xS,yS    xE,yE   TStart      TEnd
-move  : MOVE^ ID       coord    coord   object_expr object_expr
+//      Move  objectId xS,yS    xE,yE   TStart              TEnd
+move  : MOVE^ ID       coord    coord   object_expr ('s'!)? object_expr ('s'!)?
       ;
 
 // Scale instrucction:
-//      Scale   Name    SizeStart   SizeEnd     TStart      TEnd
-scale : SCALE^  ID      object_expr object_expr object_expr object_expr
+//      Scale   Name    SizeStart   SizeEnd     TStart              TEnd
+scale : SCALE^  ID      object_expr object_expr object_expr ('s'!)? object_expr('s'!)?
       ;
 
 // Rotate instrucction:
-//       Rotate     Name    AngleStart  AngleEnd    TStart      TEnd
-rotate : ROTATE^    ID      (FLOAT|INT) (FLOAT|INT) (FLOAT|INT) (FLOAT|INT)
+//       Rotate     Name    AngleStart          AngleEnd            TStart              TEnd
+rotate : ROTATE^    ID      object_expr ('º'!)? object_expr ('º'!)? object_expr ('s'!)? object_expr ('s'!)?
        ;
 
 // Source instrucction:
@@ -253,7 +255,8 @@ factor  :   (NOT^ | PLUS^ | MINUS^)? atom
         ;
 
 atom    :   ID
-        |   array
+        |   array_pos
+        |   array_const
         |   INT
         |   FLOAT
         |   STRING
@@ -262,7 +265,8 @@ atom    :   ID
         |   '('! expr ')'!
         ;
 
-
+array_const : '[' (expr (',' expr)*)? ']' ->^(ARRAY_CONST expr*)
+            ;
 
 // A function call has a lits of arguments in parenthesis (possibly empty)
 funcall :   ID '(' expr_list? ')' -> ^(FUNCALL ID ^(ARGLIST expr_list?))
@@ -315,6 +319,7 @@ STROKE    : 'stroke';
 STROKEPATTERN : 'stroke-pattern';
 STROKEWIDTH : 'stroke-width' ;
 FONTSTYLE : 'font-style';
+FONTSIZE : 'font-size' ;
 FONTWEIGHT : 'font-weight';
 ORINENTATION : 'font-orientation';
 RX      : 'rx';

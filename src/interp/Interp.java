@@ -46,7 +46,7 @@ import org.antlr.runtime.CommonTokenStream;
 public class Interp {
 
     private static final String[] rectangleAttribueTypes = {"rx","ry"};
-    private static final String[] textAtrributeTypes = {"font-style","font-weight","font-orientation"};
+    private static final String[] textAtrributeTypes = {"font-style","font-weight","font-orientation","font-size"};
     private static final String[] generalAttributeTypes = {"fill","fill-opacity","stroke","stroke-pattern","stroke-width"};
 
     private static final HashMap<String,Integer> defaultFunctions = new HashMap<String,Integer>(){{
@@ -314,23 +314,23 @@ public class Interp {
         return result;
     }
 
-    private HashMap<String,Object> getGeneralAttributes(int type, SvgTree t) {
+    private HashMap<String,Object> getGeneralAttributes(int type, SvgTree t, boolean creationTime) {
         assert t != null;
         HashMap<String,Object> attrs = new HashMap<String,Object>();
         for (int i = 0; i < t.getChildCount(); i++) {
             SvgTree attr = t.getChild(i);
-            existAttribute(type, attr.getText());
+            existAttribute(type, attr.getText(), creationTime);
             Object o = generateAttribute(attr);
             attrs.put(attr.getText(), o);
         }
         return attrs;
     }
 
-    private HashMap<String,Object> getAttributes(SvgTree t) {
+    private HashMap<String,Object> getAttributes(SvgTree t, boolean creationTime) {
         int type = t.getChild(0).getType();
         int size = t.getChildCount();
         Data d;
-        HashMap<String,Object> attrs = getGeneralAttributes(type, t.getChild(size - 2));
+        HashMap<String,Object> attrs = getGeneralAttributes(type, t.getChild(size - 2), creationTime);
         switch (type) {
             case SvgLexer.TEXT:
                 attrs.put("text",t.getChild(4).getStringValue());
@@ -517,7 +517,7 @@ public class Interp {
             case SvgLexer.ASSIGN:
                 value = evaluateExpression(t.getChild(1));
                 SvgTree leftSide = t.getChild(0);
-                if (leftSide.getType() == SvgLexer.ARRAY) {
+                if (leftSide.getType() == SvgLexer.ARRAY_POS) {
                     Data position = evaluateExpression(leftSide.getChild(0)); checkInteger(position);
                     Stack.defineVariable (leftSide.getText(),getIntValue(position),value);
                 } else {
@@ -598,7 +598,7 @@ public class Interp {
                 d = new SvgObject(id, shapeType);
                 Stack.defineVariable (id, d);
                 int[] initialCoords = generateCoordinates(t.getChild(2));
-                attrs = getAttributes(t);
+                attrs = getAttributes(t, true);
                 value = evaluateExpression(t.getChild(t.getChildCount() - 1));
                 checkNumber(value);
                 animation.create(shapeType,id, initialCoords,attrs, getFloatValue(value));
@@ -631,7 +631,7 @@ public class Interp {
                 d = Stack.getVariable(id);
                 checkSvgObject(d);
                 lexerId = shape2lexer(((SvgObject) d).getShape());
-                attrs = getGeneralAttributes(lexerId, t.getChild(1));
+                attrs = getGeneralAttributes(lexerId, t.getChild(1), false);
                 startTimeD = evaluateExpression(t.getChild(2)); checkNumber(startTimeD);
                 endTime = -1;
                 if (t.getChildCount() == 4) {
@@ -690,8 +690,8 @@ public class Interp {
                 id = t.getChild(0).getText();
                 d = Stack.getVariable(id);
                 checkSvgObject(d);
-                Data scaleX = evaluateExpression(t.getChild(1)); checkInteger(scaleX);
-                Data scaleY = evaluateExpression(t.getChild(2)); checkInteger(scaleY);
+                Data scaleX = evaluateExpression(t.getChild(1)); checkNumber(scaleX);
+                Data scaleY = evaluateExpression(t.getChild(2)); checkNumber(scaleY);
                 startTimeD = evaluateExpression(t.getChild(3)); checkNumber(startTimeD);
                 endTimeD = evaluateExpression(t.getChild(4)); checkNumber(endTimeD);
                 animation.scale(id,getFloatValue(scaleX), getFloatValue(scaleY),
@@ -855,11 +855,27 @@ public class Interp {
             case SvgLexer.STRING:
                 value = new SvgString(t.getStringValue());
                 break;
-            case SvgLexer.ARRAY:
+            case SvgLexer.ARRAY_POS:
                 Data position = evaluateExpression(t.getChild(0));
                 checkInteger(position);
                 value = Stack.getVariable(t.getText(), getIntValue(position)).copy();
                 break;
+
+            case SvgLexer.ARRAY_CONST:
+                ArrayList<Data> aux = new ArrayList<Data>();
+                if (t.getChildCount() > 0) {
+                    Data.Type dataType = evaluateExpression(t.getChild(0)).getType();
+                    for (int i = 0; i < t.getChildCount(); i++) {
+                        Data d = evaluateExpression(t.getChild(i));
+                        if (dataType != d.getType()) {
+                            throw new RuntimeException ("All positions in an array have to be of the same data type");
+                        }
+                        aux.add(d);
+                    }
+                }
+                value = new SvgArray(aux);
+                break;
+
             // A function call. Checks that the function returns a result.
             case SvgLexer.FUNCALL:
                 value = executeFunction(t.getChild(0).getText(), t.getChild(1));
@@ -1103,12 +1119,15 @@ public class Interp {
         return ret;
     }
 
-    private void existAttribute (int type, String attr) {
+    private void existAttribute (int type, String attr, boolean creationTime) {
         boolean generalAttribute = Arrays.asList(generalAttributeTypes).contains(attr);
 
         switch (type) {
             case SvgLexer.TEXT:
                 boolean textAttribute = Arrays.asList(textAtrributeTypes).contains(attr);
+                if (attr.equals("font-orientation") && !creationTime) {
+                    throw new RuntimeException("Atrribute 'font-orientation' of type TEXT can only be defined at the creation statement");
+                }
                 if (!generalAttribute && !textAttribute) {
                     throw new RuntimeException ("The attribute '" + attr + "' for variable " + Integer.toString(type) + " of type TEXT does not exist");
                 }
