@@ -16,6 +16,9 @@ public class SvgObject extends Data{
     
     public enum Shape {TEXT,CIRCLE,RECTANGLE,ELLIPSE,LINE,POLYGON;}
     //id como int o como string?
+    public SvgObject(){
+        super(Type.OBJECT);
+    }
     public SvgObject(String ident, Shape s){
         super(Type.OBJECT);
         id = ident;
