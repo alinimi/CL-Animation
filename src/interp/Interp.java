@@ -333,7 +333,8 @@ public class Interp {
         HashMap<String,Object> attrs = getGeneralAttributes(type, t.getChild(size - 2), creationTime);
         switch (type) {
             case SvgLexer.TEXT:
-                attrs.put("text",t.getChild(4).getStringValue());
+                d = evaluateExpression(t.getChild(4)); checkString(d);
+                attrs.put("text",((SvgString) d).getValue());
                 break;
 
             case SvgLexer.CIRCLE:
@@ -1020,6 +1021,12 @@ public class Interp {
     private void checkNumber(Data b) {
         if (!b.isNumber()) {
             throw new RuntimeException ("Expecting a number");
+        }
+    }
+
+    private void checkString(Data b) {
+        if (!b.isString()) {
+            throw new RuntimeException ("Expecting a String");
         }
     }
 

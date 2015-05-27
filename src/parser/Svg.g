@@ -128,11 +128,11 @@ array_pos   : id=ID '[' object_expr ']'    -> ^(ARRAY_POS[$id,$id.text] object_e
 create  : CREATE^ objecte_create                    attributes          object_expr ('s'!)?
         ;
 
-object_expr     : ('('! num_expr ')'! | FLOAT | INT | ID | array_pos)
+object_expr     : ('('! num_expr ')'! | FLOAT | INT | ID | STRING | array_pos)
                 ;
 
 //              type      Name     ObjectAttributes
-objecte_create: TEXT      variable coord object_expr ('º'!)? STRING
+objecte_create: TEXT      variable coord object_expr ('º'!)? object_expr
               | CIRCLE    variable coord object_expr
               | RECTANGLE variable coord object_expr ('º'!)? object_expr object_expr
               | ELLIPSE   variable coord object_expr ('º'!)? object_expr object_expr
