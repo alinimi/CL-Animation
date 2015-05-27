@@ -486,6 +486,13 @@ public class Interp {
         }
         return lexer;
     }
+
+    String getAnimationId(SvgTree t) {
+        if (t.getType() == SvgLexer.ARRAY_POS) {
+            Data position = evaluateExpression(t.getChild(0)); checkInteger(position);
+            return t.getText() + "-" + getIntValue(position); 
+        } else return t.getText();
+    }
     
     /**
      * Executes an instruction. 
@@ -500,6 +507,7 @@ public class Interp {
         setLineNumber(t);
         Data value; // The returned value
         String id;
+        String aId;
         Data d;
         int intType;
         int lexerId;
@@ -594,14 +602,21 @@ public class Interp {
             case SvgLexer.CREATE:
                 SvgObject.Shape shapeType = lexer2shape(t.getChild(0).getType());
                 id = t.getChild(1).getText();
-                if (Stack.existsVariable(id)) throw new RuntimeException ("Variable " + id + " it was previously declared");
-                d = new SvgObject(id, shapeType);
-                Stack.defineVariable (id, d);
+                aId = getAnimationId(t.getChild(1));
+                d = new SvgObject(aId, shapeType);
+                if (t.getChild(1).getType() == SvgLexer.ARRAY_POS) {
+                    Data position = evaluateExpression(t.getChild(1).getChild(0)); checkInteger(position);
+                    Stack.defineVariable (id,getIntValue(position),d);
+                } else {   
+                    if (Stack.existsVariable(id)) throw new RuntimeException ("Variable " + id + " it was previously declared");
+                    Stack.defineVariable (id, d);
+                }
+
                 int[] initialCoords = generateCoordinates(t.getChild(2));
                 attrs = getAttributes(t, true);
                 value = evaluateExpression(t.getChild(t.getChildCount() - 1));
                 checkNumber(value);
-                animation.create(shapeType,id, initialCoords,attrs, getFloatValue(value));
+                animation.create(shapeType,aId, initialCoords,attrs, getFloatValue(value));
                 makeInitialTransformations(t);
 
                 System.out.println("");
@@ -613,22 +628,23 @@ public class Interp {
                 return null;
 
             case SvgLexer.DESTROY:
-                id = t.getChild(0).getText();
+                aId = getAnimationId(t.getChild(0));
                 // Comprobació de que existeix l'objecte.
-                d = Stack.getVariable(id);
+                d = evaluateExpression(t.getChild(0));
                 checkSvgObject(d);
                 value = evaluateExpression(t.getChild(1));
                 checkNumber(value);
-                animation.destroy(id, getIntValue(value));
+                animation.destroy(aId, getIntValue(value));
 
                 System.out.println("");
-                System.out.println(id);
+                System.out.println(aId);
                 System.out.println(getIntValue(value));
                 return null;
 
             case SvgLexer.MODIFY:
                 id = t.getChild(0).getText();
-                d = Stack.getVariable(id);
+                aId = getAnimationId(t.getChild(0));
+                d = evaluateExpression(t.getChild(0));
                 checkSvgObject(d);
                 lexerId = shape2lexer(((SvgObject) d).getShape());
                 attrs = getGeneralAttributes(lexerId, t.getChild(1), false);
@@ -644,9 +660,9 @@ public class Interp {
                     Object objValue = entry.getValue();
                     boolean overlap = false;
                     if (t.getChildCount() == 4) {
-                        overlap = animation.modify(id, key, objValue, getFloatValue(startTimeD), endTime);
+                        overlap = animation.modify(aId, key, objValue, getFloatValue(startTimeD), endTime);
                     } else {
-                        animation.modify(id,key,objValue, getFloatValue(startTimeD));
+                        animation.modify(aId,key,objValue, getFloatValue(startTimeD));
                     }
                     if (overlap) {
                         System.out.println("WARNING: Object " + id + " has multiple definitions of modify " +
@@ -663,8 +679,8 @@ public class Interp {
                 return null;
 
             case SvgLexer.MOVE:
-                id = t.getChild(0).getText();
-                d = Stack.getVariable(id);
+                aId = getAnimationId(t.getChild(0));
+                d = evaluateExpression(t.getChild(0));
                 checkSvgObject(d);
                 int xIni = getXCoordinate(t.getChild(1));
                 int yIni = getYCoordinate(t.getChild(1));
@@ -674,10 +690,10 @@ public class Interp {
                 checkNumber(startTimeD);
                 endTimeD = evaluateExpression(t.getChild(4));
                 checkNumber(endTimeD);
-                animation.move(id,xIni,yIni,xEnd,yEnd,getFloatValue(startTimeD),getFloatValue(endTimeD));
+                animation.move(aId,xIni,yIni,xEnd,yEnd,getFloatValue(startTimeD),getFloatValue(endTimeD));
 
                 System.out.println("");
-                System.out.println(id);
+                System.out.println(aId);
                 System.out.println(xIni);
                 System.out.println(yIni);
                 System.out.println(xEnd);
@@ -687,18 +703,18 @@ public class Interp {
                 return null;
 
             case SvgLexer.SCALE:
-                id = t.getChild(0).getText();
-                d = Stack.getVariable(id);
+                aId = getAnimationId(t.getChild(0));
+                d = evaluateExpression(t.getChild(0));
                 checkSvgObject(d);
                 Data scaleX = evaluateExpression(t.getChild(1)); checkNumber(scaleX);
                 Data scaleY = evaluateExpression(t.getChild(2)); checkNumber(scaleY);
                 startTimeD = evaluateExpression(t.getChild(3)); checkNumber(startTimeD);
                 endTimeD = evaluateExpression(t.getChild(4)); checkNumber(endTimeD);
-                animation.scale(id,getFloatValue(scaleX), getFloatValue(scaleY),
+                animation.scale(aId,getFloatValue(scaleX), getFloatValue(scaleY),
                     getFloatValue(startTimeD),getFloatValue(endTimeD));
 
                 System.out.println("");
-                System.out.println(id);
+                System.out.println(aId);
                 System.out.println(scaleX);
                 System.out.println(scaleY);
                 System.out.println(getFloatValue(startTimeD));
@@ -706,18 +722,18 @@ public class Interp {
                 return null;
 
             case SvgLexer.ROTATE:
-                id = t.getChild(0).getText();
-                d = Stack.getVariable(id);
+                aId = getAnimationId(t.getChild(0));
+                d = evaluateExpression(t.getChild(0));
                 checkSvgObject(d);
                 Data startAngle = evaluateExpression(t.getChild(1)); checkNumber(startAngle);
                 Data endAngle = evaluateExpression(t.getChild(2)); checkNumber(endAngle);
                 startTimeD = evaluateExpression(t.getChild(3)); checkNumber(startTimeD);
                 endTimeD = evaluateExpression(t.getChild(4)); checkNumber(endTimeD);
-                animation.rotate(id,getFloatValue(startAngle),getFloatValue(endAngle),
+                animation.rotate(aId,getFloatValue(startAngle),getFloatValue(endAngle),
                     getFloatValue(startTimeD),getFloatValue(endTimeD));
                 
                 System.out.println("");
-                System.out.println(id);
+                System.out.println(aId);
                 System.out.println(getIntValue(startAngle));
                 System.out.println(getIntValue(endAngle));
                 System.out.println(getFloatValue(startTimeD));
@@ -1061,7 +1077,8 @@ public class Interp {
 
     private void checkOpacity(SvgTree t) {
         assert t != null;
-        float value = Float.parseFloat(t.getText());
+        Data d = evaluateExpression(t); checkNumber(d);
+        float value = getFloatValue(d);
         if (value < 0. || value > 1.) {
             throw new RuntimeException("Opacity value " + value + " not valid, correct range [0,1]");
         } 
@@ -1092,7 +1109,7 @@ public class Interp {
 
             case SvgLexer.FILLOPACITY:
                 checkOpacity(value);
-                ret = value.getText();
+                ret = getFloatValue(evaluateExpression(value));
                 break;
 
             case SvgLexer.STROKE:

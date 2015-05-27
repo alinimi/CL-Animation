@@ -132,12 +132,12 @@ object_expr     : ('('! num_expr ')'! | FLOAT | INT | ID | array_pos)
                 ;
 
 //              type      Name     ObjectAttributes
-objecte_create: TEXT      ID       coord object_expr ('º'!)? STRING
-              | CIRCLE    ID       coord object_expr
-              | RECTANGLE ID       coord object_expr ('º'!)? object_expr object_expr
-              | ELLIPSE   ID       coord object_expr ('º'!)? object_expr object_expr
-              | LINE      ID       list_min_2_coord
-              | POLYGON   ID       list_min_2_coord
+objecte_create: TEXT      variable coord object_expr ('º'!)? STRING
+              | CIRCLE    variable coord object_expr
+              | RECTANGLE variable coord object_expr ('º'!)? object_expr object_expr
+              | ELLIPSE   variable coord object_expr ('º'!)? object_expr object_expr
+              | LINE      variable list_min_2_coord
+              | POLYGON   variable list_min_2_coord
               ;
 
 list_min_2_coord : coord coord coord* -> ^(LIST_COORD coord+)
@@ -148,19 +148,19 @@ coord : object_expr ',' object_expr     -> ^(COORD object_expr object_expr)
 
 // Destroy instrucction:
 //        Destroy   ObjectId Time
-destroy : DESTROY^  ID       object_expr
+destroy : DESTROY^  variable object_expr
         ;
 
 // Modify instrucction:
 //        Modify    ObjectId    GeneralAttributes   tStart              tEnd
-modify  : MODIFY^   ID          attributes          object_expr ('s'!)? (object_expr ('s'!)?)?
+modify  : MODIFY^   variable    attributes          object_expr ('s'!)? (object_expr ('s'!)?)?
         ;
 
 attributes  : '{' attribute (',' attribute)* '}' -> ^(LIST_ATTR attribute+)
             ;
 
 attribute   : FILL^          ':'! color
-            | FILLOPACITY^   ':'! FLOAT
+            | FILLOPACITY^   ':'! object_expr
             | STROKE^        ':'! color
             | STROKEPATTERN^ ':'! ('dots'|'lines'|'alternate')
             | STROKEWIDTH^   ':'! INT ('px'!)?
@@ -186,17 +186,17 @@ rgb   : '(' object_expr ',' object_expr ',' object_expr ')' -> ^(RGB object_expr
 
 // Move instrucction: 
 //      Move  objectId xS,yS    xE,yE   TStart              TEnd
-move  : MOVE^ ID       coord    coord   object_expr ('s'!)? object_expr ('s'!)?
+move  : MOVE^ variable coord    coord   object_expr ('s'!)? object_expr ('s'!)?
       ;
 
 // Scale instrucction:
-//      Scale   Name    SizeStart   SizeEnd     TStart              TEnd
-scale : SCALE^  ID      object_expr object_expr object_expr ('s'!)? object_expr('s'!)?
+//      Scale   Name     SizeStart   SizeEnd     TStart              TEnd
+scale : SCALE^  variable object_expr object_expr object_expr ('s'!)? object_expr('s'!)?
       ;
 
 // Rotate instrucction:
-//       Rotate     Name    AngleStart          AngleEnd            TStart              TEnd
-rotate : ROTATE^    ID      object_expr ('º'!)? object_expr ('º'!)? object_expr ('s'!)? object_expr ('s'!)?
+//       Rotate     Name     AngleStart          AngleEnd            TStart              TEnd
+rotate : ROTATE^    variable object_expr ('º'!)? object_expr ('º'!)? object_expr ('s'!)? object_expr ('s'!)?
        ;
 
 // Source instrucction:
