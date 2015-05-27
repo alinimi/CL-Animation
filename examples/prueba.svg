@@ -1,23 +1,25 @@
+func generateCreates() {
+  a = [];
+  st = ["","Texto1","Texto2","Texto3","Texto4","Texto5","Texto6","Texto7","Texto8","Texto9","Texto10"];
+  j = 0.0;
+  for(i = 1; i <= 10; i= i+1) {
+    Create text a[i] 40,(20*i) 5º st[i] {fill:blue,font-size:20px,fill-opacity:1,stroke:red,stroke-width:1} 0;
+    Move a[i] 40,(20*i) 300,(30*i) 5s (5+i)s;
+    Modify a[i] {fill:blue, font-size:40px,fill-opacity:j,stroke-width:3} 5s (5+i)s;
+    Rotate a[i] 5º 50º 5s (5+i)s;
+    j = j + 0.1;
+  }
+  return a;
+}
+
 func main() {
   canvas_size(1000,1000);
-  //write p;
-  //write "\n";
-  //write q;
-  //write "\n";
-  //write p;
-  //for(i = 0; i < 15; i = i + 1) write i;
-  Create text t 100,100 0 "Attributes" {fill:(2,3,4),font-style:normal} 0.0;
-  //Create rectangle r 5,9 20 25 30 {line-width:7} 3.0;
-  i = 7 + 6;
-  Destroy t 30; 
-  Modify t {fill:red,stroke:green,font-orientation:vertical} 20 30;
-  Create line l 0,20 100,100 220,150 2,500 {stroke:green,stroke-width:10} (i/2);
-  Create rectangle r 10,10 5 50 50 {fill:red,stroke:green} 0;
-  o = r;
-  Move r 100,100 800,800 0 6;
-  n = r;
-  Move l 5,7 15,20 30 40;
-  Scale l 10 20 15.4 20;
-  Rotate l 15 40 7.8 9.8;
-  //Source "pelopicopata.txt";
+  a = generateCreates();
+  Create text t1 200,200 5º "Prova" {fill:blue,font-size:60px,font-weight:900,font-style:normal,stroke:green,stroke-width:3} 0s;
+  Move t1 0,0 100,100 3s 5s;
+  Scale t1 1 0.5 6s 10s;
+  Rotate t1 5º 50º 11s 15s;
+  Move t1 100,100 200,200 11s 13s;
+  Modify t1 {fill:green, stroke:blue, stroke-width:10,font-size:80} 15s 20s;
+  Modify t1 {fill-opacity:0.3} 21s 25s;
 }
