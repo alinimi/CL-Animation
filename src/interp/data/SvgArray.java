@@ -98,6 +98,7 @@ public class SvgArray extends Data{
             }
         }
         else{
+            elementType = d.getType();
             value = new ArrayList<Data>(index+1);
             fillIndexPositions(0,index);
             value.add(d);
@@ -141,7 +142,7 @@ public class SvgArray extends Data{
                 break;
             case OBJECT:
                 for(int i = begin; i < index; ++i){
-                    value.add(null);
+                    value.add(new SvgObject());
                 }
                 break;
             case ARRAY:
