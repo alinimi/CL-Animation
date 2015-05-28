@@ -94,9 +94,9 @@ public class AnimatedObject {
     
     public boolean overlappingAnimations(String attr, float start, float end){
         for(ObjectAnimation w:animationList){
-            if(w.attribute==attr){
-                if((start > w.startTime && start < w.endTime) ||
-                        (end > w.startTime && end < w.endTime))
+            if(attr.equals(w.attribute)){
+                if((start >= w.startTime && start <= w.endTime) ||
+                        (end >= w.startTime && end <= w.endTime))
                 {
                     return true;
                 }
