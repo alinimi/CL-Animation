@@ -824,16 +824,16 @@ public class Interp {
     }
 
     Data evaluateArithmetic(Data value1, Data value2, int type) {
-        if (value1.getType() == value2.getType()) {
+        if (value1.isNumber() == value2.isNumber()) {
             checkNumber(value1);
-            if (value1.isInteger()) {
+            if (value1.isInteger() && value2.isInteger()) {
                 value1 = ((SvgInt) value1).evaluateArithmetic(type, (SvgInt) value2);
             } else {
                 value1 = ((SvgNumber) value1).evaluateArithmetic(type, (SvgNumber) value2);
             }            
             
         } else {
-            throw new RuntimeException("Error at performing an arithmetic operation with elements of different type");
+            throw new RuntimeException("Error when performing an arithmetic operation with elements of different type");
         }
         return value1;        
     }

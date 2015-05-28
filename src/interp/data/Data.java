@@ -88,7 +88,7 @@ public abstract class Data {
 
     /** Returns the type of data */
     public Type getType() { return type; }
-
+    
     /** Indicates whether the data is Boolean */
     public boolean isBoolean() { return type == Type.BOOLEAN; }
 
