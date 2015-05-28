@@ -285,7 +285,7 @@ public class AnimatedObject {
     }
     
     public String getAttributeString(String s){
-        if(s.equals("text-orientation")){
+        if(s.equals("font-orientation")){
             if(((String)attributeMap.get(s)).equals("vertical")){
                 return "writing-mode=\"tb\" glyph-orientation-vertical=\"0\"";
             }
