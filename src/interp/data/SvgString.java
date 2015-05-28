@@ -47,9 +47,12 @@ public class SvgString extends Data{
     
     public Data evaluateRelational (int op, SvgString d) {
         switch (op) {
-            case SvgLexer.COMP_EQUAL: return new SvgBoolean(getValue().equals(d.getValue()));
-            case SvgLexer.NOT_EQUAL: return new SvgBoolean(!getValue().equals(d.getValue()));
-                //TODOmaybe otras comparaciones
+            case SvgLexer.COMP_EQUAL: return new SvgBoolean(value.equals(d.value));
+            case SvgLexer.NOT_EQUAL: return new SvgBoolean(!value.equals(d.value));
+            case SvgLexer.LT: return new SvgBoolean(value.compareTo(d.value) < 0);
+            case SvgLexer.LE: return new SvgBoolean(value.compareTo(d.value) <= 0);
+            case SvgLexer.GT: return new SvgBoolean(value.compareTo(d.value) > 0);
+            case SvgLexer.GE: return new SvgBoolean(value.compareTo(d.value) >= 0);
             default: assert false; 
         }
         return null;

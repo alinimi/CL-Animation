@@ -25,7 +25,7 @@ public class AnimationTest {
         attribs.put("stroke", "green");
         attribs.put("stroke-width", 2);
         attribs.put("text", "hello");
-        anim.create(SvgObject.Shape.TEXT, "t1", coords, attribs, 2);
+        anim.create(SvgObject.Shape.ELLIPSE, "t1", coords, attribs, 2);
         anim.destroy("t1",50);
         anim.modify("t1","y",200,0,2);
         anim.modify("t1", "text-orientation", "vertical", 10);
@@ -34,7 +34,7 @@ public class AnimationTest {
         attribs.put("stroke", "green");
         attribs.put("stroke-width", 2);
         attribs.put("fill","red");
-        attribs.put("line-pattern", "alternate");
+        attribs.put("stroke-pattern", "alternate");
         anim.create(SvgObject.Shape.LINE, "l1",c2, attribs, 2);
         anim.modify("l1", "fill", "white", 10);
         

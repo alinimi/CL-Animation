@@ -300,9 +300,10 @@ public class AnimatedObject {
     
     public String getCoordString(){
         String svg = "";
-        if(objectType == SvgObject.Shape.CIRCLE){
-            svg += " \"cx\"=" + coords[0];
-            svg += " \"cy\"" + coords[1];
+        if(objectType == SvgObject.Shape.CIRCLE ||
+                objectType == SvgObject.Shape.ELLIPSE){
+            svg += " cx=\"" + coords[0]+ "\"";
+            svg += " cy=\"" + coords[1]+ "\"";
         }
         else if(objectType == SvgObject.Shape.LINE ||
                 objectType == SvgObject.Shape.POLYGON){
@@ -375,14 +376,14 @@ public class AnimatedObject {
     
     
     public String getNameString(String name){
-        if("line-pattern".equals(name)){
+        if("stroke-pattern".equals(name)){
             return "stroke-dasharray";
         }
         return name;
     }
     
     public String getValueString(String name, Object value){
-        if("line-pattern".equals(name)){
+        if("stroke-pattern".equals(name)){
             String v = (String) value;
             
             if(attributeMap.containsKey("stroke-width")){
