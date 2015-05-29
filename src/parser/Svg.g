@@ -156,7 +156,7 @@ destroy : DESTROY^  variable object_expr
 modify  : MODIFY^   variable    attributes          object_expr ('s'!)? (object_expr ('s'!)?)?
         ;
 
-attributes  : '{' attribute (',' attribute)* '}' -> ^(LIST_ATTR attribute+)
+attributes  : '{' (attribute (',' attribute)*)? '}' -> ^(LIST_ATTR attribute*)
             ;
 
 attribute   : FILL^          ':'! color
