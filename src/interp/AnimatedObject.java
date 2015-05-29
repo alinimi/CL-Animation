@@ -22,22 +22,83 @@ import java.util.TreeMap;
  */
 public class AnimatedObject {
 
-    
+    /**
+     * Enum de los tipos de transformaciones geométricas que se pueden aplicar
+     * a un objeto. (ROTATE, SCALE, TRANSLATE)
+     */
     public enum Transform{ROTATE,SCALE,TRANSLATE;}
+    
+    /**
+     * Tiempo en segundos a partir del inicio de la animación en el que aparece
+     * el objeto.
+     */
     private float creationTime;
+    
+    /**
+     * Forma básica que tiene el objeto. (CIRCLE, ELLIPSE, TEXT, LINE, POLYGON,
+     * RECTANGLE)
+     */
     private SvgObject.Shape objectType;
+    
+    /**
+     * Tiempo en segundos a partir del inicio de la animación en el que se
+     * destruye el objeto.
+     */
     private float destructionTime;
+    
+    /**
+     * Coordenadas que describen la posición del objeto. Son de la forma
+     * {x_0,y_0,...,x_n,y_n} para polígonos y líneas con n vértices y {x,y}
+     * para el resto de formas.
+     */
     private int[] coords;
+    /**
+     * Contenido de un objeto de tipo texto. Null para objetos de otros tipos.
+     */
     private String text;
+    
+    /**
+     * Map de los nombres de los atributos que tiene el objeto a sus valores.
+     */
     private HashMap <String,Object> attributeMap;
+    
+    /**
+     * Lista de animaciones que se aplican al objeto.
+     */
     private ArrayList <ObjectAnimation> animationList;
+    
+    /**
+     * Lista de transformaciones que se aplican al objeto.
+     */
     private ArrayList <ObjectTransform> transformList;
+    
+    /**
+     * Lista de cambios de atributos que se aplican al objeto después de su
+     * creación.
+     */
     private ArrayList <ObjectSet> setList;
+    
+    /**
+     * 
+     */
     private TreeMap <Float,Coord> dynamicCenters;
+    
+    /**
+     * Coordenada x del centro de rotación del objeto.
+     */
     private float rotationCenterX;
+    
+    /**
+     * Coordenada y del centro de rotación del objeto.
+     */
     private float rotationCenterY;
     
     
+    
+    /**
+     * Creadora copiadora.
+     * @param x Un objeto.
+     */
     public AnimatedObject(AnimatedObject x){
         creationTime = x.creationTime;
         objectType = x.objectType;
@@ -67,7 +128,18 @@ public class AnimatedObject {
         dynamicCenters.put((float)0.0,new Coord(rotationCenterX,rotationCenterY));
     }
     
-    //crear objeto
+    /**
+     * Creadora. Recibe como parámetros el tipo de objeto, sus coordenadas, un
+     * map de atributos que tendrá el objeto desde el momento de su creación, y
+     * el tiempo en que aparecerá el objeto en la animación.
+     * @param type Forma básica del objeto
+     * @param coordinates Coordenadas que describen la posición del objeto. Son de la forma
+     * {x_0,y_0,...,x_n,y_n} para polígonos y líneas con n vértices y {x,y}
+     * para el resto de formas.
+     * @param attrs Map de nombres de atributos a sus valores. La clase del valor
+     * tiene que implementar toString()
+     * @param startTime Momento de creación del objeto
+     */
     public AnimatedObject(Shape type, int[] coordinates,
             HashMap<String,Object> attrs, float startTime){
         //type
@@ -80,7 +152,7 @@ public class AnimatedObject {
         attributeMap = attrs;
         
 
-        
+
         creationTime = startTime;
         
         animationList = new ArrayList <ObjectAnimation>();
@@ -92,6 +164,16 @@ public class AnimatedObject {
         dynamicCenters.put((float)0.0,new Coord(rotationCenterX,rotationCenterY));
     }
     
+    
+    /**
+     * Comprueba si una animación puede entrar en conflicto con otra que ya 
+     * existe en el objeto. Tiene como argumentos los parámetros de una animación.
+     * @param attr Atributo que modifica la animación.
+     * @param start Segundo en el que empieza la animación.
+     * @param end Segundo en el que acaba la animación.
+     * @return True si existe una animación en el objeto con el atributo attr
+     * que se solape en el tiempo con [start,end]
+     */
     public boolean overlappingAnimations(String attr, float start, float end){
         for(ObjectAnimation w:animationList){
             if(attr.equals(w.attribute)){
@@ -105,23 +187,53 @@ public class AnimatedObject {
         return false;
     }
     
+    /**
+     * Consulta la forma básica del objeto.
+     * @return Uno de CIRCLE, ELLIPSE, TEXT, LINE, POLYGON, RECTANGLE
+     */
     public Shape getType(){
         return objectType;
     }
     
+    /**
+     * Modifica el valor del atributo o lo crea si no existe.
+     * @param name Nombre del atributo.
+     * @param value Nuevo valor del atributo name.
+     */
     public void setAttribute(String name, String value){
         attributeMap.put(name, value);
     }
     
+    /**
+     * Añade varios atributos a la vez.
+     * @param attrs Map nombre de atributo-valor.
+     */
     public void addAttributes(HashMap<String,Object> attrs){
         attributeMap.putAll(attrs);
         setRotationCenter();
     }
     
+    /**
+     * Obtiene el valor en el objeto del atributo name.
+     * @param name Nombre del atributo.
+     * @return Valor del atributo.
+     */
     public Object getAttribute(String name){
         return attributeMap.get(name);
     }
     
+    /**
+     * Añade una animación al objeto. Durante el intervalo [st,et] el atributo
+     * attr transiciona entre el valor que tenía anteriormente el atributo, que viene
+     * dado por las modificaciones del atributo que se han hecho anteriormente, y
+     * un nuevo valor especificado por ev.
+     * @param st Tiempo de inicio de la animación.
+     * @param et Tiempo de final de la animación.
+     * @param attr Atributo del objeto que se modifica en la animación.
+     * @param ev Valor del atributo al final de la animación.
+     * @return True si la nueva animación se solapa en el tiempo con alguna del 
+     * mismo atributo que existiera anteriormente. False en caso contrario.
+     */
     public boolean addAnimation(float st, float et, String attr, 
                 Object ev){
         boolean overlap = overlappingAnimations(attr,st,et);
