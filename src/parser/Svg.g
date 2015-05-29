@@ -171,7 +171,7 @@ attribute   : FILL^          ':'! color
 text_attributes : FONTSTYLE^ ':'! ('normal' | 'italic' | 'oblique')
                 | FONTWEIGHT^ ':'! ('normal' | 'bold' | 'bolder' | 'lighter' | INT)
                 | ORINENTATION^ ':'! ('horizontal'|'vertical')
-                | FONTSIZE^ ':'! INT ('px'!)?
+                | FONTSIZE^ ':'! object_expr ('px'!)?
                 ;
 
 rectangle_attributes    : RX^ ':'! object_expr

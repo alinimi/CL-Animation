@@ -1138,6 +1138,7 @@ public class Interp {
                 break;
 
             case SvgLexer.STROKEWIDTH:
+            case SvgLexer.FONTSIZE:
                 d = evaluateExpression(value);
                 checkNumber(d);
                 ret = getIntValue(d);
