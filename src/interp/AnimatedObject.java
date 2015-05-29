@@ -242,11 +242,25 @@ public class AnimatedObject {
         return overlap;
     }
     
+    /**
+     * Cambia un atributo del objeto en un tiempo determinado.
+     * @param time Tiempo en segundos.
+     * @param attr Nombre del atributo.
+     * @param ev Nuevo valor del atributo.
+     */
     public void addSet(float time, String attr, Object ev){
         ObjectSet an = new ObjectSet(time,attr,ev);
         setList.add(an);
     }
     
+    /**
+     * Añade una transformación geométrica animada al objeto.
+     * @param type Tipo de transformación (ROTATE|TRANSLATE|SCALE)
+     * @param st Tiempo de inicio de la transformación
+     * @param et Tiempo de final de la transformación
+     * @param sv Valor inicial de la transformación. String con formato de svg.
+     * @param ev Valor final de la transformación. String con formato de svg.
+     */
     public void addTransform(Transform type, float st, float et, String sv, String ev){
         ObjectTransform t = new ObjectTransform(st,et,type,sv,ev);
         transformList.add(t);
@@ -319,13 +333,10 @@ public class AnimatedObject {
         float finalX = oldX;
         float finalTimeX = 0;
         
-        for(ObjectSet set:setList){
-            if(set.getTime()<= time && set.getTime() > closestTime){
-                String attr=set.getAttribute();
+        for(ObjectTransform t:transformList){
+            if(t.getType()== Transform.TRANSLATE && t.startTime<= time && t.endTime > closestTime){
+                String attr=t.startValue;
                 
-                if((attr=="width") && set.getTime()>= finalTimeX){
-                    finalX = coords[0]+(float)set.getValue()/2;
-                }
             }
             
         }
@@ -499,7 +510,6 @@ public class AnimatedObject {
             String v = (String) value;
             
             if(attributeMap.containsKey("stroke-width")){
-                
                 int sw = (int)attributeMap.get("stroke-width");
                 if(v.equals("dots")){
                     return sw+","+sw;
@@ -684,6 +694,9 @@ public class AnimatedObject {
             endValue = x.endValue;
         }
         
+        public Transform getType(){
+            return type;
+        }
         public String getTag(){
             switch(type){
                 case TRANSLATE:
