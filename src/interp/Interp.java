@@ -1107,6 +1107,7 @@ public class Interp {
         SvgTree value = t.getChild(0);
         assert value != null;
         Object ret;
+        Data d;
         int type = t.getType();
         switch (type) {
             case SvgLexer.FILL:
@@ -1131,9 +1132,15 @@ public class Interp {
 
             case SvgLexer.RX:
             case SvgLexer.RY:
-                Data d = evaluateExpression(value);
+                d = evaluateExpression(value);
                 checkNumber(d);
                 ret = getFloatValue(d);
+                break;
+
+            case SvgLexer.STROKEWIDTH:
+                d = evaluateExpression(value);
+                checkNumber(d);
+                ret = getIntValue(d);
                 break;
 
             default:
