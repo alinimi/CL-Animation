@@ -46,42 +46,19 @@ public abstract class Data {
     /** Type of data*/
     private Type type;
 
+    /**
+     * Constructor.
+     * @param t Type of the data.
+     */
     public Data(Type t) {
         type = t;
     }
     
+    /**
+     * Returns a copy of the data.
+     * @return A data object.
+     */
     public abstract Data copy();
-    
-
-    /*
-    public Data(Data d){
-        if(d.getType()!=type){
-            type = d.getType();
-        }
-        if(d.type==Type.BOOLEAN){
-            ((SvgBoolean)this).setValue(((SvgBoolean)d).getValue());
-        }
-        else if(d.type==Type.ARRAY){
-            ((SvgArray)this).setValue(((SvgArray)d).getAllValues());
-        }
-        else if(d.type==Type.FLOAT){
-            ((SvgFloat)this).setValue(((SvgFloat)d).getValue());
-        }
-        else if(d.type==Type.INTEGER){
-            ((SvgInt)this).setValue(((SvgInt)d).getValue());
-        }
-        else if(d.type==Type.STRING){
-            ((SvgString)this).setValue(((SvgString)d).getValue());
-        }
-        else if(d.type==Type.OBJECT){
-            ((SvgObject)this).setID(((SvgObject)d).getID());
-            ((SvgObject)this).setShape(((SvgObject)d).getShape());
-        }
-        else{
-            
-        }
-    }
-    */
     
     /** Constructor for void data */
     public Data() {type = Type.VOID; }
