@@ -89,7 +89,8 @@ public class Stack {
         return CurrentAR.get(name) != null;
     }
 
-    /** Defines the value of a variable. If the variable does not
+    /** 
+     * Defines the value of a variable. If the variable does not
      * exist, it is created. If it exists, the value and type of
      * the variable are re-defined.
      * @param name The name of the variable
@@ -101,6 +102,14 @@ public class Stack {
         CurrentAR.put(name,value); // Use the previous data 
     }
 
+    /** 
+     * Defines the value of an array position. If the array does not
+     * exist, it is created. If it exists, the value and type of
+     * the array are re-defined.
+     * @param name The name of the array
+     * @param position Position of the array to define the value
+     * @param value The value of the array
+     */
     public void defineVariable(String name, int position, Data value) {
         Data d = CurrentAR.get(name);
         if (d == null) CurrentAR.put(name, new SvgArray(value, position)); // New definition
@@ -112,7 +121,8 @@ public class Stack {
         }
     }
 
-    /** Gets the value of the variable. The value is represented as
+    /** 
+     * Gets the value of the variable. The value is represented as
      * a Data object. In this way, any modification of the object
      * implicitly modifies the value of the variable.
      * @param name The name of the variable
@@ -126,6 +136,14 @@ public class Stack {
         return v;
     }
 
+    /** 
+     *Gets the value of the array position. The value is represented as
+     * a Data object. In this way, any modification of the object
+     * implicitly modifies the value of the variable.
+     * @param name The name of the array.
+     * @param position Position of the array.
+     * @return The value of the variable.
+     */
     public Data getVariable(String name, int position) {
         Data v = getVariable(name);
         if (!v.isArray()) {

@@ -133,9 +133,9 @@ object_expr     : ('('! num_expr ')'! | FLOAT | INT | ID | STRING | array_pos)
 
 //              type      Name     ObjectAttributes
 objecte_create: TEXT      variable coord object_expr ('º'!)? object_expr
-              | CIRCLE    variable coord object_expr
-              | RECTANGLE variable coord object_expr ('º'!)? object_expr object_expr
-              | ELLIPSE   variable coord object_expr ('º'!)? object_expr object_expr
+              | CIRCLE    variable coord object_expr ('px'!)?
+              | RECTANGLE variable coord object_expr ('º'!)? object_expr ('px'!)? object_expr ('px'!)?
+              | ELLIPSE   variable coord object_expr ('º'!)? object_expr ('px'!)? object_expr ('px'!)?
               | LINE      variable list_min_2_coord
               | POLYGON   variable list_min_2_coord
               ;
@@ -148,7 +148,7 @@ coord : object_expr ',' object_expr     -> ^(COORD object_expr object_expr)
 
 // Destroy instrucction:
 //        Destroy   ObjectId Time
-destroy : DESTROY^  variable object_expr
+destroy : DESTROY^  variable object_expr ('s'!)?
         ;
 
 // Modify instrucction:
@@ -156,14 +156,14 @@ destroy : DESTROY^  variable object_expr
 modify  : MODIFY^   variable    attributes          object_expr ('s'!)? (object_expr ('s'!)?)?
         ;
 
-attributes  : '{' attribute (',' attribute)* '}' -> ^(LIST_ATTR attribute+)
+attributes  : '{' (attribute (',' attribute)*)? '}' -> ^(LIST_ATTR attribute*)
             ;
 
 attribute   : FILL^          ':'! color
             | FILLOPACITY^   ':'! object_expr
             | STROKE^        ':'! color
             | STROKEPATTERN^ ':'! ('dots'|'lines'|'alternate')
-            | STROKEWIDTH^   ':'! INT ('px'!)?
+            | STROKEWIDTH^   ':'! object_expr ('px'!)?
             | text_attributes
             | rectangle_attributes
             ;
@@ -171,11 +171,11 @@ attribute   : FILL^          ':'! color
 text_attributes : FONTSTYLE^ ':'! ('normal' | 'italic' | 'oblique')
                 | FONTWEIGHT^ ':'! ('normal' | 'bold' | 'bolder' | 'lighter' | INT)
                 | ORINENTATION^ ':'! ('horizontal'|'vertical')
-                | FONTSIZE^ ':'! INT ('px'!)?
+                | FONTSIZE^ ':'! object_expr ('px'!)?
                 ;
 
-rectangle_attributes    : RX^ ':'! object_expr
-                        | RY^ ':'! object_expr
+rectangle_attributes    : RX^ ':'! object_expr ('px'!)?
+                        | RY^ ':'! object_expr ('px'!)?
                         ;
 
 color : ('red'|'blue'|'green'|'yellow'|'black'|'white'|rgb)
