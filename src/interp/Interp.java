@@ -711,8 +711,8 @@ public class Interp {
                 return null;
 
             case SvgLexer.DESTROY:
+                checkInitiatedObject(t.getChild(0));
                 aId = getAnimationId(t.getChild(0));
-                // Comprobació de que existeix l'objecte.
                 d = evaluateExpression(t.getChild(0));
                 checkObject(d);
                 value = evaluateExpression(t.getChild(1));
@@ -725,6 +725,7 @@ public class Interp {
                 return null;
 
             case SvgLexer.MODIFY:
+                checkInitiatedObject(t.getChild(0));
                 id = t.getChild(0).getText();
                 aId = getAnimationId(t.getChild(0));
                 d = evaluateExpression(t.getChild(0));
@@ -762,6 +763,7 @@ public class Interp {
                 return null;
 
             case SvgLexer.MOVE:
+                checkInitiatedObject(t.getChild(0));
                 aId = getAnimationId(t.getChild(0));
                 d = evaluateExpression(t.getChild(0));
                 checkObject(d);
@@ -786,6 +788,7 @@ public class Interp {
                 return null;
 
             case SvgLexer.SCALE:
+                checkInitiatedObject(t.getChild(0));
                 aId = getAnimationId(t.getChild(0));
                 d = evaluateExpression(t.getChild(0));
                 checkObject(d);
@@ -805,6 +808,7 @@ public class Interp {
                 return null;
 
             case SvgLexer.ROTATE:
+                checkInitiatedObject(t.getChild(0));
                 aId = getAnimationId(t.getChild(0));
                 d = evaluateExpression(t.getChild(0));
                 checkObject(d);
@@ -1211,6 +1215,14 @@ public class Interp {
                 if (!generalAttribute) {
                     throw new RuntimeException ("Attribute '" + attr + "' for " + Integer.toString(type) + " does not exist");
                 }
+        }
+    }
+
+    /** Checks if an object has been previously initiated*/
+    void checkInitiatedObject(SvgTree t) {
+        Data d = evaluateExpression(t); checkObject(d);
+        if (((SvgObject) d).getID() == null) {
+            throw new RuntimeException ("It cannot be modified an uninitiated array position");
         }
     }
 
