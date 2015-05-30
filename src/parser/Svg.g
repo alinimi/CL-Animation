@@ -133,7 +133,7 @@ object_expr     : ('('! num_expr ')'! | FLOAT | INT | ID | STRING | array_pos)
 
 //              type      Name     ObjectAttributes
 objecte_create: TEXT      variable coord object_expr ('º'!)? object_expr
-              | CIRCLE    variable coord object_expr
+              | CIRCLE    variable coord object_expr ('px'!)?
               | RECTANGLE variable coord object_expr ('º'!)? object_expr ('px'!)? object_expr ('px'!)?
               | ELLIPSE   variable coord object_expr ('º'!)? object_expr ('px'!)? object_expr ('px'!)?
               | LINE      variable list_min_2_coord
