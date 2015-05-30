@@ -888,6 +888,13 @@ public class Interp {
         return null;
     }
 
+    /** 
+     * Makes a relational evaluation of two data elements
+     * @param value1 First Data of the operation.
+     * @param value2 Second Data of the operation.
+     * @param type Type of operation to execute.
+     * @return The result of the relational evaluation if it is possible.
+     */
     Data evaluateRelational(Data value1, Data value2, int type) {
         if (value1.getType() == value2.getType()) {
             if (value1.isNumber()) {
@@ -905,6 +912,13 @@ public class Interp {
         return value1;
     }
 
+    /** 
+     * Makes a arithmetic evaluation of two data elements
+     * @param value1 First Data of the operation.
+     * @param value2 Second Data of the operation.
+     * @param type Type of operation to execute.
+     * @return The result of the arithmetic evaluation if it is possible.
+     */
     Data evaluateArithmetic(Data value1, Data value2, int type) {
         if (value1.isNumber() == value2.isNumber()) {
             checkNumber(value1);
