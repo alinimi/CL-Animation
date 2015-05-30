@@ -701,13 +701,6 @@ public class Interp {
                 checkNumber(value);
                 animation.create(shapeType,aId, initialCoords,attrs, getFloatValue(value));
                 makeInitialTransformations(t);
-
-                System.out.println("");
-                System.out.println(shapeType);
-                System.out.println(id);
-                System.out.println(Arrays.toString(initialCoords));
-                System.out.println(attrs);
-                System.out.println(getFloatValue(value));
                 return null;
 
             case SvgLexer.DESTROY:
@@ -718,10 +711,6 @@ public class Interp {
                 value = evaluateExpression(t.getChild(1));
                 checkNumber(value);
                 animation.destroy(aId, getIntValue(value));
-
-                System.out.println("");
-                System.out.println(aId);
-                System.out.println(getIntValue(value));
                 return null;
 
             case SvgLexer.MODIFY:
@@ -753,13 +742,6 @@ public class Interp {
                             "in the interval of time from " + getFloatValue(startTimeD) + " to " + endTime);
                     }
                 }
-
-                System.out.println("");
-                System.out.println(lexerId);
-                System.out.println(id);
-                System.out.println(attrs);
-                System.out.println(getFloatValue(startTimeD));
-                System.out.println(endTime);
                 return null;
 
             case SvgLexer.MOVE:
@@ -776,15 +758,6 @@ public class Interp {
                 endTimeD = evaluateExpression(t.getChild(4));
                 checkNumber(endTimeD);
                 animation.move(aId,xIni,yIni,xEnd,yEnd,getFloatValue(startTimeD),getFloatValue(endTimeD));
-
-                System.out.println("");
-                System.out.println(aId);
-                System.out.println(xIni);
-                System.out.println(yIni);
-                System.out.println(xEnd);
-                System.out.println(yEnd);
-                System.out.println(getIntValue(startTimeD));
-                System.out.println(getIntValue(endTimeD));
                 return null;
 
             case SvgLexer.SCALE:
@@ -798,13 +771,6 @@ public class Interp {
                 endTimeD = evaluateExpression(t.getChild(4)); checkNumber(endTimeD);
                 animation.scale(aId,getFloatValue(scaleX), getFloatValue(scaleY),
                     getFloatValue(startTimeD),getFloatValue(endTimeD));
-
-                System.out.println("");
-                System.out.println(aId);
-                System.out.println(scaleX);
-                System.out.println(scaleY);
-                System.out.println(getFloatValue(startTimeD));
-                System.out.println(getFloatValue(endTimeD));
                 return null;
 
             case SvgLexer.ROTATE:
@@ -818,13 +784,6 @@ public class Interp {
                 endTimeD = evaluateExpression(t.getChild(4)); checkNumber(endTimeD);
                 animation.rotate(aId,getFloatValue(startAngle),getFloatValue(endAngle),
                     getFloatValue(startTimeD),getFloatValue(endTimeD));
-                
-                System.out.println("");
-                System.out.println(aId);
-                System.out.println(getIntValue(startAngle));
-                System.out.println(getIntValue(endAngle));
-                System.out.println(getFloatValue(startTimeD));
-                System.out.println(getFloatValue(endTimeD));
                 return null;
 
             case SvgLexer.SOURCE:
