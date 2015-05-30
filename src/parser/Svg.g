@@ -134,8 +134,8 @@ object_expr     : ('('! num_expr ')'! | FLOAT | INT | ID | STRING | array_pos)
 //              type      Name     ObjectAttributes
 objecte_create: TEXT      variable coord object_expr ('º'!)? object_expr
               | CIRCLE    variable coord object_expr
-              | RECTANGLE variable coord object_expr ('º'!)? object_expr object_expr
-              | ELLIPSE   variable coord object_expr ('º'!)? object_expr object_expr
+              | RECTANGLE variable coord object_expr ('º'!)? object_expr ('px'!)? object_expr ('px'!)?
+              | ELLIPSE   variable coord object_expr ('º'!)? object_expr ('px'!)? object_expr ('px'!)?
               | LINE      variable list_min_2_coord
               | POLYGON   variable list_min_2_coord
               ;
@@ -148,7 +148,7 @@ coord : object_expr ',' object_expr     -> ^(COORD object_expr object_expr)
 
 // Destroy instrucction:
 //        Destroy   ObjectId Time
-destroy : DESTROY^  variable object_expr
+destroy : DESTROY^  variable object_expr ('s'!)?
         ;
 
 // Modify instrucction:
@@ -174,8 +174,8 @@ text_attributes : FONTSTYLE^ ':'! ('normal' | 'italic' | 'oblique')
                 | FONTSIZE^ ':'! object_expr ('px'!)?
                 ;
 
-rectangle_attributes    : RX^ ':'! object_expr
-                        | RY^ ':'! object_expr
+rectangle_attributes    : RX^ ':'! object_expr ('px'!)?
+                        | RY^ ':'! object_expr ('px'!)?
                         ;
 
 color : ('red'|'blue'|'green'|'yellow'|'black'|'white'|rgb)
