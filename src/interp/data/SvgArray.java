@@ -9,15 +9,26 @@ package interp.data;
 import java.util.ArrayList;
 
 /**
- *
+ * Class that represents an array.
+ * 
  * @author Alicia
  */
 public class SvgArray extends Data{
+    /**
+     * The array.
+     */
     private ArrayList<Data> value;
+    /**
+     * Indicates the type of the elements of the array.
+     */
     private Type elementType;
     /** Value of the data */
 
 
+    /**
+     * Copy constructor.
+     * @param x Array.
+     */
     public SvgArray(SvgArray x){
         super(Type.ARRAY);
         elementType = x.getElementType();
@@ -28,12 +39,19 @@ public class SvgArray extends Data{
         }
     }
     
-  
+    /**
+     * Constructor for an empty array. Doesn't set the type of the elements.
+     */
     public SvgArray(){
         super(Type.ARRAY);
         value = new ArrayList<Data>();
     }
     
+    /**
+     * Constructor. Sets the value of the SvgArray to the ArrayList passed as
+     * an argument 
+     * @param v A data array.
+     */
     public SvgArray(ArrayList<Data> v){
         super(Type.ARRAY);
         setValue(v);
@@ -54,22 +72,34 @@ public class SvgArray extends Data{
     }
     
     /**
-     * Gets the value of an integer data. The method asserts that
-     * the data is an integer.
+     * Gets the value stored in the position index of the array.
      */
     public Data getValue(int index) {
         assert index < value.size();
         return value.get(index);
     }
 
+    /**
+     * Gets the length of the data array.
+     * @return Number of elements in the array.
+     */
     public int size() {
         return value.size();
     }
     
+    
+    /**
+     * Gets all the data contained in the array.
+     * @return An ArrayList that contains all the data in the array.
+     */
     public ArrayList<Data> getAllValues(){
         return value;
     }
     
+    /**
+     * Replaces all the data in the array. 
+     * @param d The new data of the array.
+     */
     public void setValue(ArrayList<Data> d){
         if(d.size()!=0){
             elementType = d.get(0).getType();
@@ -80,13 +110,22 @@ public class SvgArray extends Data{
         }
     }
 
-
+    /**
+     * Gets the type of the elements of the array.
+     * @return One of VOID, BOOLEAN, INTEGER, FLOAT, STRING, OBJECT, ARRAY.
+     */
     public Type getElementType(){
         return elementType;
     }
 
     
-    /** Defines a Boolean value for the data */
+    /**
+     * Sets the data in the index position to d. If index is larger than size,
+     * the positions between size and index will be filled with empty or neutral
+     * elements.
+     * @param index The index of the data.
+     * @param d The new data.
+     */
     public void setData(int index,Data d) {
         if(d.getType()==elementType){
             if(index >= value.size()){
@@ -106,7 +145,10 @@ public class SvgArray extends Data{
     }
 
 
-    /** Returns a string representing the data in textual form. */
+    /**
+     * Returns a representation of the array in textual form.
+     * @return A string of the form "[value[0],value[1]...,value[size-1]]"
+     */
     @Override
     public String toString() {
         String s = "[ ";
@@ -118,6 +160,12 @@ public class SvgArray extends Data{
     }
 
 
+    /**
+     * Fills the positions of the array between begin and index with empty or
+     * neutral elements of the same type of the existing elements of the array.
+     * @param begin Starting position.
+     * @param index The position following the last new empty element.
+     */
     private void fillIndexPositions(int begin, int index) {
         switch(elementType){
             case BOOLEAN:
@@ -153,12 +201,22 @@ public class SvgArray extends Data{
         }
     }
     
+    /**
+     * Returns a copy of the data.
+     * @return A data object.
+     */
     @Override
     public Data copy(){
         SvgArray x = new SvgArray(this);
         return x;
     }
     
+    /**
+     * Appends the string passed as an argument to the textual representation
+     * of the array and returns the result.
+     * @param s An SvgString.
+     * @return The result of the concatenation.
+     */
     public SvgString concat(SvgString s){
         return new SvgString(toString()+s);
     }

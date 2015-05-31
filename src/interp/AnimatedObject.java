@@ -8,13 +8,7 @@ package interp;
 import interp.data.SvgObject;
 import interp.data.SvgObject.Shape;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.TreeMap;
 
 /**
  * Clase que representa un objeto del lenguaje. Permite obtener su traducción

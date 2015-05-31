@@ -37,8 +37,6 @@ package interp.data;
  * The type VOID is used to represent void values on function returns.
  */
 
-import parser.*;
-
 public abstract class Data {
     /** Types of data */
     public enum Type {VOID, BOOLEAN, INTEGER, FLOAT, STRING, OBJECT, ARRAY;}
@@ -60,39 +58,71 @@ public abstract class Data {
      */
     public abstract Data copy();
     
-    /** Constructor for void data */
+    /**
+     * Constructor for void data
+     */
     public Data() {type = Type.VOID; }
 
-    /** Returns the type of data */
+    /**
+     * Returns the type of data
+     * @return the type of the data.
+     */
     public Type getType() { return type; }
     
-    /** Indicates whether the data is Boolean */
+    /**
+     * Indicates whether the data is Boolean.
+     * @return True if the data is boolean, false otherwise.
+     */
     public boolean isBoolean() { return type == Type.BOOLEAN; }
 
-    /** Indicates whether the data is integer */
+    /**
+     * Indicates whether the data is integer.
+     * @return True if the data is an integer, false otherwise.
+     */
     public boolean isInteger() { return type == Type.INTEGER; }
 
-    /** Indicates whether the data is void */
+    /**
+     * Indicates whether the data is void.
+     * @return True if the data is void, false otherwise.
+     */
     public boolean isVoid() { return type == Type.VOID; }
 
-    /** Indicates whether the data is float */
+    /**
+     * Indicates whether the data is float.
+     * @return True if the data is a float, false otherwise.
+     */
     public boolean isFloat() {return type == Type.FLOAT;}
     
-    /** Indicates whether the data is string */
+    /**
+     * Indicates whether the data is string.
+     * @return True if the data is a string, false otherwise.
+     */
     public boolean isString(){return type==Type.STRING;}
     
-    /** Indicates whether the data is object */
+    /**
+     * Indicates whether the data is object.
+     * @return True if the data is an object, false otherwise.
+     */
     public boolean isObject(){return type == Type.OBJECT;}
     
-    /** Indicates whether the data is array */
+    /**
+     * Indicates whether the data is array.
+     * @return True if the data is an array, false otherwise.
+     */
     public boolean isArray(){return type == Type.ARRAY;}
-    /** Indicates whether the data is object */
+    /**
+     * Indicates whether the data is numeric.
+     * @return True if the data is an integer or a float, false otherwise.
+     */
     public boolean isNumber(){
         return type == Type.INTEGER || type == Type.FLOAT;
     }
 
     
-    /** Returns a string representing the data in textual form. */
+    /**
+     * Returns a string representing the data in textual form.
+     * @return textual representation of the data.
+     */
     public String toString() {
         return "This variable cannot be written";
         //TODO
