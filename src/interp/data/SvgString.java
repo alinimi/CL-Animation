@@ -36,8 +36,28 @@ public class SvgString extends Data{
         return value.length();
     }
     
-    public SvgString concat(SvgString d){
-        return new SvgString(getValue()+d.getValue());
+    public SvgString concat(Data d){
+        if(d.isString()){
+            return new SvgString(getValue()+((SvgString)d).toString());
+        }
+        else if(d.isInteger()){
+            return new SvgString(getValue()+((SvgInt)d).toString());
+        }
+        else if(d.isFloat()){
+            return new SvgString(getValue()+((SvgFloat)d).toString());
+        }
+        else if(d.isBoolean()){
+            return new SvgString(getValue()+((SvgBoolean)d).toString());
+        }
+        else if(d.isArray()){
+            return new SvgString(getValue()+((SvgArray)d).toString());
+        }
+        return null;
+        
+    }
+    
+    public SvgString concat(SvgNumber d){
+        return new SvgString(value+d.toString());
     }
     
     @Override

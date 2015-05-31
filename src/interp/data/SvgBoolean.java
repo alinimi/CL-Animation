@@ -49,4 +49,8 @@ public class SvgBoolean extends Data{
         if (value) return "true";
         else return "false";
     }
+    
+    public SvgString concat(SvgString s){
+        return new SvgString(value+s.getValue());
+    }
 }

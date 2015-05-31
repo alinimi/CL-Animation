@@ -17,7 +17,9 @@ import java.util.PriorityQueue;
 import java.util.TreeMap;
 
 /**
- *
+ * Clase que representa un objeto del lenguaje. Permite obtener su traducción
+ * a svg.
+ * 
  * @author alicia
  */
 public class AnimatedObject {
@@ -78,11 +80,7 @@ public class AnimatedObject {
      */
     private ArrayList <ObjectSet> setList;
     
-    /**
-     * 
-     */
-    private TreeMap <Float,Coord> dynamicCenters;
-    
+
     /**
      * Coordenada x del centro de rotación del objeto.
      */
@@ -124,8 +122,6 @@ public class AnimatedObject {
         }
         rotationCenterX = x.rotationCenterX;
         rotationCenterY = x.rotationCenterY;
-        dynamicCenters = new TreeMap<Float,Coord>();
-        dynamicCenters.put((float)0.0,new Coord(rotationCenterX,rotationCenterY));
     }
     
     /**
@@ -159,9 +155,7 @@ public class AnimatedObject {
         transformList = new ArrayList <ObjectTransform>();
         setList = new ArrayList <ObjectSet>();
         
-        setRotationCenter();
-        dynamicCenters = new TreeMap<Float,Coord>();
-        dynamicCenters.put((float)0.0,new Coord(rotationCenterX,rotationCenterY));
+        findRotationCenter();
     }
     
     
@@ -211,7 +205,7 @@ public class AnimatedObject {
      */
     public void addAttributes(HashMap<String,Object> attrs){
         attributeMap.putAll(attrs);
-        setRotationCenter();
+        findRotationCenter();
     }
     
     /**
@@ -243,38 +237,76 @@ public class AnimatedObject {
         return overlap;
     }
     
+    /**
+     * Cambia un atributo del objeto en un tiempo determinado.
+     * @param time Tiempo en segundos.
+     * @param attr Nombre del atributo.
+     * @param ev Nuevo valor del atributo.
+     */
     public void addSet(float time, String attr, Object ev){
         ObjectSet an = new ObjectSet(time,attr,ev);
         setList.add(an);
     }
     
+    /**
+     * Añade una transformación geométrica animada al objeto.
+     * @param type Tipo de transformación (ROTATE|TRANSLATE|SCALE)
+     * @param st Tiempo de inicio de la transformación
+     * @param et Tiempo de final de la transformación
+     * @param sv Valor inicial de la transformación. String con formato de svg.
+     * @param ev Valor final de la transformación. String con formato de svg.
+     */
     public void addTransform(Transform type, float st, float et, String sv, String ev){
         ObjectTransform t = new ObjectTransform(st,et,type,sv,ev);
         transformList.add(t);
     }
 
+    /**
+     * Momento en el que se crea el objeto.
+     * @return Tiempo en segundos a partir del inicio de la animación.
+     */
     public float getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime(int creationTime) {
+    /**
+     * Setter del momento de creación del objeto.
+     * @param creationTime Tiempo en segundos.
+     */
+    public void setCreationTime(float creationTime) {
         this.creationTime = creationTime;
     }
 
+    /**
+     * Getter del momento en el que se destruye el objeto.
+     * @return Tiempo en segundos
+     */
     public float getDestructionTime() {
         return destructionTime;
     }
 
-    
+    /**
+     * Comprueba si el objeto tiene un valor especificado para el atributo name.
+     * @param name Nombre del atributo.
+     * @return True si el objeto tiene un valor para el atributo name. False en
+     * caso contrario
+     */
     public boolean hasAttribute(String name){
         return attributeMap.containsKey(name);
     }
+    
+    /**
+     * Setter del momento en el que se destruye el objeto.
+     * @param destructionTime Tiempo en segundos.
+     */
     public void setDestructionTime(float destructionTime) {
         this.destructionTime = destructionTime;
     }
     
-    
-    public void setRotationCenter(){
+    /**
+     * Finds the center of the object, which is used in rotation transforms.
+     */
+    private void findRotationCenter(){
         if(objectType == Shape.POLYGON || objectType == Shape.LINE){
             int sumX = 0;
             int sumY = 0;
@@ -292,92 +324,27 @@ public class AnimatedObject {
         }
     }
     
-    
-    public Coord getDynamicRotationCenter(float time){
-        Map.Entry<Float,Coord> closest = dynamicCenters.floorEntry(time);
-        float x = rotationCenterX,y = rotationCenterY;
-        
-        ObjectAnimation[] sortedAnims = (ObjectAnimation[])animationList.toArray();
-        Arrays.sort(sortedAnims);
-        ArrayList<ArrayList<ObjectAnimation> > split = splitAnims(sortedAnims);
-
-        if(closest == null){
-            x = getDynamicRotationCenterX(split,time,0,rotationCenterX);
-            y = getDynamicRotationCenterY(split,time,0,rotationCenterY);
-        }
-        else{
-            x = getDynamicRotationCenterX(split,time,closest.getKey(),closest.getValue().x);
-            y = getDynamicRotationCenterY(split,time,closest.getKey(),closest.getValue().y);
-        }
-        dynamicCenters.put(time, new Coord(x,y));
-        return new Coord(x,y);
-
-    }
-    
-    
-    public float getDynamicRotationCenterX(ArrayList<ArrayList<ObjectAnimation> > animations, 
-           float time, float closestTime, float oldX){
-        float finalX = oldX;
-        float finalTimeX = 0;
-        
-        for(ObjectSet set:setList){
-            if(set.getTime()<= time && set.getTime() > closestTime){
-                String attr=set.getAttribute();
-                
-                if((attr=="width") && set.getTime()>= finalTimeX){
-                    finalX = coords[0]+(float)set.getValue()/2;
-                }
-            }
-            
-        }
-        
-        int i = 0; 
-        while( i < animations.size() && 
-                !animations.get(i).get(0).attribute.equals("width") ){
-            ++i;
-        }
-        int j = 0;
-        ArrayList<ObjectAnimation> xAnims = animations.get(i);
-        while(j < xAnims.size() && xAnims.get(j).startTime < time){
-            if(xAnims.get(j).startTime > finalTimeX){
-                /////coords son ints o floats?
-                float difference = (int)xAnims.get(j).endValue-finalX;
-                float st = xAnims.get(j).startTime;
-                float et = xAnims.get(j).endTime;
-                //Anim se corta por otra animación
-                if(xAnims.size()>j+1 && xAnims.get(j+1).startTime < xAnims.get(j).endTime){
-                    float cutTime = xAnims.get(j+1).startTime;
-                    finalX = finalX+difference*(cutTime-st)/(et-st);
-                    
-                }
-                else{
-                    finalX = finalX+difference;
-                }
-                
-            }
-            ++j;
-        }
-
-        return 0;
-    }
-    
-    
-    
-    public float getDynamicRotationCenterY(ArrayList<ArrayList<ObjectAnimation> >anims,
-            float time, float closestTime, float oldX){
-        for(ObjectSet set:setList){
-        }
-        return 0;
-    }
+    /**
+     * Getter de la coordenada x del centro de rotación del objeto.
+     * @return rotationCenterX.
+     */
     public float getRotationCenterX(){
         return rotationCenterX;
     }
+    
+    /**
+     * Getter de la coordenada y del centro de rotación del objeto.
+     * @return rotationCenterY.
+     */
     public float getRotationCenterY(){
         return rotationCenterY;
     }
     
-
-    public String getTag(){
+    /**
+     * Obtiene el tag svg asociado al tipo de objeto.
+     * @return String que contiene el tag.
+     */
+    private String getTag(){
         switch(objectType){
             case RECTANGLE:
                 return "rect";
@@ -397,7 +364,12 @@ public class AnimatedObject {
         }
     }
     
-    public String getAttributeString(String s){
+    /**
+     * Obtiene la traducción a svg del valor del atributo s.
+     * @param s Nombre del atributo
+     * @return String con el valor del atributo.
+     */
+    private String getAttributeString(String s){
         if(s.equals("font-orientation")){
             if(((String)attributeMap.get(s)).equals("vertical")){
                 return "writing-mode=\"tb\" glyph-orientation-vertical=\"0\"";
@@ -411,7 +383,11 @@ public class AnimatedObject {
     }
     
     
-    public String getCoordString(){
+    /**
+     * Obtiene la traducción a svg del array de coordenadas del objeto.
+     * @return Descripción de las coordenadas en formato svg.
+     */
+    private String getCoordString(){
         String svg = "";
         if(objectType == SvgObject.Shape.CIRCLE ||
                 objectType == SvgObject.Shape.ELLIPSE){
@@ -436,7 +412,10 @@ public class AnimatedObject {
     
     
     
-    
+    /**
+     * Obtiene la traducción a svg del objeto.
+     * @return String en svg que representa el objeto y sus animaciones
+     */
     @Override
     public String toString(){
         String tab = "\t";
@@ -487,20 +466,29 @@ public class AnimatedObject {
         return svg;
     }
     
-    
-    public String getNameString(String name){
+    /**
+     * Obtiene el nombre en svg del atributo name.
+     * @param name Nombre del atributo en el lenguaje.
+     * @return String con formato svg.
+     */
+    private String getNameString(String name){
         if("stroke-pattern".equals(name)){
             return "stroke-dasharray";
         }
         return name;
     }
     
-    public String getValueString(String name, Object value){
+    /**
+     * Obtiene la string en formato svg del atributo y su valor
+     * @param name Nombre del atributo
+     * @param value Valor del atributo
+     * @return String en formato svg.
+     */
+    private String getValueString(String name, Object value){
         if("stroke-pattern".equals(name)){
             String v = (String) value;
             
             if(attributeMap.containsKey("stroke-width")){
-                
                 int sw = (int)attributeMap.get("stroke-width");
                 if(v.equals("dots")){
                     return sw+","+sw;
@@ -536,40 +524,35 @@ public class AnimatedObject {
             return value.toString();
         }
     }
-    
-    private static ArrayList<ArrayList<ObjectAnimation> > splitAnims(ObjectAnimation[] animations){
-        int i;
-        int j;
-        i = j = 0;
-        ArrayList<ArrayList<ObjectAnimation> > ret = new ArrayList<ArrayList<ObjectAnimation> > ();
-        for(ObjectAnimation anim:animations){
-            if(ret.get(i)==null){
-                ret.set(i, new ArrayList<ObjectAnimation>());
-                ret.get(i).add(anim);
-                ++j;
-            }
-            else{
-                if(anim.attribute.equals(ret.get(i).get(j-1).attribute)){
-                    ret.get(i).add(anim);
-                    ++j;
-                }
-                else{
-                    ++i;
-                    ret.set(i,new ArrayList<ObjectAnimation>());
-                    ret.get(i).add(anim);
-                    j = 1;
-                }
-            }
-        }
-        return ret;
-    }
-    
-    private class ObjectAnimation implements Comparable{
+
+    /**
+     * Clase que representa una animación.
+     */
+    private class ObjectAnimation{
+        /**
+         * Tiempo de inicio de la animación.
+         */
         private final float startTime;
+        /**
+         * Tiempo de final de la animación.
+         */
         private final float endTime;
+        /**
+         * Atributo que cambia durante la animación.
+         */
         private final String attribute;
+        /**
+         * Valor que tiene el atributo al final de la animación.
+         */
         private final Object endValue;
         
+        /**
+         * Creadora.
+         * @param st Tiempo de inicio de la animación.
+         * @param et Tiempo de final de la animación.
+         * @param attr Atributo que cambia durante la animación.
+         * @param ev Valor que tiene el atributo al final de la animación.
+         */
         public ObjectAnimation(float st, float et, String attr, 
                 Object ev){
             startTime = st;
@@ -577,6 +560,11 @@ public class AnimatedObject {
             attribute = attr;
             endValue = ev;
         }
+        
+        /**
+         * Creadora copiadora.
+         * @param x Animación.
+         */
         public ObjectAnimation(ObjectAnimation x){
             startTime = x.startTime;
             endTime = x.endTime;
@@ -584,6 +572,10 @@ public class AnimatedObject {
             endValue = x.endValue;
         }
         
+        /**
+         * Obtiene la traducción a svg de la animación.
+         * @return String de un tag animate en formato svg.
+         */
         @Override
         public String toString(){
             String svg = "\t\t<animate";
@@ -596,51 +588,52 @@ public class AnimatedObject {
             svg += "/>\n";
             return svg;
         }
-
-        @Override
-        public int compareTo(Object t) {
-            float thisTime = startTime;
-            float time = ((ObjectAnimation)t).startTime;
-            String thisAttr = attribute;
-            String attr = ((ObjectAnimation)t).attribute;
-            int compare = thisAttr.compareTo(attr);
-            if(compare != 0) return compare;
-            return ((Float)thisTime).compareTo((Float)time);
-        }
-        
-        public String getAttrib(){
-            return attribute;
-        }
-        
-        
     }
     
-    
-    private class ObjectSet implements Comparable{
+    /**
+     * Clase que representa un cambio instantáneo en un atributo.
+     */
+    private class ObjectSet{
+        /**
+         * Momento en el que se produce el set.
+         */
         private final float time;
+        /**
+         * Atributo que cambia.
+         */
         private final String attribute;
+        /**
+         * Nuevo valor del atributo.
+         */
         private final Object value;
+        
+        /**
+         * Creadora.
+         * @param t Momento en el que se produce el set.
+         * @param attr Atributo que cambia.
+         * @param ev Nuevo valor del atributo.
+         */
         public ObjectSet(float t , String attr, 
                 Object ev){
             time = t;
             attribute = attr;
             value = ev;
         }
+        
+        /**
+         * Creadora copiadora.
+         * @param x Set.
+         */
         public ObjectSet(ObjectSet x){
             time = x.time;
             attribute = x.attribute;
             value = x.value;
         }
-        
-        public String getAttribute(){
-            return attribute;
-        }
-        public Object getValue(){
-            return value;
-        }
-        public float getTime(){
-            return time;
-        }
+
+        /**
+         * Obtiene la traducción a svg del set.
+         * @return String de un tag set en formato svg.
+         */
         @Override
         public String toString(){
             String svg = "\t\t<set";
@@ -652,24 +645,46 @@ public class AnimatedObject {
             return svg;
         }
         
-        @Override
-        public int compareTo(Object t) {
-            float thisTime = time;
-            float time = ((ObjectSet)t).time;
-            if(thisTime < time) return -1;
-            if(thisTime == time) return 0;
-            return 1;
-        }
 
     }
     
-    
-    private class ObjectTransform implements Comparable{
+    /**
+     * Clase que representa una transformación geométrica animada.
+     */
+    private class ObjectTransform{
+        /**
+         * Tipo de transformación geométrica.
+         */
         private final Transform type;
+        
+        /**
+         * Valor inicial de la transformación. En formato svg.
+         */
         private final String startValue;
+        
+        /**
+         * Valor final de la transformación. En formato svg.
+         */
         private final String endValue;
+        
+        /**
+         * Momento inicial de la transformación.
+         */
         private final float startTime;
+        
+        /**
+         * Momento final de la transformación.
+         */
         private final float endTime;
+        
+        /**
+         * Creadora.
+         * @param st Momento inicial de la transformación.
+         * @param et Momento final de la transformación.
+         * @param t Tipo de transformación geométrica.
+         * @param sv Valor inicial de la transformación. En formato svg.
+         * @param ev Valor final de la transformación. En formato svg.
+         */
         public ObjectTransform(float st, float et, Transform t, String sv, String ev){
             type = t;
             startTime = st;
@@ -677,6 +692,11 @@ public class AnimatedObject {
             startValue = sv;
             endValue = ev;
         }
+        
+        /**
+         * Creadora copiadora.
+         * @param x Transformación.
+         */
         public ObjectTransform(ObjectTransform x){
             type = x.type;
             startTime = x.startTime;
@@ -685,7 +705,12 @@ public class AnimatedObject {
             endValue = x.endValue;
         }
         
-        public String getTag(){
+
+        /**
+         * Obtiene el string que indica el tipo de transformación en svg.
+         * @return String con el tipo de transformación.
+         */
+        private String getTag(){
             switch(type){
                 case TRANSLATE:
                     return "translate";
@@ -698,6 +723,10 @@ public class AnimatedObject {
             }
         }
         
+        /**
+         * Obtiene la traducción a svg de la transformación.
+         * @return String de un tag animateTransform en formato svg.
+         */
         @Override
         public String toString(){
             String tag = getTag();
@@ -723,24 +752,10 @@ public class AnimatedObject {
             svg += "/>\n";
             return svg;
         }
-        @Override
-        public int compareTo(Object t) {
-            float thisTime = startTime;
-            float time = ((ObjectAnimation)t).startTime;
-            if(thisTime < time) return -1;
-            if(thisTime == time) return 0;
-            return 1;
-        }
+
     }
     
     
 
-    private static class Coord {
-        float x;
-        float y;
-        public Coord(float x, float y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
+
 }

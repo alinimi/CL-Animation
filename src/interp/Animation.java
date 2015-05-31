@@ -12,17 +12,36 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /**
- *
+ * Clase que representa la animación obtenida a partir del programa. 
+ * 
  * @author Alicia
  */
 public class Animation{
+    /**
+     * HashMap de los objetos que hay en la animación. Sus keys son los
+     * identificadores de los objetos.
+     */
     private HashMap<String,AnimatedObject> objects;
+    
+    /**
+     * Anchura del elemento svg de la animación.
+     */
     private int width;
+    
+    /**
+     * Altura del elemento svg de la animación.
+     */
     private int height;
+    
+    /**
+     * Último id numérico utilizado. Se utiliza para combinar los objetos de 
+     * animaciones diferentes.
+     */
     int lastID;
     
     /**
-     * Constructor. Crea una ventana de animación sin objetos
+     * Constructor. Crea una ventana de animación sin objetos y con tamaño
+     * por defecto 500x500px.
      */
     public Animation(){
         width = 500;
@@ -31,11 +50,22 @@ public class Animation{
         lastID = 0;
     }
     
+    /**
+     * Setter del tamaño de la animación.
+     * @param w Anchura.
+     * @param h Altura.
+     */
     public void setSize(int w, int h){
         width = w;
         height = h;
     }
     
+    /**
+     * Copia el objeto con id el primer parámetro. Añade el nuevo objeto al map
+     * con id newId.
+     * @param id ID del objeto a copiar.
+     * @param newId ID del nuevo objeto.
+     */
     public void copyObject(String id, String newId){
         AnimatedObject x = objects.get(id);
         AnimatedObject obj = new AnimatedObject(objects.get(id));
@@ -124,6 +154,13 @@ public class Animation{
         return false;
     }
     
+    /**
+     * Modifica el valor del atributo name en un momento time determinado.
+     * @param id Identificador del objeto.
+     * @param name Nombre del atributo.
+     * @param valueEnd Valor final del atributo.
+     * @param time Momento de la animación en el que se modifica el atributo.
+     */
     public void modify(String id, String name, Object valueEnd,
             float time){
         if(objects.containsKey(id)){
@@ -137,13 +174,13 @@ public class Animation{
     /**
      * Mueve el objeto con identificador id de (xIni,yIni) a (xEnd,yEnd) en el
      * intervalo [timeStart,timeEnd]
-     * @param id
-     * @param xIni
-     * @param yIni
-     * @param xEnd
-     * @param yEnd
-     * @param timeStart
-     * @param timeEnd
+     * @param id Identificador del objeto.
+     * @param xIni Coordenada x del objeto al inicio del move.
+     * @param yIni Coordenada y del objeto al inicio del move.
+     * @param xEnd Coordenada x del objeto al final del move.
+     * @param yEnd Coordenada y del objeto al final del move.
+     * @param timeStart Momento de inicio del move.
+     * @param timeEnd Momento de final del move.
      */
     public void move(String id, float xIni, float yIni, 
             float xEnd, float yEnd, float timeStart, float timeEnd){
@@ -157,10 +194,11 @@ public class Animation{
     }
     
     /**
-     *
-     * @param id
-     * @param xEnd
-     * @param yEnd
+     * Mueve el objeto con identificador id de (xIni,yIni) a (xEnd,yEnd) al
+     * principio de la animación.
+     * @param id Identificador del objeto.
+     * @param xEnd Coordenada x del objeto al final del move.
+     * @param yEnd Coordenada y del objeto al final del move.
      */
     public void move(String id, float xEnd, float yEnd){
         if(objects.containsKey(id)){
@@ -179,9 +217,10 @@ public class Animation{
     }
     
     /**
-     *
-     * @param id
-     * @param sizeEnd
+     * Multiplica la escala del objeto por sizeEnd. El escalado se hace en las
+     * dos dimensiones por igual.
+     * @param id Identificador del objeto.
+     * @param sizeEnd Factor de escalado.
      */
     public void scale(String id, float sizeEnd){
         if(objects.containsKey(id)){
@@ -200,12 +239,14 @@ public class Animation{
     }
     
     /**
-     *
-     * @param id
-     * @param sizeStart
-     * @param sizeEnd
-     * @param timeStart
-     * @param timeEnd
+     * Modifica la escala del objeto entre sizeStart y sizeEnd durante el
+     * intervalo [timeStart,timeEnd]. El escalado se hace en las dos dimensiones
+     * por igual.
+     * @param id Identificador del objeto.
+     * @param sizeStart Factor de escalado inicial.
+     * @param sizeEnd Factor de escalado final.
+     * @param timeStart Momento de inicio de la transformacion de escalado.
+     * @param timeEnd Momento de final de la transformacion de escalado.
      */
     public void scale(String id, float sizeStart, float sizeEnd, float timeStart, float timeEnd){
         if(objects.containsKey(id)){
@@ -218,9 +259,10 @@ public class Animation{
     }
     
     /**
-     *
-     * @param id
-     * @param angleEnd
+     * Rota el objeto angleEnd grados antes del inicio de la animación.
+     * El centro de rotación depende del objeto.
+     * @param id Identificador del objeto.
+     * @param angleEnd Ángulo relativo al ángulo anterior.
      */
     public void rotate(String id, float angleEnd){
         if(objects.containsKey(id)){
@@ -241,12 +283,13 @@ public class Animation{
     }
     
     /**
-     *
-     * @param id
-     * @param angleStart
-     * @param angleEnd
-     * @param timeStart
-     * @param timeEnd
+     * Rota el objeto entre angleStart y angleEnd en el intervalo
+     * [timeStart,timeEnd]. El centro de rotación depende del objeto.
+     * @param id Identificador del objeto.
+     * @param angleStart Ángulo inicial de rotación.
+     * @param angleEnd Ángulo final.
+     * @param timeStart Momento de inicio de la rotación.
+     * @param timeEnd Momento de final de la rotación.
      */
     public void rotate(String id, float angleStart, float angleEnd, float timeStart, float timeEnd){
         if(objects.containsKey(id)){
@@ -259,7 +302,7 @@ public class Animation{
     }
     
     /**
-     *
+     * Obtiene la representación de la animación en svg.
      * @return Animación especificada en svg
      */
     @Override
@@ -277,6 +320,10 @@ public class Animation{
         return svg;
     }
     
+    /**
+     * Añade a la animación los objetos de la animación pasada por parámetro.
+     * @param x Animación.
+     */
     public void merge(Animation x){
         for(AnimatedObject obj: x.objects.values()){
             objects.put(Integer.toString(lastID), obj);

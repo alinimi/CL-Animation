@@ -68,4 +68,8 @@ public abstract class SvgNumber extends Data{
         return null;
     }
     
+    public SvgString concat(SvgString s){
+        return new SvgString(toString()+s);
+    }
+    
 }

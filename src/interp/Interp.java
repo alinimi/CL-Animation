@@ -884,9 +884,10 @@ public class Interp {
             checkNumber(value1);
             if (value1.isInteger() && value2.isInteger()) {
                 value1 = ((SvgInt) value1).evaluateArithmetic(type, (SvgInt) value2);
-            } else {
+            }
+            else if(value1.isNumber() && value2.isNumber()){
                 value1 = ((SvgNumber) value1).evaluateArithmetic(type, (SvgNumber) value2);
-            }            
+            }
             
         } else {
             throw new RuntimeException("Error when performing an arithmetic operation with elements of different type");
@@ -1004,6 +1005,15 @@ public class Interp {
 
             // Arithmetic operators
             case SvgLexer.PLUS:
+                value2 = evaluateExpression(t.getChild(1));
+                if(value.isString()||value2.isString()){
+                    value = concat(value,value2);
+                    
+                }
+                else{
+                    value = evaluateArithmetic(value, value2, type);
+                }
+                break;
             case SvgLexer.MINUS:
             case SvgLexer.MUL:
             case SvgLexer.DIV:
@@ -1026,6 +1036,23 @@ public class Interp {
         
         setLineNumber(previous_line);
         return value;
+    }
+    
+    SvgString concat(Data value, Data value2){
+        if(value.isString()){
+            SvgString x = ((SvgString)value).concat(value2);
+            if(x==null) throw new RuntimeException ("Invalid types for concat");
+            else return x;
+        }
+        else if(value.isNumber()){
+            return ((SvgNumber)value).concat((SvgString)value2);
+        }
+        else if(value.isBoolean()){
+            return ((SvgBoolean)value).concat((SvgString)value2);
+        }
+        else{
+            throw new RuntimeException ("Invalid types for concat");
+        }
     }
     
     /**

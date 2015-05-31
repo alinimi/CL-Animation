@@ -158,4 +158,8 @@ public class SvgArray extends Data{
         SvgArray x = new SvgArray(this);
         return x;
     }
+    
+    public SvgString concat(SvgString s){
+        return new SvgString(toString()+s);
+    }
 }
