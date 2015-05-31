@@ -90,7 +90,6 @@ public class Interp {
      * data structures for the execution of the main program.
      */
     public Interp(SvgTree T, String tracefile) {
-        System.out.println("Init interp");
         assert T != null;
         MapFunctions(T);  // Creates the table to map function names into AST nodes
         PreProcessAST(T); // Some internal pre-processing ot the AST
@@ -820,8 +819,6 @@ public class Interp {
 
                 // Get the AST
                 SvgTree newT = (SvgTree)result.getTree();
-                System.out.println(newT.toString());
-                System.out.println(newT.getChild(0).toString());
                 Interp I = null;
                 int linenumber = -1;
                 try {
