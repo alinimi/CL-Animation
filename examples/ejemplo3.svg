@@ -1,0 +1,19 @@
+func generateCreates() {
+  a = [];
+  st = ["","Texto1","Texto2","Texto3","Texto4","Texto5","Texto6","Texto7","Texto8","Texto9","Texto10"];
+  j = 0.0;
+  for(i = 1; i < size(st); i= i+1) {
+    Create text a[i] 40,(20*i) 5º st[i] {fill:blue,font-size:20px,fill-opacity:1,stroke:red,stroke-width:1} 0;
+    Move a[i] 40,(20*i) 300,(30*i) 5s (5+i)s;
+    Modify a[i] {fill:blue, font-size:40px,fill-opacity:j,stroke-width:3} 5s (5+i)s;
+    Rotate a[i] 5º 50º 5s (5+i)s;
+    j = j + 0.1;
+  }
+  return a;
+}
+
+func main() {
+  canvas_size(1500,700);
+  a = generateCreates();
+  Destroy a[3] 5;
+}

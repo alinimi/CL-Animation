@@ -1,0 +1,8 @@
+func main() {
+	Create rectangle r 50,50 5º 300px 150px {fill:blue} 0s;
+	for(i = 0; i < 25; i = i + 1) {
+		if (i%3 == 1) Modify r {fill-opacity:0.2, stroke-pattern:alternate, fill:green} (i)s (i+1)s;
+		elif (i%3 == 2) Modify r {stroke-pattern:dots, stroke-width:15px, stroke:green, fill:blue} (i)s (i+1)s;
+		else Modify r {stroke-width:4px, fill:red, fill-opacity:0.9} (i)s (i+1)s;
+	}
+}

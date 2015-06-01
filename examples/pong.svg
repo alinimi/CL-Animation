@@ -1,0 +1,71 @@
+func corregeixOffset(&a) {
+	a[0] = a[0] + 20;
+}
+
+func corregeixTemps(&t, factor) {
+	for(i = 0; i < size(t); i = i + 1) {
+		t[i] = t[i] * factor;
+	}
+}
+
+func main() {
+	// Mida Horitzontal canvas.
+	Xsize = 1000;
+	// Mida Vertical canvas.
+	Ysize = 600;
+
+	canvas_size(Xsize,Ysize);
+
+	// Posició X del rectangle esquerra
+	Xe = 20;
+	// Posició X del rectangle dret
+	Xd = Xsize - Xe;
+	// radi bola
+	r = 10;
+	// Posició X de la bola quan està a la dreta
+	XBd = Xd - r;
+	// Posició X de la bola quan està a l'esquerra
+	XBe = Xe + r;
+
+	// Factor pel qual es multiplica el temps
+	factor = 0.5;
+
+	// Creació objectes
+	Create circle bola (Xsize/2),(Ysize/2) (r)px {stroke:black, fill:white, stroke-width:3px} 0s;
+	Create rectangle rE Xe,(Ysize/2) 0º 10px 40px {fill:red} 0s;
+	Create rectangle rD Xd,(Ysize/2) 0º 10px 40px {fill:blue} 0s;
+
+	// Posicions Y del rectangle esquerra
+	LcoordY = [(Ysize/2),(Ysize/9),(Ysize/9),(7*Ysize/10),(7*Ysize/10),(7*Ysize/10),(7*Ysize/10),(Ysize/2),Ysize,(Ysize/9)];
+	corregeixOffset(LcoordY);
+	
+	// Posicions Y del rectangle dret
+	RcoordY = [(Ysize/2),(Ysize/2),(7*Ysize/10),(7*Ysize/10),(7*Ysize/10),(Ysize/3),(Ysize/3),(Ysize/3),Ysize,(Ysize/2)];
+	corregeixOffset(RcoordY);
+
+	// Posicions X i Y de la bola
+	BcoordX = [(Xsize/2),XBe,XBd,XBe,(Xsize/2),XBd,(Xsize/3),XBe,XBd,XBe];
+	BcoordY = [(Ysize/2),(Ysize/9),(7*Ysize/10),(7*Ysize/10),Ysize,(Ysize/3),0,(Ysize/2),Ysize,0];
+
+	// Temps
+	time = [0.0,1.0,3.0,5.0,6.0,7.0,8.0,9.0,11.0,12.0];
+	corregeixTemps(time, factor);
+
+	for(i = 1; i < size(BcoordX); i = i + 1) {
+		diffX = BcoordX[i] - BcoordX[i-1];
+		diffY = BcoordY[i] - BcoordY[i-1];
+		Move bola 0,0 diffX,diffY time[i-1] time[i];
+
+		diffY = LcoordY[i] - LcoordY[i-1];
+		Move rE 0,0 0,diffY time[i-1] time[i];
+
+		diffY = RcoordY[i] - RcoordY[i-1];
+		Move rD 0,0 0,diffY time[i-1] time[i];
+	}
+
+	final = time[size(time)-1];
+	Destroy bola final;
+	Destroy rE final;
+	Destroy rD final;
+	Create text t (Xsize/2),(Ysize/2) 0º "Game Over" {font-size:50px,stroke:black,stroke-width:2px,fill:red,stroke-pattern:dots,font-weight:bold} (final)s;
+}

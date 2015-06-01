@@ -1,0 +1,7 @@
+func main() {
+	Create circle c 20,20 20px {fill:red} 0s;
+	for (i = 0; i < 10; i = i+1) {
+		if (i%2 == 0) Move c 0,0 0,40 i (i+1);
+		else Move c 0,0 0,(-40) i (i+1);
+	}
+}
