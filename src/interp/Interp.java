@@ -214,9 +214,9 @@ public class Interp {
     private Data executeFunction (String funcname, SvgTree args) {
 
         if (funcname.equals("canvas_size") && args.getChildCount() == 2) {
-            int w = args.getChild(0).getIntValue();
-            int l = args.getChild(1).getIntValue();
-            animation.setSize(w,l);
+            Data w = evaluateExpression(args.getChild(0)); checkInteger(w);
+            Data l = evaluateExpression(args.getChild(1)); checkInteger(l);
+            animation.setSize(getIntValue(w),getIntValue(l));
             return new SvgVoid();
             // set canvas size
         } else if (funcname.equals("size") && args.getChildCount() == 1) {

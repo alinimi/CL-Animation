@@ -119,7 +119,7 @@ return_stmt :   RETURN^ expr?
 variable:   (ID|array_pos)
         ;
 
-array_pos   : id=ID '[' object_expr ']'    -> ^(ARRAY_POS[$id,$id.text] object_expr)
+array_pos   : id=ID '[' num_expr ']'    -> ^(ARRAY_POS[$id,$id.text] num_expr)
         ;
 
 // Create instruccion:
