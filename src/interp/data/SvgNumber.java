@@ -9,19 +9,26 @@ package interp.data;
 import parser.SvgLexer;
 
 /**
- *
+ * Abstract class that represents a numeric value.
+ * 
  * @author Alicia
  */
 public abstract class SvgNumber extends Data{
     
-    
+    /**
+     * Constructor that sets the type of the Data.
+     * @param t Type of the data. Can be INTEGER or FLOAT.
+     */
     public SvgNumber(Type t){
         super(t);
     }
     
-       /**
+      
+    /**
      * Checks for zero (for division). It raises an exception in case
      * the value is zero.
+     * 
+     * @param d Number Data.
      */
     public void checkDivZero(SvgNumber d) {
         if(d.getFloatValue()==0.0){
@@ -29,8 +36,21 @@ public abstract class SvgNumber extends Data{
         }
     }
         
+    
+    /**
+    * Gets the float value. Used for arithmetic with integers and floats.
+    * @return The value of the object. 
+    */
     public abstract float getFloatValue();
     
+    
+    /**
+     * Evaluates arithmetic operations that involve floats. 
+     * @param op Token that represents the arithmetic operation.
+     * @param d Operator.
+     * @return Float result of performing the op operation between this data
+     * and d.
+     */
     public SvgFloat evaluateArithmetic (int op, SvgNumber d) {
         switch (op) {
             case SvgLexer.PLUS: 
@@ -68,6 +88,12 @@ public abstract class SvgNumber extends Data{
         return null;
     }
     
+    /**
+     * Appends the string passed as an argument to the textual representation
+     * of the number and returns the result.
+     * @param s An SvgString.
+     * @return The result of the concatenation.
+     */
     public SvgString concat(SvgString s){
         return new SvgString(toString()+s);
     }

@@ -9,7 +9,6 @@ package interp;
 import interp.AnimatedObject.Transform;
 import interp.data.SvgObject.Shape;
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * Clase que representa la animación obtenida a partir del programa. 

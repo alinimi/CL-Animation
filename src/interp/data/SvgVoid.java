@@ -6,12 +6,20 @@
 package interp.data;
 
 /**
- *
+ * Class that represents a Data object without a type.
+ * 
  * @author alicia
  */
 public class SvgVoid extends Data {
+    /**
+     * Constructor.
+     */
     public SvgVoid(){}
 
+    /**
+     * Makes a copy of the object.
+     * @return A new Data object.
+     */
     public Data copy() {
     	return new SvgVoid();
     }
